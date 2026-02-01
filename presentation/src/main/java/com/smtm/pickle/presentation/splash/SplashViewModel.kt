@@ -24,10 +24,11 @@ class SplashViewModel @Inject constructor(
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val initTokenUseCase: InitTokenUseCase,
 ) : ViewModel() {
-    private val _effect = MutableSharedFlow<SplashEffect>(replay = 1)
+    private val _effect = MutableSharedFlow<SplashEffect>(replay = 0)
     val effect: SharedFlow<SplashEffect> = _effect.asSharedFlow()
 
-    init {
+
+    fun initialize() {
         viewModelScope.launch {
             runCatching { initTokenUseCase() }
                 .onFailure { e ->

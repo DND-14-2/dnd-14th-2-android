@@ -25,6 +25,10 @@ fun SplashScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.initialize()
+    }
+
     SplashContent()
 }
 

@@ -39,16 +39,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun loginWithKakao(token: String) {
+    fun loginWithKakao() {
         handleLogin {
-            kakaoLoginUseCase(token = token).getOrThrow()
-        }
-    }
-
-    fun handleLoginError(message: String) {
-        viewModelScope.launch {
-            _uiState.value = LoginUiState.Idle
-            _effect.emit(LoginEffect.ShowSnackbar(message))
+            kakaoLoginUseCase().getOrThrow()
         }
     }
 

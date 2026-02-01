@@ -31,6 +31,14 @@ android {
             ?: error("local.properties에 GOOGLE_WEB_CLIENT_ID가 없습니다")
 
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleClientId\"")
+
+        // 키값이 없음을 빠르게 확인용
+        val kakaoKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY")
+            ?: throw GradleException("local.properties에 KAKAO_NATIVE_APP_KEY가 없습니다")
+
+        // Manifest에 주입
+        manifestPlaceholders["NATIVE_APP_KEY"] = kakaoKey
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
     }
 
     buildTypes {
@@ -96,6 +104,7 @@ dependencies {
 
     // Social SDK
     implementation(libs.bundles.google.login)
+    implementation(libs.kakao.user)
 
     // Hilt
     implementation(libs.hilt.android)

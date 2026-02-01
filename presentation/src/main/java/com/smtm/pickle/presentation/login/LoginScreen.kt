@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.common.auth.KakaoLoginManager
+
 import com.smtm.pickle.presentation.designsystem.components.PickleLogo
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
@@ -42,7 +42,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val kakaoLoginManager = remember(context) { KakaoLoginManager(context) }
+
     val snackbarState = remember { SnackbarState() }
 
     LaunchedEffect(lifecycleOwner) {
@@ -73,16 +73,7 @@ fun LoginScreen(
     LoginContent(
         uiState = uiState,
         onGoogleLogin = viewModel::loginWithGoogle,
-        onKakaoLogin = {
-            kakaoLoginManager.login(
-                onSuccess = { token ->
-                    viewModel.loginWithKakao(token)
-                },
-                onFailure = { message ->
-                    viewModel.handleLoginError(message)
-                }
-            )
-        }
+        onKakaoLogin = viewModel::loginWithKakao
     )
 
     SnackbarHost(snackbarState)

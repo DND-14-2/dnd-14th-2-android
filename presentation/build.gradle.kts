@@ -60,8 +60,7 @@ dependencies {
     // Coroutines
     implementation(libs.bundles.coroutines)
 
-    // Social SDK
-    implementation(libs.kakao.user)
+
 
     // Logging
     implementation(libs.timber)

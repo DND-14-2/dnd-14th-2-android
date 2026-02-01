@@ -11,5 +11,7 @@ interface AuthRepository {
     ): Result<AuthToken>
 
     suspend fun loginWithGoogle(): Result<AuthToken>
+    
+    suspend fun loginWithKakao(): Result<AuthToken>
 
 }

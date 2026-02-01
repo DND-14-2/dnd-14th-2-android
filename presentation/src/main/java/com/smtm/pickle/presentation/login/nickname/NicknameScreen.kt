@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.login.nickname
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +47,10 @@ fun NicknameScreen(
                 }
             }
         }
+    }
+
+    BackHandler {
+        viewModel.onBackClick()
     }
 
     NicknameContent(

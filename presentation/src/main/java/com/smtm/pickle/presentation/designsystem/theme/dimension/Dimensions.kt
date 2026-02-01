@@ -59,4 +59,5 @@ object Dimensions {
     val radiusModal = 24.dp
     val radiusFull = 999.dp
 
+    val bottomContentHeight = 72.dp
 }

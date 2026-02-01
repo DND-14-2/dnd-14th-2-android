@@ -6,6 +6,7 @@ import com.smtm.pickle.domain.usecase.auth.InitTokenUseCase
 import com.smtm.pickle.domain.usecase.auth.IsLoggedInUseCase
 import com.smtm.pickle.domain.usecase.onboarding.GetOnboardingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -29,7 +30,10 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             runCatching { initTokenUseCase() }
-                .onFailure { Timber.e(it) }
+                .onFailure { e ->
+                    if (e is CancellationException) throw e
+                    Timber.e(e)
+                }
             checkInitialDestination()
         }
     }
@@ -38,12 +42,18 @@ class SplashViewModel @Inject constructor(
         coroutineScope {
             val isOnboardingCompletedDeferred = async {
                 runCatching { getOnboardingStatusUseCase().first() }
-                    .getOrDefault(false)
+                    .getOrElse { e ->
+                        if (e is CancellationException) throw e
+                        false
+                    }
             }
 
             val isLoggedInDeferred = async {
                 runCatching { isLoggedInUseCase().first() }
-                    .getOrDefault(false)
+                    .getOrElse { e ->
+                        if (e is CancellationException) throw e
+                        false
+                    }
             }
 
             delay(1500L)

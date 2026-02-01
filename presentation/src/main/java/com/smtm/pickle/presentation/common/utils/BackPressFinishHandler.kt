@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarDuration
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
@@ -30,7 +31,7 @@ fun BackPressFinishHandler(
             backPressedTime = currentTime
             snackBarState.show(
                 PickleSnackbar.custom(
-                    message = "뒤로가기를 한 번 더 누르면 종료됩니다.",
+                    message = context.getString(R.string.back_pressed_message),
                     duration = SnackbarDuration.TOAST_SHORT.duration,
                     position = SnackbarPosition.AboveBottomContents
                 )

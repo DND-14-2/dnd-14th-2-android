@@ -25,4 +25,7 @@
     <string name="common_previous">이전</string>
     <string name="common_next">다음</string>
 
+    <!-- Other -->
+    <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
+
 </resources>

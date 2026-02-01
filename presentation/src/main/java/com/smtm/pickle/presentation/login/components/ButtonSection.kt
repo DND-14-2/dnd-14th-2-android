@@ -19,21 +19,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.login.LoginUiState
 
 @Composable
 fun ButtonSection(
     modifier: Modifier = Modifier,
+    uiState: LoginUiState,
     onKakaoLogin: () -> Unit,
     onGoogleLogin: () -> Unit,
 ) {
     Column(modifier = modifier) {
         Button(
             onClick = onKakaoLogin,
+            enabled = uiState !is LoginUiState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = PickleTheme.semantic.kakao)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PickleTheme.semantic.kakao,
+                disabledContainerColor = PickleTheme.semantic.kakao
+            )
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_kakao),
@@ -52,13 +58,15 @@ fun ButtonSection(
 
         OutlinedButton(
             onClick = onGoogleLogin,
+            enabled = uiState !is LoginUiState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             shape = RoundedCornerShape(10.dp),
             border = ButtonDefaults.outlinedButtonBorder().copy(width = 1.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.White
+                containerColor = Color.White,
+                disabledContainerColor = Color.White,
             )
         ) {
             Icon(
@@ -81,6 +89,7 @@ fun ButtonSection(
 private fun ButtonSectionPreview() {
     PickleTheme {
         ButtonSection(
+            uiState = LoginUiState.Idle,
             onGoogleLogin = {},
             onKakaoLogin = {}
         )

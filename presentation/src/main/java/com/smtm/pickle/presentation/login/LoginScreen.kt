@@ -23,6 +23,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.smtm.pickle.presentation.common.auth.KakaoLoginManager
 import com.smtm.pickle.presentation.designsystem.components.PickleLogo
+import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
+import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.components.tooltip.PickleTooltip
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.login.components.ButtonSection
@@ -36,6 +40,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val kakaoLoginManager = remember(context) { KakaoLoginManager(context) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarState = remember { SnackbarState() }
 
     LaunchedEffect(uiState) {
         when (uiState) {
@@ -49,12 +54,22 @@ fun LoginScreen(
                 }
             }
 
-            is LoginUiState.Error -> viewModel.clearError()
+            is LoginUiState.Error -> {
+                snackbarState.show(
+                    PickleSnackbar.toastError(
+                        message = "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.",
+                        position = SnackbarPosition.BelowStatusBar
+                    )
+                )
+                viewModel.clearError()
+            }
+
             else -> Unit
         }
     }
 
     LoginContent(
+        uiState = uiState,
         onGoogleLogin = {
             viewModel.loginWithGoogle()
         },
@@ -69,11 +84,14 @@ fun LoginScreen(
             )
         },
     )
+
+    SnackbarHost(snackbarState)
 }
 
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
+    uiState: LoginUiState,
     onGoogleLogin: () -> Unit,
     onKakaoLogin: () -> Unit,
 ) {
@@ -99,6 +117,7 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(15.dp))
 
             ButtonSection(
+                uiState = uiState,
                 onGoogleLogin = onGoogleLogin,
                 onKakaoLogin = onKakaoLogin,
             )
@@ -112,6 +131,7 @@ fun LoginContent(
 private fun LoginContentPreview() {
     PickleTheme {
         LoginContent(
+            uiState = LoginUiState.Idle,
             onGoogleLogin = {},
             onKakaoLogin = {},
         )

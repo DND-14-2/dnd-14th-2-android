@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -77,7 +78,7 @@ fun NicknameContent(
         modifier = Modifier.clearFocusOnBackgroundTab(focusManager),
         topBar = {
             PickleAppBar(
-                title = "닉네임 입력",
+                title = stringResource(R.string.nickname_title),
                 navigationItem = NavigationItem.Back(onBackClick),
             )
         },
@@ -88,7 +89,7 @@ fun NicknameContent(
                     .imePadding()
                     .padding(bottom = 14.dp)
                     .padding(horizontal = 16.dp),
-                text = "다음",
+                text = stringResource(R.string.common_next),
                 onClick = onSaveNickname,
                 enabled = uiState.canSubmit,
                 textColor = PickleTheme.colors.base0
@@ -103,7 +104,7 @@ fun NicknameContent(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "닉네임을 설정해주세요",
+                text = stringResource(R.string.nickname_instruction),
                 style = PickleTheme.typography.body1Bold,
                 color = PickleTheme.colors.gray800
             )
@@ -115,8 +116,8 @@ fun NicknameContent(
                 onValueChange = { newNickname ->
                     onNicknameChanged(newNickname)
                 },
-                hint = "최대 5자까지 입력 가능해요",
-                defaultSupportingText = "특수 문자 및 영어 대문자는 사용할 수 없어요.",
+                hint = stringResource(R.string.nickname_hint),
+                defaultSupportingText = stringResource(R.string.nickname_helper),
                 trailingIcon = {
                     when {
                         uiState.isAvailable == true -> {

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
@@ -43,12 +44,12 @@ fun ButtonSection(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_kakao),
-                contentDescription = "카카오톡 아이콘",
+                contentDescription = null,
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "카카오톡으로 시작하기",
+                text = stringResource(R.string.login_kakao_start),
                 style = PickleTheme.typography.body4Medium,
                 color = PickleTheme.colors.gray800
             )
@@ -71,12 +72,12 @@ fun ButtonSection(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_google),
-                contentDescription = "구글 아이콘",
+                contentDescription = null,
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "구글 계정으로 시작하기",
+                text = stringResource(R.string.login_google_start),
                 style = PickleTheme.typography.body4Medium,
                 color = PickleTheme.colors.gray700
             )

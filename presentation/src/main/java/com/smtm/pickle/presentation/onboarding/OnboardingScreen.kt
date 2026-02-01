@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -32,6 +33,7 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.model.Snack
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
 import com.smtm.pickle.presentation.onboarding.components.OnboardingBottomButton
 import com.smtm.pickle.presentation.onboarding.components.OnboardingPagerSection
@@ -58,7 +60,6 @@ fun OnboardingScreen(
             }
         }
     }
-
 
     BackHandler {
         val currentTime = System.currentTimeMillis()
@@ -107,7 +108,7 @@ private fun OnboardingContent(
                 actions = {
                     TextButton(onClick = onSkipOrFinish) {
                         Text(
-                            text = "건너뛰기",
+                            text = stringResource(R.string.onboarding_skip),
                             style = PickleTheme.typography.body1Bold,
                             color = PickleTheme.colors.primary500
                         )

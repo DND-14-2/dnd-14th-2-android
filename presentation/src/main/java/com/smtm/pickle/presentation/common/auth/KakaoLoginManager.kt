@@ -31,16 +31,13 @@ class KakaoLoginManager @Inject constructor(
                 }
 
                 else -> {
-                    onFailure(IllegalStateException(context.getString(R.string.unknown_error)))
+                    onFailure(IllegalStateException("알 수 없는 에러 발생"))
                 }
             }
         }
 
         if (!UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            UserApiClient.instance.loginWithKakaoAccount(
-                context = context,
-                callback = resultHandler
-            )
+            loginWithKakaoAccount(resultHandler)
             return
         }
 
@@ -57,14 +54,11 @@ class KakaoLoginManager @Inject constructor(
 
                 // 카카오톡 실패 → 카카오계정 로그인 fallback
                 error != null -> {
-                    UserApiClient.instance.loginWithKakaoAccount(
-                        context = context,
-                        callback = resultHandler
-                    )
+                    loginWithKakaoAccount(resultHandler)
                 }
 
                 else -> {
-                    onFailure(IllegalStateException(context.getString(R.string.unknown_error)))
+                    onFailure(IllegalStateException("알 수 없는 에러 발생"))
                 }
             }
         }
@@ -74,5 +68,12 @@ class KakaoLoginManager @Inject constructor(
         UserApiClient.instance.logout { error ->
             onCompleted()
         }
+    }
+
+    private fun loginWithKakaoAccount(resultHandler: (OAuthToken?, Throwable?) -> Unit) {
+        UserApiClient.instance.loginWithKakaoAccount(
+            context = context,
+            callback = resultHandler
+        )
     }
 }

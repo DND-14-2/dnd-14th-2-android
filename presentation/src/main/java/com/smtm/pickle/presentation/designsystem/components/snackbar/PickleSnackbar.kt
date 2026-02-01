@@ -56,7 +56,7 @@ fun PickleSnackbar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
             .height(Dimensions.snackbarHeight)
             .clip(RoundedCornerShape(Dimensions.radius))
             .background(PickleTheme.colors.base60)
@@ -119,7 +119,7 @@ object PickleSnackbar {
     /** 토스트 메시지 - 성공 아이콘 */
     fun toastSuccess(
         message: String,
-        position: SnackbarPosition = SnackbarPosition.BOTTOM,
+        position: SnackbarPosition = SnackbarPosition.BelowTopAppBar,
         duration: Long = SnackbarDuration.TOAST_SHORT.duration
     ) = SnackbarData(
         message = message,
@@ -131,7 +131,7 @@ object PickleSnackbar {
     /** 토스트 메시지 - 실패 아이콘 */
     fun toastError(
         message: String,
-        position: SnackbarPosition = SnackbarPosition.BOTTOM,
+        position: SnackbarPosition = SnackbarPosition.BelowTopAppBar,
         duration: Long = SnackbarDuration.TOAST_SHORT.duration
     ) = SnackbarData(
         message = message,
@@ -143,7 +143,7 @@ object PickleSnackbar {
 
     fun snackbarShort(
         message: String,
-        position: SnackbarPosition = SnackbarPosition.BOTTOM,
+        position: SnackbarPosition = SnackbarPosition.BelowTopAppBar,
         actionLabel: String? = null,
         onActionClick: (() -> Unit)? = null,
         duration: Long = SnackbarDuration.SNACKBAR_SHORT.duration
@@ -159,7 +159,7 @@ object PickleSnackbar {
     fun custom(
         message: String,
         iconType: SnackbarIconType = SnackbarIconType.None,
-        position: SnackbarPosition = SnackbarPosition.BOTTOM,
+        position: SnackbarPosition = SnackbarPosition.BelowTopAppBar,
         actionLabel: String? = null,
         onActionClick: (() -> Unit)? = null,
         duration: Long = SnackbarDuration.SNACKBAR_SHORT.duration

@@ -78,7 +78,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaInject" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaInject" }
 
 # Kotlin
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -97,9 +97,9 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 # Social
-androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
-androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoUser" }
 
 # Testing

@@ -17,7 +17,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
 
-        // https://docs.gradle.org/current/userguide/filtering_repository_content.html?utm_source=chatgpt.com
+        // https://docs.gradle.org/current/userguide/filtering_repository_content.html
         // forRepository에 선언된 kakao 저장소는 filter에 선언된 라이브러리 그룹만 조회
         exclusiveContent {
             forRepository {
@@ -27,7 +27,6 @@ dependencyResolutionManagement {
             }
             filter {
                 includeGroup("com.kakao.sdk")
-                includeGroup("com.kakao.i")
             }
         }
     }

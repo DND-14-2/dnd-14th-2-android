@@ -12,16 +12,17 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarAlignment
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarData
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
-import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarAlignment
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 /**
@@ -61,7 +62,13 @@ fun SnackbarHost(
     modifier: Modifier = Modifier,
 ) {
     val snackbar = snackbarState.currentSnackbar
-    val alignment = snackbar?.position?.toAlignment() ?: Alignment.TopCenter
+
+    var lastValidData by remember { mutableStateOf<SnackbarData?>(null) }
+    if (snackbar != null) {
+        lastValidData = snackbar
+    }
+
+    val alignment = lastValidData?.position?.toAlignment() ?: Alignment.TopCenter
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -82,7 +89,7 @@ fun SnackbarHost(
                 }
             ) + fadeOut(animationSpec = tween(300))
         ) {
-            snackbar?.let {
+            lastValidData?.let {
                 PickleSnackbar(
                     snackbarData = it,
                     modifier = Modifier.applyPositionPadding(it.position),

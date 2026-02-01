@@ -24,6 +24,4 @@ interface TokenProvider {
     fun getTokenFlow(): Flow<AuthToken?>
 
     fun getAccessTokenFlow(): Flow<String?>
-
-    fun isLoggedInFlow(): Flow<Boolean>
 }

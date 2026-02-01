@@ -9,6 +9,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.smtm.pickle.presentation.R
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
+import timber.log.Timber
 import javax.inject.Inject
 
 @Stable
@@ -18,7 +19,7 @@ class KakaoLoginManager @Inject constructor(
 ) {
     fun login(
         onSuccess: (String) -> Unit,
-        onFailure: (Throwable) -> Unit
+        onFailure: (String) -> Unit
     ) {
         val resultHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             when {
@@ -27,11 +28,13 @@ class KakaoLoginManager @Inject constructor(
                 }
 
                 error != null -> {
-                    onFailure(error)
+                    Timber.e(error, "카카오 로그인 실패")
+                    onFailure(context.getString(R.string.login_error_general))
                 }
 
                 else -> {
-                    onFailure(IllegalStateException("알 수 없는 에러 발생"))
+                    Timber.e("알 수 없는 오류 발생")
+                    onFailure(context.getString(R.string.error_unknown))
                 }
             }
         }
@@ -49,16 +52,18 @@ class KakaoLoginManager @Inject constructor(
 
                 // 사용자 취소도 로그인 실패 처리
                 error is ClientError && error.reason == ClientErrorCause.Cancelled -> {
-                    onFailure(error)
+                    Timber.e(error, "카카오 로그인 취소")
+                    onFailure(context.getString(R.string.login_error_cancelled))
                 }
 
                 // 카카오톡 실패 → 카카오계정 로그인 fallback
                 error != null -> {
+                    Timber.e(error, "카카오 로그인 실패, 카카오계정으로 로그인")
                     loginWithKakaoAccount(resultHandler)
                 }
 
                 else -> {
-                    onFailure(IllegalStateException("알 수 없는 에러 발생"))
+                    onFailure(context.getString(R.string.error_unknown))
                 }
             }
         }

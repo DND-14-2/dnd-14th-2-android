@@ -18,7 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.auth.KakaoLoginManager
 import com.smtm.pickle.presentation.designsystem.components.PickleLogo
@@ -37,51 +40,49 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val kakaoLoginManager = remember(context) { KakaoLoginManager(context) }
+    val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val kakaoLoginManager = remember(context) { KakaoLoginManager(context) }
     val snackbarState = remember { SnackbarState() }
 
-    LaunchedEffect(uiState) {
-        when (uiState) {
-            is LoginUiState.Success -> {
-                val isFirstLogin = (uiState as LoginUiState.Success).isFirstLogin
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    LoginViewModel.LoginEffect.NavigateToNickname -> {
+                        navigator.navigateToNickname()
+                    }
 
-                if (isFirstLogin) {
-                    navigator.navigateToNickname()
-                } else {
-                    navigator.navigateToMain()
+                    LoginViewModel.LoginEffect.NavigateToMain -> {
+                        navigator.navigateToMain()
+                    }
+
+                    is LoginViewModel.LoginEffect.ShowSnackbar -> {
+                        snackbarState.show(
+                            PickleSnackbar.toastError(
+                                message = effect.message,
+                                position = SnackbarPosition.BelowStatusBar
+                            )
+                        )
+                    }
                 }
             }
-
-            is LoginUiState.Error -> {
-                snackbarState.show(
-                    PickleSnackbar.toastError(
-                        message = "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.",
-                        position = SnackbarPosition.BelowStatusBar
-                    )
-                )
-                viewModel.clearError()
-            }
-
-            else -> Unit
         }
     }
 
     LoginContent(
         uiState = uiState,
-        onGoogleLogin = {
-            viewModel.loginWithGoogle()
-        },
+        onGoogleLogin = viewModel::loginWithGoogle,
         onKakaoLogin = {
             kakaoLoginManager.login(
-                onSuccess = { accessToken ->
-                    viewModel.loginWithKakao(accessToken)
+                onSuccess = { token ->
+                    viewModel.loginWithKakao(token)
                 },
-                onFailure = { error ->
-                    viewModel.handleLoginError(error.message ?: "Kakao 로그인 실패")
+                onFailure = { message ->
+                    viewModel.handleLoginError(message)
                 }
             )
-        },
+        }
     )
 
     SnackbarHost(snackbarState)

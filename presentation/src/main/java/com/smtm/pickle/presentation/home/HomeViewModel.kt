@@ -1,7 +1,10 @@
 package com.smtm.pickle.presentation.home
 
 import androidx.lifecycle.ViewModel
+import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
+import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.home.model.LedgerCalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +22,63 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    init {
+        val today = LocalDate.now()
+        _uiState.value = HomeUiState(
+            profile = HomeUiState.ProfileState(
+                nickname = "피클이",
+                badge = "절약왕",
+                monthlyTotalIncome = 3_500_000,
+                monthlyTotalExpense = 1_200_000,
+            ),
+            calendar = HomeUiState.CalendarState(
+                selectedYearMonth = YearMonth.now(),
+                selectedDate = today,
+                ledgerCalendarDays = mapOf(
+                    today to LedgerCalendarDay(
+                        date = today,
+                        totalIncome = 50_000,
+                        totalExpense = 32_000,
+                    ),
+                    today.minusDays(1) to LedgerCalendarDay(
+                        date = today.minusDays(1),
+                        totalIncome = null,
+                        totalExpense = 15_000,
+                    ),
+                ),
+            ),
+            dailyLedger = HomeUiState.DailyLedgerState(
+                date = today,
+                totalIncome = 50_000,
+                totalExpense = 32_000,
+                ledgers = listOf(
+                    LedgerUiModel(
+                        id = 1,
+                        type = LedgerTypeUiModel.Expense,
+                        amount = 32_000,
+                        category = CategoryUiModel.Food,
+                        description = "점심 식사",
+                        occurredOn = today,
+                        dateText = "오늘",
+                        paymentMethod = PaymentMethodUiModel.CreditCard,
+                        memo = null,
+                    ),
+                    LedgerUiModel(
+                        id = 2,
+                        type = LedgerTypeUiModel.Income,
+                        amount = 50_000,
+                        category = CategoryUiModel.Allowance,
+                        description = "용돈",
+                        occurredOn = today,
+                        dateText = "오늘",
+                        paymentMethod = PaymentMethodUiModel.BankTransfer,
+                        memo = "감사합니다",
+                    ),
+                ),
+            ),
+        )
+    }
 
     fun onBannerClick() {
 

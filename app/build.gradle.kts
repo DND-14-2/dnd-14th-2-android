@@ -16,10 +16,22 @@ val localProperties = Properties().apply {
     }
 }
 
+fun Properties.require(key: String): String =
+    getProperty(key) ?: throw GradleException("local.properties에 '$key'가 설정되지 않았습니다.")
+
 android {
     namespace = "com.smtm.pickle"
     compileSdk {
         version = release(36)
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(localProperties.require("DEBUG_KEYSTORE_PATH"))
+            storePassword = localProperties.require("DEBUG_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.require("DEBUG_KEY_ALIAS")
+            keyPassword = localProperties.require("DEBUG_KEY_PASSWORD")
+        }
     }
 
     defaultConfig {
@@ -32,8 +44,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // 키값이 없음을 빠르게 확인용
-        val kakaoKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY")
-            ?: throw GradleException("local.properties에 KAKAO_NATIVE_APP_KEY가 없습니다")
+        val kakaoKey = localProperties.require("KAKAO_NATIVE_APP_KEY")
 
         // Manifest에 주입
         manifestPlaceholders["NATIVE_APP_KEY"] = kakaoKey
@@ -41,7 +52,9 @@ android {
     }
 
     buildTypes {
-        debug {  }
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

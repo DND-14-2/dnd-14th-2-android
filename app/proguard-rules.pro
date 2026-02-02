@@ -19,3 +19,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# TODO: 배포 시 활성화 (코드 축소, 난독화, 최적화) https://developers.kakao.com/docs/latest/ko/android/getting-started#project-pro-guard
+#-keep class com.kakao.sdk.**.model.* { <fields>; }
+#
+## https://github.com/square/okhttp/pull/6792
+#-dontwarn org.bouncycastle.jsse.**
+#-dontwarn org.conscrypt.*
+#-dontwarn org.openjsse.**
+#
+## refrofit2 (with r8 full mode)
+#-if interface * { @retrofit2.http.* <methods>; }
+#-keep,allowobfuscation interface <1>
+#-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+#-if interface * { @retrofit2.http.* public *** *(...); }
+#-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+#-keep,allowobfuscation,allowshrinking class retrofit2.Response

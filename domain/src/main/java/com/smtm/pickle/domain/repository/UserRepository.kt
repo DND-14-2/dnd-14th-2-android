@@ -7,4 +7,8 @@ interface UserRepository {
     suspend fun setOnboardingCompleted(completed: Boolean)
 
     fun isOnboardingCompleted(): Flow<Boolean>
+
+    suspend fun setFirstLogin(isFirstLogin: Boolean)
+
+    fun isFirstLogin(): Flow<Boolean>
 }

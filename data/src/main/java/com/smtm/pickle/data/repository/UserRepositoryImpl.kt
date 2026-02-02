@@ -5,7 +5,6 @@ import com.smtm.pickle.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
 class UserRepositoryImpl @Inject constructor(
     private val preferencesDataStore: PreferencesDataStore
 ) : UserRepository {
@@ -16,5 +15,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun isOnboardingCompleted(): Flow<Boolean> {
         return preferencesDataStore.isOnboardingCompleted()
+    }
+
+    override suspend fun setFirstLogin(isFirstLogin: Boolean) {
+        preferencesDataStore.setFirstLogin(isFirstLogin)
+    }
+
+    override fun isFirstLogin(): Flow<Boolean> {
+        return preferencesDataStore.isFirstLogin()
     }
 }

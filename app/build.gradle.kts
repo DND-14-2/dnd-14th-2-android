@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,13 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+}
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
 }
 
 android {
@@ -21,12 +30,24 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // 키값이 없음을 빠르게 확인용
+        val kakaoKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY")
+            ?: throw GradleException("local.properties에 KAKAO_NATIVE_APP_KEY가 없습니다")
+
+        // Manifest에 주입
+        manifestPlaceholders["NATIVE_APP_KEY"] = kakaoKey
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
     }
 
     buildTypes {
+        debug {  }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        create("qa") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -38,6 +59,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -56,6 +78,9 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
+
+    // Social SDK
+    implementation(libs.kakao.user)
 
     // Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))

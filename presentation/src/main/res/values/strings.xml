@@ -33,4 +33,10 @@
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
 
+    <!-- Common -->
+    <string name="common_income">수입</string>
+    <string name="common_expense">지출</string>
+    <string name="common_minus_str">-%s</string>
+    <string name="common_plus_str">+%s</string>
+
 </resources>

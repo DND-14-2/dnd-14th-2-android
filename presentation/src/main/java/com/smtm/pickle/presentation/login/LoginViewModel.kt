@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,17 +59,19 @@ class LoginViewModel @Inject constructor(
             runCatching {
                 loginAction()
             }.onSuccess {
-                val isFirstLogin = getFirstLoginUseCase().first()
-                if (isFirstLogin) setFirstLoginUseCase(false)
-
                 _uiState.value = LoginUiState.Idle
-
-                val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
-                else LoginEffect.NavigateToMain
-
-                _effect.emit(destination)
-
                 Timber.d("로그인 성공")
+
+                getFirstLoginUseCase()
+                    .take(1)
+                    .collect { isFirstLogin ->
+                        if (isFirstLogin) setFirstLoginUseCase(false)
+
+                        val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
+                        else LoginEffect.NavigateToMain
+
+                        _effect.emit(destination)
+                    }
             }.onFailure { error ->
                 _uiState.value = LoginUiState.Idle
                 _effect.emit(LoginEffect.ShowSnackbar("로그인에 실패했습니다. 잠시 후 다시 시도해주세요."))

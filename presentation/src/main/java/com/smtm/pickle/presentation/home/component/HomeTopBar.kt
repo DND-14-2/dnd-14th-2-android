@@ -31,7 +31,7 @@ fun HomeTopBar(
 }
 
 @Preview(
-    name = "HomeTopBar - New Alarm",
+    name = "HomeTopBar",
     showBackground = true,
     widthDp = 360
 )

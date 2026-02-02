@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.login
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.common.auth.KakaoLoginManager
+import com.smtm.pickle.presentation.common.auth.KakaoLoginManagerEntryPoint
 import com.smtm.pickle.presentation.designsystem.components.PickleLogo
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
@@ -33,16 +34,21 @@ import com.smtm.pickle.presentation.designsystem.components.tooltip.PickleToolti
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.login.components.ButtonSection
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
+import dagger.hilt.android.EntryPointAccessors
 
 @Composable
 fun LoginScreen(
     navigator: AuthNavigator,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
+    val activity = LocalContext.current as Activity
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val kakaoLoginManager = remember(context) { KakaoLoginManager(context) }
+    val kakaoLoginManager = remember {
+        EntryPointAccessors
+            .fromActivity(activity, KakaoLoginManagerEntryPoint::class.java)
+            .kakaoLoginManager()
+    }
     val snackbarState = remember { SnackbarState() }
 
     LaunchedEffect(lifecycleOwner) {

@@ -7,10 +7,19 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.smtm.pickle.presentation.R
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
 import timber.log.Timber
 import javax.inject.Inject
+
+@EntryPoint
+@InstallIn(ActivityComponent::class)
+interface KakaoLoginManagerEntryPoint {
+    fun kakaoLoginManager(): KakaoLoginManager
+}
 
 @Stable
 @ActivityScoped

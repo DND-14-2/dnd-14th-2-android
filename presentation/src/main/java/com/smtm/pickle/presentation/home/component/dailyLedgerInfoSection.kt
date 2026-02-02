@@ -81,9 +81,9 @@ fun LazyListScope.dailyLedgerInfoSection(
                 title = stringResource(item.category.stringResId),
                 description = item.description,
                 amount = if (item.type == LedgerTypeUiModel.Income) {
-                    stringResource(R.string.common_plus_str, item.amount)
+                    stringResource(R.string.common_plus_str, item.amount.toMoneyFormat())
                 } else {
-                    stringResource(R.string.common_minus_str, item.amount)
+                    stringResource(R.string.common_minus_str, item.amount.toMoneyFormat())
                 },
                 amountColor = if (item.type == LedgerTypeUiModel.Income) {
                     PickleTheme.colors.primary500

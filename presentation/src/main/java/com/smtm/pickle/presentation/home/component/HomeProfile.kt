@@ -49,7 +49,7 @@ fun HomeProfile(
             PickleBadge(text = badge)
             Text(
                 text = nickname,
-                style = PickleTheme.typography.body4Medium,
+                style = PickleTheme.typography.head4SemiBold,
                 color = PickleTheme.colors.gray800
             )
         }

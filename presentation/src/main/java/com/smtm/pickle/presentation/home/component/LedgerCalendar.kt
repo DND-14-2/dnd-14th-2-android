@@ -37,7 +37,7 @@ fun LedgerCalendar(
         startMonth = startMonth,
         endMonth = endMonth,
         firstVisibleMonth = currentMonth,
-        firstDayOfWeek = DayOfWeek.SATURDAY,
+        firstDayOfWeek = DayOfWeek.SUNDAY,
     )
     val visibleMonth = monthlyCalendarState.firstVisibleMonth.yearMonth
 

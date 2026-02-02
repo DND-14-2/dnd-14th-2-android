@@ -52,7 +52,7 @@ mockk = "1.14.7"
 material = "1.13.0"
 
 # Calendar
-kizitonwoseCalendar = "2.10.0"
+kizitonwoseCalendar = "2.9.0"
 
 [libraries]
 # AndroidX

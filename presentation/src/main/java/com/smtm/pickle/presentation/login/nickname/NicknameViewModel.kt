@@ -60,15 +60,9 @@ class NicknameViewModel @Inject constructor(
                 )
             }
 
-            var isAvailable = false
-            checkNicknameAvailableUseCase(requestedNickname)
-                .onSuccess { available ->
-                    isAvailable = available
-                }
-                .onFailure { e ->
-                    Timber.e(e, "닉네임 중복 체크 실패")
-                    isAvailable = false
-                }
+            val isAvailable = checkNicknameAvailableUseCase(requestedNickname)
+                .onFailure { e -> Timber.e(e, "닉네임 중복 체크 실패") }
+                .getOrDefault(false)
             _uiState.update {
                 if (it.nickname != requestedNickname) return@update it
 

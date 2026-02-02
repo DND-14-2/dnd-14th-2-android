@@ -38,5 +38,6 @@
     <string name="common_expense">지출</string>
     <string name="common_minus_str">-%s</string>
     <string name="common_plus_str">+%s</string>
+    <string name="common_yyyy_mm">%d년 %d월</string>
 
 </resources>

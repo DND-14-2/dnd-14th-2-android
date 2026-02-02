@@ -12,6 +12,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
 import com.smtm.pickle.presentation.home.component.HomeTopBar
+import com.smtm.pickle.presentation.home.component.LedgerCalendar
+import java.time.LocalDate
+import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
@@ -22,8 +25,13 @@ fun HomeScreen(
     HomeContent(
         monthlyTotalIncome = 1_000_000,
         monthlyTotalExpense = 500_000,
+        ledgerCalendarDays = emptyMap(),
+        selectedYearMonth = YearMonth.now(),
+        selectedDate = LocalDate.now(),
+        onDateClick = {},
+        onMonthChanged = {},
         onNavigateToLedgerCreate = onNavigateToLedgerCreate,
-        onNavigateToLedgerDetail = onNavigateToLedgerDetail
+        onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
 }
 
@@ -31,6 +39,11 @@ fun HomeScreen(
 private fun HomeContent(
     monthlyTotalIncome: Long,
     monthlyTotalExpense: Long,
+    ledgerCalendarDays: Map<LocalDate, LedgerCalendarDay>,
+    selectedYearMonth: YearMonth,
+    selectedDate: LocalDate,
+    onDateClick: (LocalDate) -> Unit,
+    onMonthChanged: (YearMonth) -> Unit,
     onNavigateToLedgerCreate: () -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
@@ -56,6 +69,15 @@ private fun HomeContent(
                     expense = monthlyTotalExpense,
                 )
             }
+            item("ledger_calendar") {
+                LedgerCalendar(
+                    ledgerCalendarDays = ledgerCalendarDays,
+                    selectedYearMonth = selectedYearMonth,
+                    selectedDate = selectedDate,
+                    onDateClick = onDateClick,
+                    onMonthChanged = onMonthChanged,
+                )
+            }
         }
     }
 }
@@ -67,6 +89,11 @@ private fun HomeContentPreview() {
         HomeContent(
             monthlyTotalIncome = 1000000,
             monthlyTotalExpense = 200000,
+            ledgerCalendarDays = emptyMap(),
+            selectedYearMonth = YearMonth.now(),
+            selectedDate = LocalDate.now(),
+            onDateClick = {},
+            onMonthChanged = {},
             onNavigateToLedgerCreate = {},
             onNavigateToLedgerDetail = {},
         )

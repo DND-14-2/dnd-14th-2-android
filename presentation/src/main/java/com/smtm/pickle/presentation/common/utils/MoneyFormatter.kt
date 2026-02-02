@@ -2,7 +2,8 @@ package com.smtm.pickle.presentation.common.utils
 
 import java.text.DecimalFormat
 
-private val moneyFormat = DecimalFormat("#,###")
+private val moneyFormat
+    get() = DecimalFormat("#,###")
 
 fun Int.toMoneyFormat(): String = moneyFormat.format(this)
 

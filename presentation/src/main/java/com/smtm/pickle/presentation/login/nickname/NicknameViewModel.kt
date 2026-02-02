@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,7 +60,15 @@ class NicknameViewModel @Inject constructor(
                 )
             }
 
-            val isAvailable = checkNicknameAvailableUseCase(requestedNickname)
+            var isAvailable = false
+            checkNicknameAvailableUseCase(requestedNickname)
+                .onSuccess { available ->
+                    isAvailable = available
+                }
+                .onFailure { e ->
+                    Timber.e(e, "닉네임 중복 체크 실패")
+                    isAvailable = false
+                }
             _uiState.update {
                 if (it.nickname != requestedNickname) return@update it
 
@@ -78,11 +87,13 @@ class NicknameViewModel @Inject constructor(
 
     fun saveNickname() {
         viewModelScope.launch {
-            runCatching {
-                saveNicknameUseCase(uiState.value.nickname)
-            }.onSuccess {
-                _effect.emit(NicknameEffect.NavigateToMain)
-            }
+            saveNicknameUseCase(uiState.value.nickname)
+                .onSuccess {
+                    _effect.emit(NicknameEffect.NavigateToMain)
+                }
+                .onFailure { e ->
+                    Timber.e(e, "닉네임 저장 실패")
+                }
         }
     }
 

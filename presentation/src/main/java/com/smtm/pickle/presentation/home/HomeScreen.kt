@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
 import com.smtm.pickle.presentation.home.component.HomeTopBar
@@ -22,14 +24,13 @@ fun HomeScreen(
     onNavigateToLedgerCreate: () -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     HomeContent(
-        monthlyTotalIncome = 1_000_000,
-        monthlyTotalExpense = 500_000,
-        ledgerCalendarDays = emptyMap(),
-        selectedYearMonth = YearMonth.now(),
-        selectedDate = LocalDate.now(),
-        onDateClick = {},
-        onMonthChanged = {},
+        profileState = uiState.profile,
+        calendarState = uiState.calendar,
+        onMonthChanged = viewModel::onMonthChange,
+        onDateClick = viewModel::onSelectDate,
         onNavigateToLedgerCreate = onNavigateToLedgerCreate,
         onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
@@ -37,13 +38,10 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    monthlyTotalIncome: Long,
-    monthlyTotalExpense: Long,
-    ledgerCalendarDays: Map<LocalDate, LedgerCalendarDay>,
-    selectedYearMonth: YearMonth,
-    selectedDate: LocalDate,
-    onDateClick: (LocalDate) -> Unit,
+    profileState: HomeUiState.ProfileUiState,
+    calendarState: HomeUiState.CalendarUiState,
     onMonthChanged: (YearMonth) -> Unit,
+    onDateClick: (LocalDate) -> Unit,
     onNavigateToLedgerCreate: () -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
@@ -63,17 +61,17 @@ private fun HomeContent(
 
             item("profile") {
                 HomeProfile(
-                    badge = "뱃지명",
-                    nickname = "나의닉네임",
-                    income = monthlyTotalIncome,
-                    expense = monthlyTotalExpense,
+                    nickname = profileState.nickname,
+                    badge = profileState.badge,
+                    income = profileState.monthlyTotalIncome,
+                    expense = profileState.monthlyTotalExpense,
                 )
             }
             item("ledger_calendar") {
                 LedgerCalendar(
-                    ledgerCalendarDays = ledgerCalendarDays,
-                    selectedYearMonth = selectedYearMonth,
-                    selectedDate = selectedDate,
+                    ledgerCalendarDays = calendarState.ledgerCalendarDays,
+                    selectedYearMonth = calendarState.selectedYearMonth,
+                    selectedDate = calendarState.selectedDate,
                     onDateClick = onDateClick,
                     onMonthChanged = onMonthChanged,
                 )
@@ -87,11 +85,8 @@ private fun HomeContent(
 private fun HomeContentPreview() {
     PickleTheme {
         HomeContent(
-            monthlyTotalIncome = 1000000,
-            monthlyTotalExpense = 200000,
-            ledgerCalendarDays = emptyMap(),
-            selectedYearMonth = YearMonth.now(),
-            selectedDate = LocalDate.now(),
+            profileState = HomeUiState.ProfileUiState(),
+            calendarState = HomeUiState.CalendarUiState(),
             onDateClick = {},
             onMonthChanged = {},
             onNavigateToLedgerCreate = {},

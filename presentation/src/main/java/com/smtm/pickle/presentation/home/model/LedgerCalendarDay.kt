@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.home
+package com.smtm.pickle.presentation.home.model
 
 import java.time.LocalDate
 

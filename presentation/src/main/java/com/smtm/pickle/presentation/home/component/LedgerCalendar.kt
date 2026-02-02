@@ -15,7 +15,7 @@ import com.kizitonwose.calendar.compose.ContentHeightMode
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.home.LedgerCalendarDay
+import com.smtm.pickle.presentation.home.model.LedgerCalendarDay
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -56,6 +56,8 @@ fun LedgerCalendar(
         Spacer(modifier = Modifier.height(24.dp))
 
         WeekDaysHeader()
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         HorizontalCalendar(
             modifier = Modifier.fillMaxWidth(),

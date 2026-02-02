@@ -13,6 +13,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
+import com.smtm.pickle.presentation.home.component.HomeTopBanner
 import com.smtm.pickle.presentation.home.component.HomeTopBar
 import com.smtm.pickle.presentation.home.component.LedgerCalendar
 import java.time.LocalDate
@@ -28,7 +29,10 @@ fun HomeScreen(
 
     HomeContent(
         profileState = uiState.profile,
+        bannerState = uiState.bannerState,
         calendarState = uiState.calendar,
+        onBannerClick = viewModel::onBannerClick,
+        onBannerCloseClick = viewModel::onBannerCloseClick,
         onMonthChanged = viewModel::onMonthChange,
         onDateClick = viewModel::onSelectDate,
         onNavigateToLedgerCreate = onNavigateToLedgerCreate,
@@ -38,8 +42,11 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    profileState: HomeUiState.ProfileUiState,
-    calendarState: HomeUiState.CalendarUiState,
+    profileState: HomeUiState.ProfileState,
+    bannerState: HomeUiState.BannerState,
+    calendarState: HomeUiState.CalendarState,
+    onBannerClick: () -> Unit,
+    onBannerCloseClick: () -> Unit,
     onMonthChanged: (YearMonth) -> Unit,
     onDateClick: (LocalDate) -> Unit,
     onNavigateToLedgerCreate: () -> Unit,
@@ -57,6 +64,15 @@ private fun HomeContent(
         ) {
             item("top_bar") {
                 HomeTopBar()
+            }
+
+            if (bannerState.isVisible) {
+                item("banner") {
+                    HomeTopBanner(
+                        onClick = onBannerClick,
+                        onCloseClick = onBannerCloseClick,
+                    )
+                }
             }
 
             item("profile") {
@@ -85,8 +101,11 @@ private fun HomeContent(
 private fun HomeContentPreview() {
     PickleTheme {
         HomeContent(
-            profileState = HomeUiState.ProfileUiState(),
-            calendarState = HomeUiState.CalendarUiState(),
+            profileState = HomeUiState.ProfileState(),
+            bannerState = HomeUiState.BannerState(),
+            calendarState = HomeUiState.CalendarState(),
+            onBannerClick = {},
+            onBannerCloseClick = {},
             onDateClick = {},
             onMonthChanged = {},
             onNavigateToLedgerCreate = {},

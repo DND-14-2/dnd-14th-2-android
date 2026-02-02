@@ -19,6 +19,20 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    fun onBannerClick() {
+
+    }
+
+    fun onBannerCloseClick() {
+        _uiState.update { state ->
+            state.copy(
+                bannerState = state.bannerState.copy(
+                    isVisible = false
+                )
+            )
+        }
+    }
+
     fun onMonthChange(yearMonth: YearMonth) {
         _uiState.update { state ->
             state.copy(
@@ -41,17 +55,22 @@ class HomeViewModel @Inject constructor(
 }
 
 data class HomeUiState(
-    val profile: ProfileUiState = ProfileUiState(),
-    val calendar: CalendarUiState = CalendarUiState(),
+    val profile: ProfileState = ProfileState(),
+    val bannerState: BannerState = BannerState(),
+    val calendar: CalendarState = CalendarState(),
 ) {
-    data class ProfileUiState(
+    data class ProfileState(
         val nickname: String = "익명 닉네임",
         val badge: String = "뱃지명",
         val monthlyTotalIncome: Long = 10_000_000,
         val monthlyTotalExpense: Long = 5_000_000,
     )
 
-    data class CalendarUiState(
+    data class BannerState(
+        val isVisible: Boolean = true,
+    )
+
+    data class CalendarState(
         val ledgerCalendarDays: Map<LocalDate, LedgerCalendarDay> = emptyMap(),
         val selectedYearMonth: YearMonth = YearMonth.now(),
         val selectedDate: LocalDate = LocalDate.now(),

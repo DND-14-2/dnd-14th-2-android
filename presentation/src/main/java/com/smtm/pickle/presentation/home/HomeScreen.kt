@@ -16,6 +16,7 @@ import com.smtm.pickle.presentation.home.component.HomeProfile
 import com.smtm.pickle.presentation.home.component.HomeTopBanner
 import com.smtm.pickle.presentation.home.component.HomeTopBar
 import com.smtm.pickle.presentation.home.component.LedgerCalendar
+import com.smtm.pickle.presentation.home.component.dailyLedgerInfoSection
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -29,8 +30,9 @@ fun HomeScreen(
 
     HomeContent(
         profileState = uiState.profile,
-        bannerState = uiState.bannerState,
+        bannerState = uiState.banner,
         calendarState = uiState.calendar,
+        dailyLedgerState = uiState.dailyLedger,
         onBannerClick = viewModel::onBannerClick,
         onBannerCloseClick = viewModel::onBannerCloseClick,
         onMonthChanged = viewModel::onMonthChange,
@@ -45,6 +47,7 @@ private fun HomeContent(
     profileState: HomeUiState.ProfileState,
     bannerState: HomeUiState.BannerState,
     calendarState: HomeUiState.CalendarState,
+    dailyLedgerState: HomeUiState.DailyLedgerState,
     onBannerClick: () -> Unit,
     onBannerCloseClick: () -> Unit,
     onMonthChanged: (YearMonth) -> Unit,
@@ -83,6 +86,7 @@ private fun HomeContent(
                     expense = profileState.monthlyTotalExpense,
                 )
             }
+
             item("ledger_calendar") {
                 LedgerCalendar(
                     ledgerCalendarDays = calendarState.ledgerCalendarDays,
@@ -92,6 +96,13 @@ private fun HomeContent(
                     onMonthChanged = onMonthChanged,
                 )
             }
+
+            dailyLedgerInfoSection(
+                date = dailyLedgerState.date,
+                ledgers = dailyLedgerState.ledgers,
+                totalIncome = dailyLedgerState.totalIncome,
+                totalExpense = dailyLedgerState.totalExpense,
+            )
         }
     }
 }
@@ -104,6 +115,7 @@ private fun HomeContentPreview() {
             profileState = HomeUiState.ProfileState(),
             bannerState = HomeUiState.BannerState(),
             calendarState = HomeUiState.CalendarState(),
+            dailyLedgerState = HomeUiState.DailyLedgerState(),
             onBannerClick = {},
             onBannerCloseClick = {},
             onDateClick = {},

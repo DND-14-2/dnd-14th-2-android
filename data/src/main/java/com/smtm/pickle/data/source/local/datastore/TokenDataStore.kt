@@ -35,7 +35,8 @@ class TokenDataStore @Inject constructor(
         val encryptedAccess = tokenEncryption.encrypt(token.access)
         val encryptedRefresh = tokenEncryption.encrypt(token.refresh)
         if (encryptedRefresh == null || encryptedAccess == null) {
-            Timber.e("토큰 암호화 실패")
+            if (encryptedAccess == null) Timber.e("액세스 토큰 암호화 실패")
+            if (encryptedRefresh == null) Timber.e("리프레시 토큰 암호화 실패")
             return
         }
 

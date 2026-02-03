@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.mypage
 
 import androidx.lifecycle.ViewModel
+import com.smtm.pickle.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,8 +55,39 @@ class MyPageViewModel @Inject constructor(
                 )
             ),
             activity = MyPageUiState.ActivityState(
-                pendingJudgments = emptyList()
-            )
+                pendingJudgments = listOf(
+                    MyPageUiState.PendingJudgmentState(
+                        id = "1",
+                        title = "식비",
+                        price = 10000L,
+                        iconRes = R.drawable.ic_mypage_coin
+                    ),
+                    MyPageUiState.PendingJudgmentState(
+                        id = "2",
+                        title = "식비",
+                        price = 10000L,
+                        iconRes = R.drawable.ic_mypage_coin
+                    ),
+                    MyPageUiState.PendingJudgmentState(
+                        id = "3",
+                        title = "식비",
+                        price = 10000L,
+                        iconRes = R.drawable.ic_mypage_coin
+                    ),
+                    MyPageUiState.PendingJudgmentState(
+                        id = "4",
+                        title = "식비",
+                        price = 10000L,
+                        iconRes = R.drawable.ic_mypage_coin
+                    ),
+                    MyPageUiState.PendingJudgmentState(
+                        id = "5",
+                        title = "식비",
+                        price = 10000L,
+                        iconRes = R.drawable.ic_mypage_coin
+                    )
+                )
+            ),
         )
     }
 }

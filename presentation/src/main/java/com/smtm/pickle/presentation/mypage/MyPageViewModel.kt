@@ -27,7 +27,7 @@ class MyPageViewModel @Inject constructor(
             profile = MyPageUiState.ProfileState(
                 nickname = "유저 닉네임",
                 badgeName = "배지명",
-                invitationCode = "PICKLE2024"
+                invitationCode = "PICKLE2026"
             ),
             statistics = MyPageUiState.StatisticsState(
                 selectedTabIndex = 0,

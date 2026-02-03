@@ -50,7 +50,7 @@ fun MyPageBadgeBottomSheetContent(
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.height(20.dp)) // TODO: 디자인 수정 시 고치기
+        Spacer(modifier = Modifier.height(32.dp))
 
         PickleButton(
             text = "배지 변경하기",

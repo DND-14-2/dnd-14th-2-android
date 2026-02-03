@@ -37,6 +37,7 @@ fun HomeScreen(
         onBannerCloseClick = viewModel::onBannerCloseClick,
         onMonthChanged = viewModel::onMonthChange,
         onDateClick = viewModel::onSelectDate,
+        onNavigateToMyPage = {},
         onNavigateToLedgerCreate = onNavigateToLedgerCreate,
         onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
@@ -52,6 +53,7 @@ private fun HomeContent(
     onBannerCloseClick: () -> Unit,
     onMonthChanged: (YearMonth) -> Unit,
     onDateClick: (LocalDate) -> Unit,
+    onNavigateToMyPage: () -> Unit,
     onNavigateToLedgerCreate: () -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
@@ -66,7 +68,9 @@ private fun HomeContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item("top_bar") {
-                HomeTopBar()
+                HomeTopBar(
+                    onStatisticsClick = onNavigateToMyPage
+                )
             }
 
             if (bannerState.isVisible) {
@@ -120,6 +124,7 @@ private fun HomeContentPreview() {
             onBannerCloseClick = {},
             onDateClick = {},
             onMonthChanged = {},
+            onNavigateToMyPage = {},
             onNavigateToLedgerCreate = {},
             onNavigateToLedgerDetail = {},
         )

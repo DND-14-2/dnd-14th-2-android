@@ -143,7 +143,7 @@ private fun getStatus(status: ProfileStatus): String {
 @Composable
 private fun PickleProfilePreview() {
     PickleTheme {
-        PickleProfile(type = ProfileType.Setting)
+        PickleProfile(type = ProfileType.InSetting)
     }
 }
 

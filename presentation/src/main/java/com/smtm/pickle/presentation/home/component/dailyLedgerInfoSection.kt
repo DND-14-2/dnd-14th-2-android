@@ -58,7 +58,7 @@ fun LazyListScope.dailyLedgerInfoSection(
             EmptyNotice(modifier = modifier)
         }
     } else {
-        item {
+        item("selected_date_amount") {
             SelectedDateAmount(
                 modifier = modifier
                     .padding(horizontal = 16.dp),

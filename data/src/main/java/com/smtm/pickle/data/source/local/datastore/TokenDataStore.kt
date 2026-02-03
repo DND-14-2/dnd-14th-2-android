@@ -32,14 +32,15 @@ class TokenDataStore @Inject constructor(
     }
 
     suspend fun saveToken(token: AuthToken) {
+        val encryptedAccess = tokenEncryption.encrypt(token.access)
         val encryptedRefresh = tokenEncryption.encrypt(token.refresh)
-        if (encryptedRefresh == null) {
+        if (encryptedRefresh == null || encryptedAccess == null) {
             Timber.e("토큰 암호화 실패")
             return
         }
 
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.ACCESS_TOKEN] = token.access
+            preferences[PreferencesKeys.ACCESS_TOKEN] = encryptedAccess
             preferences[PreferencesKeys.REFRESH_TOKEN] = encryptedRefresh
         }
     }
@@ -58,9 +59,8 @@ class TokenDataStore @Inject constructor(
         }
     }
 
-    /** UI 관찰용 엑세스 토큰 획득 */
     fun getAccessTokenFlow(): Flow<String?> = dataStoreFlow.map { preferences ->
-        preferences[PreferencesKeys.ACCESS_TOKEN]
+        preferences[PreferencesKeys.ACCESS_TOKEN]?.let { tokenEncryption.decrypt(it) }
     }
 
     fun getTokenFlow(): Flow<AuthToken?> = dataStoreFlow.map { preferences ->
@@ -68,15 +68,16 @@ class TokenDataStore @Inject constructor(
     }
 
     private fun Preferences.getAuthToken(): AuthToken? {
-        val accessToken = this[PreferencesKeys.ACCESS_TOKEN]
+        val encryptedAccess = this[PreferencesKeys.ACCESS_TOKEN]
         val encryptedRefresh = this[PreferencesKeys.REFRESH_TOKEN]
 
-        if (accessToken == null || encryptedRefresh == null) return null
+        if (encryptedAccess == null || encryptedRefresh == null) return null
 
+        val access = tokenEncryption.decrypt(encryptedAccess)
         val refresh = tokenEncryption.decrypt(encryptedRefresh)
 
-        return if (refresh != null) {
-            AuthToken(accessToken, refresh)
+        return if (access != null && refresh != null) {
+            AuthToken(access, refresh)
         } else {
             Timber.e("토큰 복호화 실패")
             null

@@ -44,12 +44,15 @@ fun PickleIconButton(
     Box(
         modifier = modifier
             .customLayout(
-                contentSize = iconSize,
+                contentSize = touchSize,
                 layoutSize = layoutSize
             ) // 클릭 이벤트 및 리플 효과 설정
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(bounded = false, radius = touchSize / 2),
+                indication = ripple(
+                    bounded = false,
+                    radius = maxOf(touchSize / 2, 24.dp)
+                ),
                 onClick = onClick,
             ),
         contentAlignment = Alignment.Center

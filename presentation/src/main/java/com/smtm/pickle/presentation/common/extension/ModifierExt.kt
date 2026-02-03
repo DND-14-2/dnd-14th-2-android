@@ -87,7 +87,7 @@ fun Modifier.customLayout(
     val contentPx = contentSize.roundToPx()
     val layoutPx = layoutSize.roundToPx()
 
-    // 터치 영역 설정
+    // 컨텐츠 영역 측정
     val placeable = measurable.measure(
         constraints.copy(
             minWidth = contentPx,

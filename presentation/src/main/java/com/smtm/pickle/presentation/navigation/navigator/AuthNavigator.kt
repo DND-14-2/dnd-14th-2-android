@@ -6,5 +6,7 @@ interface AuthNavigator {
 
     fun navigateToLogin()
 
+    fun navigateToNickname()
+
     fun navigateToMain()
 }

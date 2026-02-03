@@ -21,9 +21,13 @@ android {
     }
 
     buildTypes {
+        debug {  }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        create("qa") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -35,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -49,11 +54,17 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.android.compiler)
 
     // Coroutines
     implementation(libs.bundles.coroutines)
+
+    // Social SDK
+    implementation(libs.kakao.user)
+
+    // Logging
+    implementation(libs.timber)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)

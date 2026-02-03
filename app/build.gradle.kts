@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,10 +9,29 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+fun Properties.require(key: String): String =
+    getProperty(key) ?: throw GradleException("local.properties에 '$key'가 설정되지 않았습니다.")
+
 android {
     namespace = "com.smtm.pickle"
     compileSdk {
         version = release(36)
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(localProperties.require("DEBUG_KEYSTORE_PATH"))
+            storePassword = localProperties.require("DEBUG_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.require("DEBUG_KEY_ALIAS")
+            keyPassword = localProperties.require("DEBUG_KEY_PASSWORD")
+        }
     }
 
     defaultConfig {
@@ -21,12 +42,25 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // 키값이 없음을 빠르게 확인용
+        val kakaoKey = localProperties.require("KAKAO_NATIVE_APP_KEY")
+
+        // Manifest에 주입
+        manifestPlaceholders["NATIVE_APP_KEY"] = kakaoKey
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        create("qa") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -38,6 +72,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -56,6 +91,9 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
+
+    // Social SDK
+    implementation(libs.kakao.user)
 
     // Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))

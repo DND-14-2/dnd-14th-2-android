@@ -13,3 +13,6 @@ data object OnboardingRoute
 
 @Serializable
 data object LoginRoute
+
+@Serializable
+data object NicknameRoute

@@ -24,6 +24,9 @@ object Dimensions {
     // 스낵바
     val snackbarHeight = 56.dp
 
+    // 앱바
+    val appbarHeight = 56.dp
+
     // 칩
     /** 바텀시트, 다이얼로그 등 내부 칩 */
     val chipHeightBadge = 24.dp
@@ -56,4 +59,5 @@ object Dimensions {
     val radiusModal = 24.dp
     val radiusFull = 999.dp
 
+    val bottomContentHeight = 72.dp
 }

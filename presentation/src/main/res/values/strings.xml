@@ -20,6 +20,12 @@
     <!-- Onboarding -->
     <string name="onboarding_skip">건너뛰기</string>
     <string name="onboarding_start">시작하기</string>
+    <string name="onboarding_step1_title">가계부 작성</string>
+    <string name="onboarding_step1_description">아주 간단하게\n가계부를 기록할 수 있어요</string>
+    <string name="onboarding_step2_title">소비 심판</string>
+    <string name="onboarding_step2_description">이 지출, 꼭 필요한가요?\n객관적으로 심판 받을 수 있어요</string>
+    <string name="onboarding_step3_title">지인 연동</string>
+    <string name="onboarding_step3_description">친구와 함께라면\n작심삼일 탈출!</string>
 
     <!-- Common -->
     <string name="common_previous">이전</string>

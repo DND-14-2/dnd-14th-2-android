@@ -19,12 +19,6 @@ fun OnboardingPagerSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState
 ) {
-    val onboardingSteps = listOf(
-        OnboardingItems.Step1,
-        OnboardingItems.Step2,
-        OnboardingItems.Step3
-    )
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -35,7 +29,7 @@ fun OnboardingPagerSection(
             state = pagerState,
         ) { page ->
             OnboardingPagerContent(
-                content = onboardingSteps[page]
+                currentItem = OnboardingItems.entries[page]
             )
         }
         Spacer(Modifier.height(20.dp))

@@ -24,6 +24,12 @@
     <!-- Common -->
     <string name="common_previous">이전</string>
     <string name="common_next">다음</string>
+    <string name="common_income">수입</string>
+    <string name="common_expense">지출</string>
+    <string name="common_minus_str">-%s</string>
+    <string name="common_plus_str">+%s</string>
+    <string name="common_yyyy_mm">%d년 %d월</string>
+    <string name="common_mm_dd">%d월 %d일</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>
@@ -32,5 +38,34 @@
 
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
+
+    <!-- Ledger -->
+    <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>
+
+    <!-- Ledger Category -->
+    <string name="ledger_category_food">식비</string>
+    <string name="ledger_category_transport">교통비</string>
+    <string name="ledger_category_housing">주거비</string>
+    <string name="ledger_category_shopping">쇼핑</string>
+    <string name="ledger_category_health_medical">의료/건강</string>
+    <string name="ledger_category_education_self_development">교육/자기계발</string>
+    <string name="ledger_category_leisure_hobby">여가/취미</string>
+    <string name="ledger_category_saving_finance">저축/금융</string>
+    <string name="ledger_category_salary">월급</string>
+    <string name="ledger_category_side_income">부수입</string>
+    <string name="ledger_category_bonus">상여</string>
+    <string name="ledger_category_allowance">용돈</string>
+    <string name="ledger_category_part_time_income">아르바이트</string>
+    <string name="ledger_category_financial_income">금융수입</string>
+    <string name="ledger_category_split_bill">더치페이</string>
+    <string name="ledger_category_transfer">이체</string>
+    <string name="ledger_category_other">기타</string>
+
+    <!-- Ledger Payment Method -->
+    <string name="ledger_payment_method_bank_transfer">계좌이체</string>
+    <string name="ledger_payment_method_credit_card">신용카드</string>
+    <string name="ledger_payment_method_debit_card">체크카드</string>
+    <string name="ledger_payment_method_cash">현금</string>
+
 
 </resources>

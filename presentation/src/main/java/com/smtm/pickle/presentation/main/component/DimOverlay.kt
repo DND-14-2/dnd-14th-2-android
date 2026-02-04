@@ -1,5 +1,8 @@
 package com.smtm.pickle.presentation.main.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,17 +15,24 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
 fun DimOverlay(
-    modifier: Modifier = Modifier,
+    isVisible: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(PickleTheme.colors.dim)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick
-            )
-    )
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(PickleTheme.colors.dim)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClick
+                )
+        )
+    }
 }

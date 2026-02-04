@@ -73,11 +73,12 @@ fun MainScreen(
             }
         )
 
-        if (isHomeScreen && isFabExpanded) {
-            DimOverlay(onClick = { isFabExpanded = false })
-        }
-
         if (isHomeScreen) {
+            DimOverlay(
+                isVisible = isFabExpanded,
+                onClick = { isFabExpanded = false },
+            )
+
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -88,8 +89,7 @@ fun MainScreen(
             ) {
                 HomeExpandableFab(
                     isExpanded = isFabExpanded,
-                    onOpenClick = { isFabExpanded = true },
-                    onCloseClick = { isFabExpanded = false },
+                    onToggleClick = { isFabExpanded = !isFabExpanded },
                     onCreateClick = {
                         isFabExpanded = false
                         rootNavController.navigate(LedgerCreateRoute.from(selectedDate))

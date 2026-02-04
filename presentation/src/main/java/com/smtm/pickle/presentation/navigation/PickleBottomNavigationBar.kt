@@ -77,7 +77,7 @@ private fun RowScope.PickleNavigationBarItem(
     ) {
         Image(
             painter = painterResource(
-                id = if (isSelected) bottomNavItem.activatedIconResId else bottomNavItem.inActiveIconResId
+                id = if (isSelected) bottomNavItem.activatedIconResId else bottomNavItem.inactivatedIconResId
             ),
             contentDescription = stringResource(bottomNavItem.labelResId),
             modifier = Modifier.size(24.dp),

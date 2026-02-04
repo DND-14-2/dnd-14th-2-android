@@ -12,27 +12,27 @@ import kotlin.reflect.KClass
  * @param tabRouteClass 현재 선택 상태 비교용
  * @param labelResId 탭 라벨
  * @param activatedIconResId 선택된 탭 아이콘
- * @param inActiveIconResId 미선택 아이콘
+ * @param inactivatedIconResId 미선택 아이콘
  */
 enum class BottomNavItem(
     val tabRoute: Any,
     val tabRouteClass: KClass<*>,
     @StringRes val labelResId: Int,
     @DrawableRes val activatedIconResId: Int,
-    @DrawableRes val inActiveIconResId: Int,
+    @DrawableRes val inactivatedIconResId: Int,
 ) {
     HOME(
         tabRoute = HomeTabRoute,
         tabRouteClass = HomeTabRoute::class,
         labelResId = R.string.nav_home,
         activatedIconResId = R.drawable.ic_nav_home_activated,
-        inActiveIconResId = R.drawable.ic_nav_home_inactivated,
+        inactivatedIconResId = R.drawable.ic_nav_home_inactivated,
     ),
     MY_PAGE(
         tabRoute = MyPageTabRoute,
         tabRouteClass = MyPageTabRoute::class,
         labelResId = R.string.nav_mypage,
         activatedIconResId = R.drawable.ic_nav_mypage_activated,
-        inActiveIconResId = R.drawable.ic_nav_mypage_inactivated,
+        inactivatedIconResId = R.drawable.ic_nav_mypage_inactivated,
     ),
 }

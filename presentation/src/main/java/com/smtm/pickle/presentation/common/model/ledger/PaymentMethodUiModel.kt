@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.common.model.ledger
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.smtm.pickle.domain.model.ledger.PaymentMethod
 import com.smtm.pickle.presentation.R
 
 sealed class PaymentMethodUiModel(
@@ -27,4 +28,12 @@ sealed class PaymentMethodUiModel(
         stringResId = R.string.ledger_payment_method_cash,
         iconResId = R.drawable.ic_ledger_payment_method_cash,
     )
+}
+
+
+fun PaymentMethod.toUiModel(): PaymentMethodUiModel = when (this) {
+    PaymentMethod.BankTransfer -> PaymentMethodUiModel.BankTransfer
+    PaymentMethod.CreditCard -> PaymentMethodUiModel.CreditCard
+    PaymentMethod.DebitCard -> PaymentMethodUiModel.DebitCard
+    PaymentMethod.Cash -> PaymentMethodUiModel.Cash
 }

@@ -29,6 +29,7 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
 import com.smtm.pickle.presentation.onboarding.components.OnboardingBottomButton
 import com.smtm.pickle.presentation.onboarding.components.OnboardingPagerSection
+import com.smtm.pickle.presentation.onboarding.model.OnboardingItems
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,7 +65,7 @@ private fun OnboardingContent(
     snackbarState: SnackbarState,
     onSkipOrFinish: () -> Unit,
 ) {
-    val pagerState = rememberPagerState(pageCount = { 3 })
+    val pagerState = rememberPagerState(pageCount = { OnboardingItems.entries.size })
     val scope = rememberCoroutineScope()
 
     val onPrevPage: () -> Unit = { scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) } }

@@ -51,6 +51,9 @@ mockk = "1.14.7"
 # UI
 material = "1.13.0"
 
+# Calendar
+kizitonwoseCalendar = "2.9.0"
+
 [libraries]
 # AndroidX
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -112,6 +115,9 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 # UI
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Calendar
+kizitonwose-calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "kizitonwoseCalendar" }
 
 [plugins]
 # Android

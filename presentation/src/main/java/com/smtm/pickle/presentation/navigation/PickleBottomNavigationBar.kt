@@ -2,7 +2,6 @@ package com.smtm.pickle.presentation.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -34,6 +36,7 @@ fun PickleBottomNavigationBar(
 ) {
     Row(
         modifier = modifier
+            .selectableGroup()
             .fillMaxWidth()
             .background(PickleTheme.colors.base0)
             .navigationBarsPadding()
@@ -65,11 +68,12 @@ private fun RowScope.PickleNavigationBarItem(
     Column(
         modifier = modifier
             .weight(1f)
-            .clickable(
+            .selectable(
+                selected = isSelected,
+                role = Role.Tab,
+                onClick = { if (!isSelected) onClick() },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                enabled = !isSelected,
-                onClick = onClick
             )
             .padding(vertical = 8.dp),
         verticalArrangement = Arrangement.Center,

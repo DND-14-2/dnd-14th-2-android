@@ -35,7 +35,7 @@ fun HomeExpandableFab(
                 Text(
                     text = stringResource(R.string.home_fab_create_ledger),
                     style = PickleTheme.typography.body1Bold,
-                    color = Color.White,
+                    color = PickleTheme.colors.base0,
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -46,7 +46,7 @@ fun HomeExpandableFab(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_fab_edit),
-                        contentDescription = "close",
+                        contentDescription = stringResource(R.string.home_fab_create_ledger),
                         modifier = Modifier.size(52.dp),
                         tint = Color.Unspecified,
                     )

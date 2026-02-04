@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.common.extension.customLayout
 
 /**
- * 커스텀 아이콘 버튼
+ * 커스텀 상호작용 아이콘 버튼
  * @param iconRes 아이콘 리소스
  * @param onClick 클릭 이벤트
  * @param modifier
@@ -29,7 +29,7 @@ import com.smtm.pickle.presentation.common.extension.customLayout
  * @param tint 아이콘 색상
  */
 @Composable
-fun PickleIconButton(
+fun PickleIconButtonWithTouchCustom(
     @DrawableRes iconRes: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

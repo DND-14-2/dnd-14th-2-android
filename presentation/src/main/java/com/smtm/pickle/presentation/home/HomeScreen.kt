@@ -1,10 +1,12 @@
 package com.smtm.pickle.presentation.home
 
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,52 +63,56 @@ private fun HomeContent(
         modifier = Modifier.fillMaxSize(),
         color = PickleTheme.colors.background50,
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(PickleTheme.colors.background50),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        CompositionLocalProvider(
+            LocalOverscrollFactory provides null
         ) {
-            item("top_bar") {
-                HomeTopBar(
-                    onStatisticsClick = onNavigateToMyPage
-                )
-            }
-
-            if (bannerState.isVisible) {
-                item("banner") {
-                    HomeTopBanner(
-                        onClick = onBannerClick,
-                        onCloseClick = onBannerCloseClick,
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(PickleTheme.colors.background50),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                stickyHeader("top_bar") {
+                    HomeTopBar(
+                        onStatisticsClick = onNavigateToMyPage
                     )
                 }
-            }
 
-            item("profile") {
-                HomeProfile(
-                    nickname = profileState.nickname,
-                    badge = profileState.badge,
-                    income = profileState.monthlyTotalIncome,
-                    expense = profileState.monthlyTotalExpense,
+                if (bannerState.isVisible) {
+                    item("banner") {
+                        HomeTopBanner(
+                            onClick = onBannerClick,
+                            onCloseClick = onBannerCloseClick,
+                        )
+                    }
+                }
+
+                item("profile") {
+                    HomeProfile(
+                        nickname = profileState.nickname,
+                        badge = profileState.badge,
+                        income = profileState.monthlyTotalIncome,
+                        expense = profileState.monthlyTotalExpense,
+                    )
+                }
+
+                item("ledger_calendar") {
+                    LedgerCalendar(
+                        ledgerCalendarDays = calendarState.ledgerCalendarDays,
+                        selectedYearMonth = calendarState.selectedYearMonth,
+                        selectedDate = calendarState.selectedDate,
+                        onDateClick = onDateClick,
+                        onMonthChanged = onMonthChanged,
+                    )
+                }
+
+                dailyLedgerInfoSection(
+                    date = dailyLedgerState.date,
+                    ledgers = dailyLedgerState.ledgers,
+                    totalIncome = dailyLedgerState.totalIncome,
+                    totalExpense = dailyLedgerState.totalExpense,
                 )
             }
-
-            item("ledger_calendar") {
-                LedgerCalendar(
-                    ledgerCalendarDays = calendarState.ledgerCalendarDays,
-                    selectedYearMonth = calendarState.selectedYearMonth,
-                    selectedDate = calendarState.selectedDate,
-                    onDateClick = onDateClick,
-                    onMonthChanged = onMonthChanged,
-                )
-            }
-
-            dailyLedgerInfoSection(
-                date = dailyLedgerState.date,
-                ledgers = dailyLedgerState.ledgers,
-                totalIncome = dailyLedgerState.totalIncome,
-                totalExpense = dailyLedgerState.totalExpense,
-            )
         }
     }
 }

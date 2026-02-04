@@ -1,16 +1,29 @@
 package com.smtm.pickle.presentation.main
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.smtm.pickle.presentation.home.HomeScreen
+import com.smtm.pickle.presentation.main.component.DimOverlay
+import com.smtm.pickle.presentation.main.component.HomeExpandableFab
 import com.smtm.pickle.presentation.mypage.MyPageScreen
 import com.smtm.pickle.presentation.navigation.GlobalNavEvent
 import com.smtm.pickle.presentation.navigation.PickleBottomNavigationBar
@@ -28,6 +41,7 @@ import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictResultRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictTabRoute
 import com.smtm.pickle.presentation.verdict.VerdictScreen
+import java.time.LocalDate
 
 @Composable
 fun MainScreen(
@@ -37,10 +51,69 @@ fun MainScreen(
     val tabNavController = rememberNavController()
     val navBackStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val isHomeScreen = currentDestination?.hasRoute(HomeTabRoute::class) == true
 
+    var isFabExpanded by remember { mutableStateOf(false) }
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    val density = LocalDensity.current
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        MainContent(
+            rootNavController = rootNavController,
+            tabNavController = tabNavController,
+            currentDestination = currentDestination,
+            onBottomBarHeightChange = { height ->
+                with(density) {
+                    bottomBarHeight = height.toDp()
+                }
+            },
+            onSelectedDateChange = { date ->
+                selectedDate = date
+            }
+        )
+
+        if (isHomeScreen && isFabExpanded) {
+            DimOverlay(onClick = { isFabExpanded = false })
+        }
+
+        if (isHomeScreen) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        bottom = bottomBarHeight + 9.dp,
+                        end = 16.dp
+                    )
+            ) {
+                HomeExpandableFab(
+                    isExpanded = isFabExpanded,
+                    onOpenClick = { isFabExpanded = true },
+                    onCloseClick = { isFabExpanded = false },
+                    onCreateClick = {
+                        isFabExpanded = false
+                        rootNavController.navigate(LedgerCreateRoute.from(selectedDate))
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MainContent(
+    rootNavController: NavHostController,
+    tabNavController: NavHostController,
+    currentDestination: NavDestination?,
+    onBottomBarHeightChange: (Int) -> Unit,
+    onSelectedDateChange: (LocalDate) -> Unit,
+) {
     Scaffold(
         bottomBar = {
             PickleBottomNavigationBar(
+                modifier = Modifier.onGloballyPositioned { coordinates ->
+                    onBottomBarHeightChange(coordinates.size.height)
+                },
                 currentDestination = currentDestination,
                 onNavigate = { route ->
                     tabNavController.navigate(route) {
@@ -61,9 +134,7 @@ fun MainScreen(
             builder = {
                 composable<HomeTabRoute> {
                     HomeScreen(
-                        onNavigateToLedgerCreate = {
-                            rootNavController.navigate(LedgerCreateRoute)
-                        },
+                        onSelectedDateChange = onSelectedDateChange,
                         onNavigateToLedgerDetail = { id ->
                             rootNavController.navigate(LedgerDetailRoute(id))
                         }

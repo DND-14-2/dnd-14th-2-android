@@ -33,7 +33,7 @@ import java.time.YearMonth
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onNavigateToLedgerCreate: () -> Unit,
+    onSelectedDateChange: (LocalDate) -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -64,9 +64,11 @@ fun HomeScreen(
         onBannerClick = viewModel::onBannerClick,
         onBannerCloseClick = viewModel::onBannerCloseClick,
         onMonthChanged = viewModel::onMonthChange,
-        onDateClick = viewModel::onSelectDate,
+        onDateClick = { date ->
+            viewModel.onSelectDate(date)
+            onSelectedDateChange(date)
+        },
         onNavigateToMyPage = {},
-        onNavigateToLedgerCreate = onNavigateToLedgerCreate,
         onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
 
@@ -84,7 +86,6 @@ private fun HomeContent(
     onMonthChanged: (YearMonth) -> Unit,
     onDateClick: (LocalDate) -> Unit,
     onNavigateToMyPage: () -> Unit,
-    onNavigateToLedgerCreate: () -> Unit,
     onNavigateToLedgerDetail: (Long) -> Unit,
 ) {
     Surface(
@@ -159,7 +160,6 @@ private fun HomeContentPreview() {
             onDateClick = {},
             onMonthChanged = {},
             onNavigateToMyPage = {},
-            onNavigateToLedgerCreate = {},
             onNavigateToLedgerDetail = {},
         )
     }

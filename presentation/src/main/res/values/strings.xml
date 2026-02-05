@@ -73,5 +73,7 @@
     <string name="ledger_payment_method_debit_card">체크카드</string>
     <string name="ledger_payment_method_cash">현금</string>
 
+    <!-- Home -->
+    <string name="home_fab_create_ledger">가계부 작성하기</string>
 
 </resources>

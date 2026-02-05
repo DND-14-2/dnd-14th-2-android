@@ -15,15 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.mypage.tabs.statistics.model.ComparisonResult
+import kotlin.math.abs
 
 @Composable
 fun StatsSummaryCard(
@@ -32,6 +36,8 @@ fun StatsSummaryCard(
     onMyLedgerClick: () -> Unit = {},
     comparedValue: Long,
 ) {
+    val comparisonResult = getComparisonResult(isExpenditure, comparedValue)
+
     PickleCard(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp)
@@ -47,7 +53,7 @@ fun StatsSummaryCard(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = String.format(java.util.Locale.KOREA, "%,d원", cost),
+                    text = "${cost.toMoneyFormat()}원",
                     style = PickleTheme.typography.head2SemiBold,
                     color = PickleTheme.colors.gray700
                 )
@@ -89,19 +95,47 @@ fun StatsSummaryCard(
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = buildAnnotatedString {
-                    append("지난달보다 ")
-
-                    withStyle(style = SpanStyle(color = PickleTheme.colors.primary500)) {
-                        append(String.format(java.util.Locale.KOREA, "%,d원", comparedValue))
+                text = if (comparisonResult.highlightColor == null) {
+                    AnnotatedString("지난달과 똑같아요")
+                } else {
+                    buildAnnotatedString {
+                        append("지난달보다 ")
+                        withStyle(style = SpanStyle(color = comparisonResult.highlightColor)) {
+                            append("${abs(comparedValue).toMoneyFormat()}원")
+                        }
+                        append(" ${comparisonResult.suffix}")
                     }
-
-                    append(if (isExpenditure) " 절약했어요" else " 증가했어요") // TODO: 실제 증감 여부에 따른 로직 필요
                 },
                 style = PickleTheme.typography.body1Bold,
                 color = PickleTheme.colors.gray600
             )
         }
+    }
+}
+
+@Composable
+private fun getComparisonResult(isExpenditure: Boolean, comparedValue: Long): ComparisonResult {
+    return when {
+        comparedValue == 0L -> ComparisonResult(
+            suffix = "",
+            highlightColor = null
+        )
+        isExpenditure && comparedValue > 0 -> ComparisonResult(
+            suffix = "절약",
+            highlightColor = PickleTheme.colors.primary500
+        )
+        isExpenditure -> ComparisonResult(
+            suffix = "지출",
+            highlightColor = PickleTheme.colors.error50
+        )
+        comparedValue > 0 -> ComparisonResult(
+            suffix = "증가",
+            highlightColor = PickleTheme.colors.primary500
+        )
+        else -> ComparisonResult(
+            suffix = "감소",
+            highlightColor = PickleTheme.colors.error50
+        )
     }
 }
 

@@ -7,21 +7,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.smtm.pickle.presentation.R
+import java.time.LocalDate
 
 @Composable
-fun LedgerCreateScreen() {
+fun LedgerCreateScreen(
+    date: LocalDate,
+    onNavigateBack: () -> Unit,
+    onNavigateToHome: () -> Unit,
+) {
 
-    LedgerCreateContent()
+    LedgerCreateContent(
+        date
+    )
 }
 
 @Composable
-private fun LedgerCreateContent() {
+private fun LedgerCreateContent(
+    date: LocalDate,
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Ledger Create Screen")
+            Text(text = "Date: ${stringResource(R.string.common_mm_dd, date.monthValue, date.dayOfMonth)}")
         }
     }
 }

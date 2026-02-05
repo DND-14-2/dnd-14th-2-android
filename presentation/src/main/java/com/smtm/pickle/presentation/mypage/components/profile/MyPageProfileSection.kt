@@ -30,7 +30,7 @@ fun MyPageProfileSection(
 ) {
     var showInviteSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
+        skipPartiallyExpanded = false,
         confirmValueChange = { true }
     )
 
@@ -41,7 +41,7 @@ fun MyPageProfileSection(
             nickname = nickname,
             badge = badgeName,
             onNicknameEditClick = onNicknameEditClick,
-            onInviteClick = { /*showInviteSheet = true*/ }
+            onInviteClick = { /*showInviteSheet = true*/ },
         )
         Spacer(modifier = Modifier.height(20.dp))
         ProfileQuickMenuCard(
@@ -55,6 +55,7 @@ fun MyPageProfileSection(
             sheetState = sheetState,
             onDismiss = { showInviteSheet = false }
         ) {
+            // TODO: MVP 후 활성화
 //            MyPageInviteBottomSheetContent(invitationCode = invitationCode)
         }
     }

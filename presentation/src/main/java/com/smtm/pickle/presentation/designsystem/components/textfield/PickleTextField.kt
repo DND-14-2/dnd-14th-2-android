@@ -157,14 +157,24 @@ fun PickleTextField(
                             color = PickleTheme.colors.gray500,
                         )
                     },
-                    leadingIcon = leadingIcon,
-                    trailingIcon = trailingIcon,
+                    leadingIcon = leadingIcon?.let { icon ->
+                        {
+                            Box(modifier = Modifier.padding(start = 12.dp)) { icon() }
+                        }
+                    },
+                    trailingIcon = trailingIcon?.let { icon ->
+                        {
+                            Box(modifier = Modifier.padding(end = 12.dp)) { icon() }
+                        }
+                    },
                     singleLine = isSingleLine,
                     enabled = enabled,
                     isError = inputState is InputState.Error,
                     interactionSource = interactionSource,
                     colors = textFieldColor,
                     contentPadding = OutlinedTextFieldDefaults.contentPadding(
+                        start = if (leadingIcon == null) 16.dp else 8.dp,
+                        end = if (trailingIcon == null) 16.dp else 8.dp,
                         top = 0.dp,
                         bottom = 0.dp,
                     ),
@@ -462,7 +472,6 @@ object PickleTextField {
         val leadingIcon = remember {
             @Composable {
                 Image(
-                    modifier = Modifier.padding(start = 8.dp),
                     painter = painterResource(id = R.drawable.ic_search_magnifier),
                     contentDescription = null,
                 )

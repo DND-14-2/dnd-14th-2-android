@@ -163,6 +163,10 @@ fun PickleTextField(
                     isError = inputState is InputState.Error,
                     interactionSource = interactionSource,
                     colors = textFieldColor,
+                    contentPadding = OutlinedTextFieldDefaults.contentPadding(
+                        top = 0.dp,
+                        bottom = 0.dp,
+                    ),
                     container = {
                         OutlinedTextFieldDefaults.Container(
                             enabled = enabled,
@@ -459,7 +463,9 @@ object PickleTextField {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search_magnifier),
                     contentDescription = null,
-                    modifier = Modifier.size(Dimensions.iconMedium)
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .size(Dimensions.iconMedium)
                 )
             }
         }
@@ -536,5 +542,17 @@ private fun TextFieldWithSupporting() {
             email.contains("@") -> InputState.Success(null)
             else -> InputState.Error("이메일을 다시 확인해주세요")
         },
+    )
+}
+
+@Preview
+@Composable
+private fun TextFieldWithSearch() {
+    var searchValue by remember { mutableStateOf("aaa") }
+
+    PickleTextField.Search(
+        value = searchValue,
+        onValueChange = { searchValue = it },
+        hint = "검색어를 입력해주세요"
     )
 }

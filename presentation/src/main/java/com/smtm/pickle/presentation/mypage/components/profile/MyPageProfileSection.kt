@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.mypage.components.MyPageInviteBottomSheetContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +41,7 @@ fun MyPageProfileSection(
             nickname = nickname,
             badge = badgeName,
             onNicknameEditClick = onNicknameEditClick,
-            onInviteClick = { showInviteSheet = true }
+            onInviteClick = { /*showInviteSheet = true*/ }
         )
         Spacer(modifier = Modifier.height(20.dp))
         ProfileQuickMenuCard(
@@ -56,7 +55,7 @@ fun MyPageProfileSection(
             sheetState = sheetState,
             onDismiss = { showInviteSheet = false }
         ) {
-            MyPageInviteBottomSheetContent(invitationCode = invitationCode)
+//            MyPageInviteBottomSheetContent(invitationCode = invitationCode)
         }
     }
 }

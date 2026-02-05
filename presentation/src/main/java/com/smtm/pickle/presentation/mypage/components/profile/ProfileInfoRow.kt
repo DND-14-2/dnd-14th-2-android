@@ -13,17 +13,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.button.PickleBadge
-import com.smtm.pickle.presentation.designsystem.components.button.PickleChip
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun ProfileInfoRow(
@@ -64,18 +63,22 @@ fun ProfileInfoRow(
             }
             Spacer(modifier = Modifier.height(4.dp))
 
-            PickleChip(
-                text = "초대하기",
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_mypage_invitation),
-                        contentDescription = "초대하기",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.scale(1.2f)
-                    )
-                },
-                onClick = onInviteClick
-            )
+            // TODO: 초대 코드 기능 MVP 제외로 인한 임시 높이
+            Spacer(modifier = Modifier.height(Dimensions.chipHeight))
+
+            // TODO: 초대 코드 기능 MVP 제외로 인한 일시 비활성화
+//            PickleChip(
+//                text = "초대하기",
+//                trailingIcon = {
+//                    Icon(
+//                        painter = painterResource(R.drawable.ic_mypage_invitation),
+//                        contentDescription = "초대하기",
+//                        tint = Color.Unspecified,
+//                        modifier = Modifier.scale(1.2f)
+//                    )
+//                },
+//                onClick = onInviteClick
+//            )
         }
     }
 }

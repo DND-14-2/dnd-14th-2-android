@@ -47,7 +47,7 @@ fun StatsSummaryCard(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "${String.format("%,d", cost)}원",
+                    text = String.format(java.util.Locale.KOREA, "%,d원", cost),
                     style = PickleTheme.typography.head2SemiBold,
                     color = PickleTheme.colors.gray700
                 )
@@ -93,7 +93,7 @@ fun StatsSummaryCard(
                     append("지난달보다 ")
 
                     withStyle(style = SpanStyle(color = PickleTheme.colors.primary500)) {
-                        append("${String.format("%,d", comparedValue)}원")
+                        append(String.format(java.util.Locale.KOREA, "%,d원", comparedValue))
                     }
 
                     append(if (isExpenditure) " 절약했어요" else " 증가했어요") // TODO: 실제 증감 여부에 따른 로직 필요

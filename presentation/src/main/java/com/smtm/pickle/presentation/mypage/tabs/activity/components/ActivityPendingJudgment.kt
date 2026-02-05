@@ -65,7 +65,7 @@ fun ActivityPendingJudgment(
 
             IconButton(
                 modifier = Modifier.size(24.dp),
-                onClick = {}
+                onClick = { /* TODO 리스트 페이지 */ }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_mypage_arrow_right),
@@ -84,7 +84,7 @@ fun ActivityPendingJudgment(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     iconRes = judgment.iconRes,
                     title = judgment.title,
-                    price = "%,d원".format(judgment.price),
+                    price = String.format(java.util.Locale.KOREA, "%,d원", judgment.price),
                     onClick = { /* 심판하기 클릭 이벤트 */ }
                 )
             }

@@ -123,7 +123,8 @@ private fun StatisticsContents(
     )
     Spacer(modifier = Modifier.height(20.dp))
 
-    if (chartItems.isEmpty()) {
+    val totalValue = chartItems.sumOf { it.value.toDouble() }
+    if (chartItems.isEmpty() || totalValue <= 0.0) {
         StatsEmptyChart()
     } else {
         StatsChartCard(

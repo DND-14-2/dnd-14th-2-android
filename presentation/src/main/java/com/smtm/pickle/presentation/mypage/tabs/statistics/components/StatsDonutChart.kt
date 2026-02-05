@@ -46,6 +46,8 @@ fun DonutChart(
     // 전체 합계 계산
     val total = remember(items) { items.sumOf { it.value.toDouble() }.toFloat() }
 
+    if (total <= 0f) return
+
     // 각 섹션의 각도 계산
     val angles = remember(items, total) {
         items.map { (it.value / total) * 360f }

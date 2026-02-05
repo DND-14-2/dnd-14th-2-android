@@ -23,7 +23,6 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHos
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
-import com.smtm.pickle.presentation.home.component.HomeTopBanner
 import com.smtm.pickle.presentation.home.component.HomeTopBar
 import com.smtm.pickle.presentation.home.component.LedgerCalendar
 import com.smtm.pickle.presentation.home.component.dailyLedgerInfoSection
@@ -58,11 +57,8 @@ fun HomeScreen(
 
     HomeContent(
         profileState = uiState.profile,
-        bannerState = uiState.banner,
         calendarState = uiState.calendar,
         dailyLedgerState = uiState.dailyLedger,
-        onBannerClick = viewModel::onBannerClick,
-        onBannerCloseClick = viewModel::onBannerCloseClick,
         onMonthChanged = viewModel::onMonthChange,
         onDateClick = { date ->
             viewModel.onSelectDate(date)
@@ -78,11 +74,8 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     profileState: HomeUiState.ProfileState,
-    bannerState: HomeUiState.BannerState,
     calendarState: HomeUiState.CalendarState,
     dailyLedgerState: HomeUiState.DailyLedgerState,
-    onBannerClick: () -> Unit,
-    onBannerCloseClick: () -> Unit,
     onMonthChanged: (YearMonth) -> Unit,
     onDateClick: (LocalDate) -> Unit,
     onNavigateToMyPage: () -> Unit,
@@ -105,15 +98,6 @@ private fun HomeContent(
                     HomeTopBar(
                         onStatisticsClick = onNavigateToMyPage
                     )
-                }
-
-                if (bannerState.isVisible) {
-                    item("banner") {
-                        HomeTopBanner(
-                            onClick = onBannerClick,
-                            onCloseClick = onBannerCloseClick,
-                        )
-                    }
                 }
 
                 item("profile") {
@@ -152,11 +136,8 @@ private fun HomeContentPreview() {
     PickleTheme {
         HomeContent(
             profileState = HomeUiState.ProfileState(),
-            bannerState = HomeUiState.BannerState(),
             calendarState = HomeUiState.CalendarState(),
             dailyLedgerState = HomeUiState.DailyLedgerState(),
-            onBannerClick = {},
-            onBannerCloseClick = {},
             onDateClick = {},
             onMonthChanged = {},
             onNavigateToMyPage = {},

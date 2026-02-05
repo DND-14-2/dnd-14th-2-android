@@ -67,20 +67,6 @@ class HomeViewModel @Inject constructor(
         observeSelectedDateLedgers()
     }
 
-    fun onBannerClick() {
-
-    }
-
-    fun onBannerCloseClick() {
-        _uiState.update { state ->
-            state.copy(
-                banner = state.banner.copy(
-                    isVisible = false
-                )
-            )
-        }
-    }
-
     fun onMonthChange(yearMonth: YearMonth) {
         selectedYearMonth.value = yearMonth
     }
@@ -155,7 +141,6 @@ class HomeViewModel @Inject constructor(
 
 data class HomeUiState(
     val profile: ProfileState = ProfileState(),
-    val banner: BannerState = BannerState(),
     val calendar: CalendarState = CalendarState(),
     val dailyLedger: DailyLedgerState = DailyLedgerState(),
 ) {
@@ -164,10 +149,6 @@ data class HomeUiState(
         val badge: String = "뱃지명",
         val monthlyTotalIncome: Long = 10_000_000,
         val monthlyTotalExpense: Long = 5_000_000,
-    )
-
-    data class BannerState(
-        val isVisible: Boolean = true,
     )
 
     data class CalendarState(

@@ -3,7 +3,6 @@ package com.smtm.pickle.presentation.mypage.tabs.statistics
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,7 +53,6 @@ fun StatisticsTab(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
             .background(PickleTheme.colors.background50)
             .padding(16.dp)
             .padding(top = 4.dp)

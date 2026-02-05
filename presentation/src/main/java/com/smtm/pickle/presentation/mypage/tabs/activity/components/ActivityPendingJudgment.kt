@@ -70,6 +70,7 @@ fun ActivityPendingJudgment(
                 Icon(
                     painter = painterResource(R.drawable.ic_mypage_arrow_right),
                     contentDescription = "더보기",
+                    tint = Color.Unspecified
                 )
             }
         }

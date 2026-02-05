@@ -1,7 +1,6 @@
 package com.smtm.pickle.presentation.mypage.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
@@ -37,7 +36,7 @@ fun MyPageTabSection(
     Column(modifier = modifier) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            containerColor = PickleTheme.colors.transparent,
+            containerColor = PickleTheme.colors.base0,
             contentColor = PickleTheme.colors.gray800,
             indicator = { tabPosition ->
                 TabRowDefaults.PrimaryIndicator(
@@ -73,7 +72,6 @@ fun MyPageTabSection(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top
         ) { page ->
             when (page) {
@@ -82,6 +80,7 @@ fun MyPageTabSection(
                     onMyLedgerClick = onNavigateMyLedger,
                     onTabSelected = onStatisticsTabSelected,
                 )
+
                 1 -> ActivityTab(
                     activityState = activityState,
                 )

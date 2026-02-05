@@ -32,6 +32,8 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 @Composable
 fun ActivityActionCardRow(
     modifier: Modifier = Modifier,
+    onJudgmentClick: () -> Unit,
+    onJuryClick: () -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -41,13 +43,13 @@ fun ActivityActionCardRow(
             title = "심판 활동",
             subTitle = "내가 심판받은 소비",
             iconRes = R.drawable.illust_mypage_balances,
-            onClick = {}
+            onClick = onJudgmentClick
         )
         ActivityActionCard(
             title = "배심 활동",
             subTitle = "내가 판결한 소비",
             iconRes = R.drawable.illust_mypage_gavel,
-            onClick = {}
+            onClick = onJuryClick
         )
     }
 }
@@ -100,6 +102,9 @@ private fun RowScope.ActivityActionCard(
 @Composable
 private fun ActivityActionCardRowPreview() {
     PickleTheme {
-        ActivityActionCardRow()
+        ActivityActionCardRow(
+            onJudgmentClick = {},
+            onJuryClick = {}
+        )
     }
 }

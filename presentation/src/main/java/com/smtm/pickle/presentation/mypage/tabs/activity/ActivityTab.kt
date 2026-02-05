@@ -3,7 +3,6 @@ package com.smtm.pickle.presentation.mypage.tabs.activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -23,13 +22,15 @@ fun ActivityTab(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 600.dp)
+            .heightIn(min = 500.dp)
             .background(PickleTheme.colors.background50)
             .padding(16.dp)
             .padding(top = 4.dp)
     ) {
-        ActivityActionCardRow()
+        ActivityActionCardRow(
+            onJudgmentClick = {},
+            onJuryClick = {}
+        )
         Spacer(modifier = Modifier.height(20.dp))
         ActivityPendingJudgment(
             pendingJudgments = activityState.pendingJudgments

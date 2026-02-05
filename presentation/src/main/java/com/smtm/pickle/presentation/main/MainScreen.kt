@@ -36,6 +36,7 @@ import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyPageTabRoute
+import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictCreateRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
@@ -176,6 +177,9 @@ private fun MainContent(
                         },
                         onNavigateAlarmSetting = {
                             rootNavController.navigate(AlarmSettingRoute)
+                        },
+                        onNavigateMyProfile = {
+                            rootNavController.navigate(MyProfileRoute)
                         }
                     )
                 }

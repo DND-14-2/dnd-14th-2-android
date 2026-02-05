@@ -30,7 +30,7 @@ fun LedgerTypeSelectors(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 15.dp, bottom = 16.dp),
         color = PickleTheme.colors.background50,
         shape = RoundedCornerShape(Dimensions.radiusSurface)
     ) {

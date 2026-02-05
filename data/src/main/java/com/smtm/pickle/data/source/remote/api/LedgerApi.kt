@@ -8,7 +8,7 @@ interface LedgerApi {
 
     @GET("ledgers/summary")
     suspend fun getLedgerSummary(
-        @Query("from") from: String,
-        @Query("to") to: String
+        @Query("start") from: String,
+        @Query("end") to: String
     ): LedgersResponse
 }

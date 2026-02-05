@@ -1,9 +1,15 @@
 package com.smtm.pickle.data.source.local.database.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "ledger_table")
+@Entity(
+    tableName = "ledger_table",
+    indices = [
+        Index(value = ["occurredOn"]),
+    ]
+)
 data class LedgerEntity(
     @PrimaryKey
     val id: Long,

@@ -462,6 +462,7 @@ object PickleTextField {
         val leadingIcon = remember {
             @Composable {
                 Image(
+                    modifier = Modifier.padding(start = 8.dp),
                     painter = painterResource(id = R.drawable.ic_search_magnifier),
                     contentDescription = null,
                 )

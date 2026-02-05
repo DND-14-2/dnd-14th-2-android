@@ -15,10 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.presentation.common.extension.customLayout
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
@@ -70,10 +70,27 @@ fun PickleIconButtonWithTouchCustom(
 
     Box(
         modifier = modifier
-            .customLayout(
-                contentSize = touchSize,
-                layoutSize = layoutSize
-            ) // 클릭 이벤트 및 리플 효과 설정
+            .layout { measurable, constraints ->
+                val contentPx = touchSize.roundToPx()
+                val layoutPx = layoutSize.roundToPx()
+
+                // 컨텐츠 영역 측정
+                val placeable = measurable.measure(
+                    constraints.copy(
+                        minWidth = contentPx,
+                        minHeight = contentPx,
+                        maxWidth = contentPx,
+                        maxHeight = contentPx
+                    )
+                )
+
+                // 실제 레이아웃 차지 공간 설정
+                layout(layoutPx, layoutPx) {
+                    val offset = (layoutPx - contentPx) / 2
+                    placeable.place(offset, offset)
+                }
+            }
+            // 클릭 이벤트 및 리플 효과 설정
             .clickable(
                 interactionSource = interactionSource,
                 indication = ripple(

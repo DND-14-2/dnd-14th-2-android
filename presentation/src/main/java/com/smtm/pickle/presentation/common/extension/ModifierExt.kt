@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -76,30 +75,5 @@ fun Modifier.clearFocusOnBackgroundTab(
                 if (distance > touchSlop) return@awaitEachGesture
             }
         }
-    }
-}
-
-// 아이콘 관련 공통 컴포넌트용
-fun Modifier.customLayout(
-    contentSize: Dp,
-    layoutSize: Dp
-) = this.layout { measurable, constraints ->
-    val contentPx = contentSize.roundToPx()
-    val layoutPx = layoutSize.roundToPx()
-
-    // 컨텐츠 영역 측정
-    val placeable = measurable.measure(
-        constraints.copy(
-            minWidth = contentPx,
-            minHeight = contentPx,
-            maxWidth = contentPx,
-            maxHeight = contentPx
-        )
-    )
-
-    // 실제 레이아웃 차지 공간 설정
-    layout(layoutPx, layoutPx) {
-        val offset = (layoutPx - contentPx) / 2
-        placeable.place(offset, offset)
     }
 }

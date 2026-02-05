@@ -57,8 +57,34 @@ fun RemoteLedger.toDomain() = Ledger(
     memo = memo,
 )
 
-fun RemoteLedgerType.toDomain() = LedgerType.valueOf(name)
+fun RemoteLedgerType.toDomain(): LedgerType = when (this) {
+    RemoteLedgerType.Income -> LedgerType.Income
+    RemoteLedgerType.Expense -> LedgerType.Expense
+}
 
-fun RemoteLedgerCategory.toDomain() = LedgerCategory.valueOf(name)
+fun RemoteLedgerCategory.toDomain(): LedgerCategory = when (this) {
+    RemoteLedgerCategory.Food -> LedgerCategory.Food
+    RemoteLedgerCategory.Transport -> LedgerCategory.Transport
+    RemoteLedgerCategory.Housing -> LedgerCategory.Housing
+    RemoteLedgerCategory.Shopping -> LedgerCategory.Shopping
+    RemoteLedgerCategory.HealthMedical -> LedgerCategory.HealthMedical
+    RemoteLedgerCategory.EducationSelfDevelopment -> LedgerCategory.EducationSelfDevelopment
+    RemoteLedgerCategory.LeisureHobby -> LedgerCategory.LeisureHobby
+    RemoteLedgerCategory.SavingFinance -> LedgerCategory.SavingFinance
+    RemoteLedgerCategory.Salary -> LedgerCategory.Salary
+    RemoteLedgerCategory.SideIncome -> LedgerCategory.SideIncome
+    RemoteLedgerCategory.Bonus -> LedgerCategory.Bonus
+    RemoteLedgerCategory.Allowance -> LedgerCategory.Allowance
+    RemoteLedgerCategory.PartTimeIncome -> LedgerCategory.PartTimeIncome
+    RemoteLedgerCategory.FinancialIncome -> LedgerCategory.FinancialIncome
+    RemoteLedgerCategory.SplitBill -> LedgerCategory.SplitBill
+    RemoteLedgerCategory.Transfer -> LedgerCategory.Transfer
+    RemoteLedgerCategory.Other -> LedgerCategory.Other
+}
 
-fun RemotePaymentMethod.toDomain() = PaymentMethod.valueOf(name)
+fun RemotePaymentMethod.toDomain(): PaymentMethod = when (this) {
+    RemotePaymentMethod.BankTransfer -> PaymentMethod.BankTransfer
+    RemotePaymentMethod.CreditCard -> PaymentMethod.CreditCard
+    RemotePaymentMethod.Cash -> PaymentMethod.Cash
+    RemotePaymentMethod.DebitCard -> PaymentMethod.DebitCard
+}

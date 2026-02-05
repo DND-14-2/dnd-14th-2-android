@@ -34,8 +34,10 @@
     <string name="common_expense">지출</string>
     <string name="common_minus_str">-%s</string>
     <string name="common_plus_str">+%s</string>
+    <string name="common_yyyy_mm_dd">%d년 %d월 %d일</string>
     <string name="common_yyyy_mm">%d년 %d월</string>
     <string name="common_mm_dd">%d월 %d일</string>
+    <string name="common_currency_won">₩</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>
@@ -66,6 +68,12 @@
     <string name="ledger_category_split_bill">더치페이</string>
     <string name="ledger_category_transfer">이체</string>
     <string name="ledger_category_other">기타</string>
+
+    <!-- Ledger Create -->
+    <string name="ledger_create_category_header">카테고리를 선택해주세요.*</string>
+    <string name="ledger_create_category_header_highlight">*</string>
+    <string name="ledger_create_description_header">가계부 내용을 입력해주세요.</string>
+    <string name="ledger_create_description_hint">공백 포함 15자 이내로 입력해주세요.</string>
 
     <!-- Ledger Payment Method -->
     <string name="ledger_payment_method_bank_transfer">계좌이체</string>

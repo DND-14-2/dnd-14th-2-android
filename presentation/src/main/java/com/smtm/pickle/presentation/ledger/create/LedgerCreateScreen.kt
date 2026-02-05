@@ -1,14 +1,23 @@
 package com.smtm.pickle.presentation.ledger.create
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
+import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
+import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateAppBar
+import com.smtm.pickle.presentation.ledger.create.component.firststep.LedgerCreateFirstStepContent
 import java.time.LocalDate
 
 @Composable
@@ -16,23 +25,67 @@ fun LedgerCreateScreen(
     date: LocalDate,
     onNavigateBack: () -> Unit,
     onNavigateToHome: () -> Unit,
+    viewModel: LedgerCreateViewModel = hiltViewModel(),
 ) {
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     LedgerCreateContent(
-        date
+        date = date,
+        uiState = uiState,
+        setAmount = viewModel::setAmount,
+        selectLedgerType = viewModel::selectLedgerType,
+        selectCategory = viewModel::selectCategory,
+        setDescription = viewModel::setDescription,
+        setStep = viewModel::setStep,
+        onNavigationClick = onNavigateBack,
     )
 }
 
 @Composable
 private fun LedgerCreateContent(
     date: LocalDate,
+    uiState: LedgerCreateUiState,
+    setAmount: (String) -> Unit,
+    selectLedgerType: (LedgerTypeUiModel) -> Unit,
+    selectCategory: (CategoryUiModel?) -> Unit,
+    setDescription: (String) -> Unit,
+    setStep: (LedgerCreateStep) -> Unit,
+    onNavigationClick: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PickleTheme.colors.base0)
+            .systemBarsPadding()
+            .clearFocusOnBackgroundTab(focusManager),
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Date: ${stringResource(R.string.common_mm_dd, date.monthValue, date.dayOfMonth)}")
+        LedgerCreateAppBar(
+            modifier = Modifier,
+            title = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
+            onNavigationClick = onNavigationClick,
+        )
+
+        when (uiState.step) {
+            LedgerCreateStep.First -> {
+                LedgerCreateFirstStepContent(
+                    amount = uiState.firstStepState.amount,
+                    selectedLedgerType = uiState.firstStepState.selectedLedgerType,
+                    selectedCategory = uiState.firstStepState.selectedCategory,
+                    description = uiState.firstStepState.description,
+                    isNextEnabled = uiState.firstStepState.isNextEnabled,
+                    onAmountChange = setAmount,
+                    onLedgerTypeClick = selectLedgerType,
+                    onCategoryClick = selectCategory,
+                    onDescriptionChange = setDescription,
+                    onNextClick = { setStep(LedgerCreateStep.Second) },
+                )
+            }
+
+            LedgerCreateStep.Second -> {
+            }
         }
     }
 }

@@ -5,16 +5,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,17 +17,9 @@ fun MyPageProfileSection(
     modifier: Modifier = Modifier,
     nickname: String,
     badgeName: String,
-    invitationCode: String,
     onNicknameEditClick: () -> Unit,
-    onMyJuryClick: () -> Unit,
     onMyBadgeClick: () -> Unit,
 ) {
-    var showInviteSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
-        confirmValueChange = { true }
-    )
-
     Column(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 20.dp)
     ) {
@@ -41,23 +27,10 @@ fun MyPageProfileSection(
             nickname = nickname,
             badge = badgeName,
             onNicknameEditClick = onNicknameEditClick,
-            onInviteClick = { /*showInviteSheet = true*/ },
         )
         Spacer(modifier = Modifier.height(20.dp))
-        ProfileQuickMenuCard(
-            onMyJuryClick = onMyJuryClick,
-            onMyBadgeClick = onMyBadgeClick,
-        )
-    }
 
-    if (showInviteSheet) {
-        PickleBottomSheet(
-            sheetState = sheetState,
-            onDismiss = { showInviteSheet = false }
-        ) {
-            // TODO: MVP 후 활성화
-//            MyPageInviteBottomSheetContent(invitationCode = invitationCode)
-        }
+        ProfileMyBadgeCard(onMyBadgeClick = onMyBadgeClick)
     }
 }
 
@@ -69,9 +42,7 @@ private fun MyPageProfileSectionPreview() {
             nickname = "유저 닉네임",
             badgeName = "배지명",
             onNicknameEditClick = {},
-            onMyJuryClick = {},
             onMyBadgeClick = {},
-            invitationCode = ""
         )
     }
 }

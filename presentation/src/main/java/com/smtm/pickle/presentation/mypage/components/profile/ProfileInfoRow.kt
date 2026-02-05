@@ -22,14 +22,12 @@ import com.smtm.pickle.presentation.designsystem.components.button.PickleBadge
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun ProfileInfoRow(
     nickname: String,
     badge: String,
     onNicknameEditClick: () -> Unit,
-    onInviteClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -47,8 +45,6 @@ fun ProfileInfoRow(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
 
-                PickleBadge(badge)
-
                 IconButton(
                     onClick = onNicknameEditClick,
                     modifier = Modifier.size(32.dp)
@@ -61,24 +57,9 @@ fun ProfileInfoRow(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
-            // TODO: 초대 코드 기능 MVP 제외로 인한 임시 높이
-            Spacer(modifier = Modifier.height(Dimensions.chipHeight))
-
-            // TODO: 초대 코드 기능 MVP 제외로 인한 일시 비활성화
-//            PickleChip(
-//                text = "초대하기",
-//                trailingIcon = {
-//                    Icon(
-//                        painter = painterResource(R.drawable.ic_mypage_invitation),
-//                        contentDescription = "초대하기",
-//                        tint = Color.Unspecified,
-//                        modifier = Modifier.scale(1.2f)
-//                    )
-//                },
-//                onClick = onInviteClick
-//            )
+            PickleBadge(badge)
         }
     }
 }
@@ -91,7 +72,6 @@ private fun ProfileInfoRowPreview() {
             nickname = "유저 닉네임",
             badge = "배지명",
             onNicknameEditClick = {},
-            onInviteClick = {}
         )
     }
 }

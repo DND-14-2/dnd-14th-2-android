@@ -16,8 +16,8 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.mypage.components.MyPageTabSection
 import com.smtm.pickle.presentation.mypage.components.profile.MyPageProfileSection
+import com.smtm.pickle.presentation.mypage.tabs.statistics.StatisticsTab
 
 @Composable
 fun MyPageScreen(
@@ -71,19 +71,16 @@ private fun MyPageContent(
                     modifier = Modifier.background(PickleTheme.colors.base0),
                     nickname = uiState.profile.nickname,
                     badgeName = uiState.profile.badgeName,
-                    invitationCode = uiState.profile.invitationCode,
                     onNicknameEditClick = {},
-                    onMyJuryClick = {},
                     onMyBadgeClick = {},
                 )
             }
 
             item("tab") {
-                MyPageTabSection(
+                StatisticsTab(
                     statisticsState = uiState.statistics,
-                    activityState = uiState.activity,
-                    onNavigateMyLedger = onNavigateMyLedger,
-                    onStatisticsTabSelected = onStatisticsTabSelected,
+                    onMyLedgerClick = onNavigateMyLedger,
+                    onTabSelected = onStatisticsTabSelected,
                 )
             }
         }

@@ -1,11 +1,13 @@
 package com.smtm.pickle.data.di
 
 import com.smtm.pickle.data.repository.AuthRepositoryImpl
-import com.smtm.pickle.domain.repository.AuthRepository
-import com.smtm.pickle.data.repository.UserRepositoryImpl
-import com.smtm.pickle.domain.repository.UserRepository
 import com.smtm.pickle.data.repository.FakeNicknameRepository
+import com.smtm.pickle.data.repository.LedgerRepositoryImpl
+import com.smtm.pickle.data.repository.UserRepositoryImpl
+import com.smtm.pickle.domain.repository.AuthRepository
+import com.smtm.pickle.domain.repository.LedgerRepository
 import com.smtm.pickle.domain.repository.NicknameRepository
+import com.smtm.pickle.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +27,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindNicknameRepository(impl: FakeNicknameRepository): NicknameRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLedgerRepository(impl: LedgerRepositoryImpl): LedgerRepository
 }

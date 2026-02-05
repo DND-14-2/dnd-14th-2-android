@@ -2,26 +2,38 @@ package com.smtm.pickle.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
+import com.smtm.pickle.domain.model.ledger.summarize
+import com.smtm.pickle.domain.usecase.ledger.EnsureLedgersSyncedUseCase
+import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByDayUseCase
+import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByMonthUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
+import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.home.model.LedgerCalendarDay
+import com.smtm.pickle.presentation.home.model.toLedgerCalendarDays
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-
+    private val observeLedgersByMonthUseCase: ObserveLedgersByMonthUseCase,
+    private val observeLedgersByDayUseCase: ObserveLedgersByDayUseCase,
+    private val ensureLedgersSyncedUseCase: EnsureLedgersSyncedUseCase,
 ) : ViewModel() {
 
     private val selectedYearMonth = MutableStateFlow(YearMonth.now())
@@ -47,23 +59,12 @@ class HomeViewModel @Inject constructor(
         initialValue = HomeUiState()
     )
 
+    private val _effect: MutableSharedFlow<HomeEffect> = MutableSharedFlow(replay = 0)
+    val effect: SharedFlow<HomeEffect> = _effect.asSharedFlow()
+
     init {
         observeMonthLedgers()
         observeSelectedDateLedgers()
-    }
-
-    fun onBannerClick() {
-
-    }
-
-    fun onBannerCloseClick() {
-        _uiState.update { state ->
-            state.copy(
-                banner = state.banner.copy(
-                    isVisible = false
-                )
-            )
-        }
     }
 
     fun onMonthChange(yearMonth: YearMonth) {
@@ -78,52 +79,59 @@ class HomeViewModel @Inject constructor(
     private fun observeMonthLedgers() {
         selectedYearMonth
             .flatMapLatest { yearMonth ->
-                mockObserveLedgersByMonth(yearMonth)
-            }.onEach { ledgers ->
-                val calendarDays = ledgers.groupBy { it.occurredOn }
-                    .mapValues { (date, items) ->
-                        LedgerCalendarDay(
-                            date = date,
-                            totalIncome = items.filter { it.type is LedgerTypeUiModel.Income }
-                                .sumOf { it.amount }.takeIf { it > 0 },
-                            totalExpense = items.filter { it.type is LedgerTypeUiModel.Expense }
-                                .sumOf { it.amount }.takeIf { it > 0 },
-                        )
+                ensureLedgersSynced(yearMonth)
+                observeLedgersByMonthUseCase(yearMonth)
+                    .catch { e ->
+                        Timber.e(e, "observeLedgersByMonthUseCase() failed")
+                        _effect.emit(HomeEffect.ShowSnackBar("데이터를 불러오는데 실패했습니다."))
                     }
+            }.onEach { ledgers ->
+                val summary = ledgers.summarize()
+                val ledgerCalendarDays = ledgers.toLedgerCalendarDays()
+
                 _uiState.update { state ->
                     state.copy(
                         calendar = state.calendar.copy(
-                            ledgerCalendarDays = calendarDays,
+                            ledgerCalendarDays = ledgerCalendarDays,
                         ),
                         profile = state.profile.copy(
-                            monthlyTotalIncome = ledgers
-                                .filter { it.type is LedgerTypeUiModel.Income }
-                                .sumOf { it.amount },
-                            monthlyTotalExpense = ledgers
-                                .filter { it.type is LedgerTypeUiModel.Expense }
-                                .sumOf { it.amount },
+                            monthlyTotalIncome = summary.totalIncome,
+                            monthlyTotalExpense = summary.totalExpense
                         ),
                     )
                 }
             }.launchIn(viewModelScope)
     }
 
+    private suspend fun ensureLedgersSynced(yearMonth: YearMonth) {
+        ensureLedgersSyncedUseCase(
+            baseMonth = yearMonth,
+            monthsBack = 3,
+            monthsForward = 3,
+        ).onFailure { e ->
+            Timber.e(e, "ensureLedgersSynced() failed")
+            _effect.emit(HomeEffect.ShowSnackBar("최신 데이터를 불러오는데 실패했습니다."))
+        }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeSelectedDateLedgers() {
         selectedDate
             .flatMapLatest { date ->
-                mockObserveLedgersByDay(date)
+                observeLedgersByDayUseCase(date)
+                    .catch { e ->
+                        Timber.e(e, "observeLedgersByDayUseCase() failed")
+                        _effect.emit(HomeEffect.ShowSnackBar("데이터를 불러오는데 실패했습니다."))
+                    }
             }.onEach { ledgers ->
+                val summary = ledgers.summarize()
+
                 _uiState.update { state ->
                     state.copy(
                         dailyLedger = state.dailyLedger.copy(
-                            ledgers = ledgers,
-                            totalIncome = ledgers
-                                .filter { it.type is LedgerTypeUiModel.Income }
-                                .sumOf { it.amount },
-                            totalExpense = ledgers
-                                .filter { it.type is LedgerTypeUiModel.Expense }
-                                .sumOf { it.amount },
+                            ledgers = ledgers.map { it.toUiModel() },
+                            totalIncome = summary.totalIncome,
+                            totalExpense = summary.totalExpense,
                         ),
                     )
                 }
@@ -133,7 +141,6 @@ class HomeViewModel @Inject constructor(
 
 data class HomeUiState(
     val profile: ProfileState = ProfileState(),
-    val banner: BannerState = BannerState(),
     val calendar: CalendarState = CalendarState(),
     val dailyLedger: DailyLedgerState = DailyLedgerState(),
 ) {
@@ -142,10 +149,6 @@ data class HomeUiState(
         val badge: String = "뱃지명",
         val monthlyTotalIncome: Long = 10_000_000,
         val monthlyTotalExpense: Long = 5_000_000,
-    )
-
-    data class BannerState(
-        val isVisible: Boolean = true,
     )
 
     data class CalendarState(
@@ -160,4 +163,8 @@ data class HomeUiState(
         val totalIncome: Long = 0L,
         val totalExpense: Long = 0L,
     )
+}
+
+sealed interface HomeEffect {
+    data class ShowSnackBar(val msg: String) : HomeEffect
 }

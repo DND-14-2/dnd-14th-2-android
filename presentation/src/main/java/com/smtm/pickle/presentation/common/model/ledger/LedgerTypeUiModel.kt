@@ -1,11 +1,17 @@
 package com.smtm.pickle.presentation.common.model.ledger
 
 import androidx.annotation.StringRes
+import com.smtm.pickle.domain.model.ledger.LedgerType
 import com.smtm.pickle.presentation.R
 
-sealed class LedgerTypeUiModel(
+enum class LedgerTypeUiModel(
     @StringRes val stringResId: Int,
 ) {
-    data object Income : LedgerTypeUiModel(R.string.common_income)
-    data object Expense : LedgerTypeUiModel(R.string.common_expense)
+    Income(R.string.common_income),
+    Expense(R.string.common_expense),
+}
+
+fun LedgerType.toUiModel(): LedgerTypeUiModel = when (this) {
+    LedgerType.Income -> LedgerTypeUiModel.Income
+    LedgerType.Expense -> LedgerTypeUiModel.Expense
 }

@@ -3,6 +3,7 @@ package com.smtm.pickle.data.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.smtm.pickle.data.BuildConfig
 import com.smtm.pickle.data.source.remote.api.AuthService
+import com.smtm.pickle.data.source.remote.api.LedgerApi
 import com.smtm.pickle.data.source.remote.api.RefreshTokenApi
 import com.smtm.pickle.data.source.remote.auth.TokenAuthenticator
 import com.smtm.pickle.domain.provider.TokenProvider
@@ -139,4 +140,10 @@ object NetworkModule {
         @Named("RefreshRetrofit") retrofit: Retrofit
     ): RefreshTokenApi =
         retrofit.create(RefreshTokenApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLedgerApi(retrofit: Retrofit): LedgerApi {
+        return retrofit.create(LedgerApi::class.java)
+    }
 }

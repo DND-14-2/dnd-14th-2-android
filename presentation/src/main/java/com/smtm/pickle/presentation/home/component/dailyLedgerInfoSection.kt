@@ -314,7 +314,6 @@ private fun DailyLedgerInfoSectionWithDataPreview() {
             category = CategoryUiModel.SavingFinance,
             description = "월급",
             occurredOn = LocalDate.now(),
-            dateText = "1월 26일",
             paymentMethod = PaymentMethodUiModel.BankTransfer,
             memo = null
         ),
@@ -325,7 +324,6 @@ private fun DailyLedgerInfoSectionWithDataPreview() {
             category = CategoryUiModel.Food,
             description = "점심",
             occurredOn = LocalDate.now(),
-            dateText = "1월 26일",
             paymentMethod = PaymentMethodUiModel.CreditCard,
             memo = null
         ),
@@ -336,7 +334,6 @@ private fun DailyLedgerInfoSectionWithDataPreview() {
             category = CategoryUiModel.Food,
             description = "커피",
             occurredOn = LocalDate.now(),
-            dateText = "1월 26일",
             paymentMethod = PaymentMethodUiModel.CreditCard,
             memo = null
         )

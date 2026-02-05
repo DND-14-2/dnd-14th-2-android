@@ -55,7 +55,7 @@ fun PickleAppBar(
                 ) {
                     NavigationIcon(navigationItem)
 
-                    Spacer(modifier = modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
                     if (title != null) {
                         Text(text = title, style = PickleTheme.typography.body1Bold)

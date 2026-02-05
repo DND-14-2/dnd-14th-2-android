@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.designsystem.components.textfield
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -460,12 +461,9 @@ object PickleTextField {
     ) {
         val leadingIcon = remember {
             @Composable {
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_search_magnifier),
                     contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .size(Dimensions.iconMedium)
                 )
             }
         }

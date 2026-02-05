@@ -36,9 +36,7 @@ fun MyPageProfileSection(
     )
 
     Column(
-        modifier = modifier
-            .padding(16.dp)
-            .padding(vertical = 4.dp)
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 20.dp)
     ) {
         ProfileInfoRow(
             nickname = nickname,

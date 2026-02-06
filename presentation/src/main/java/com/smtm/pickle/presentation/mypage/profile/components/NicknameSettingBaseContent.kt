@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.nicknamesetting.components
+package com.smtm.pickle.presentation.mypage.profile.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope

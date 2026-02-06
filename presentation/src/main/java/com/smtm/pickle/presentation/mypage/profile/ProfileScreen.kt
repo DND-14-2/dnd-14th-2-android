@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.nicknamesetting
+package com.smtm.pickle.presentation.mypage.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import com.smtm.pickle.presentation.designsystem.components.textfield.PickleText
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.mypage.MyPageViewModel
-import com.smtm.pickle.presentation.mypage.nicknamesetting.components.NicknameSettingBaseContent
+import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBaseContent
 
 @Composable
 fun ProfileScreen(

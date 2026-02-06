@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.nicknamesetting
+package com.smtm.pickle.presentation.mypage.profile
 
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -21,7 +21,7 @@ import com.smtm.pickle.presentation.login.nickname.components.CheckDuplicateButt
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
 import com.smtm.pickle.presentation.mypage.MyPageUiState
 import com.smtm.pickle.presentation.mypage.MyPageViewModel
-import com.smtm.pickle.presentation.mypage.nicknamesetting.components.NicknameSettingBaseContent
+import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBaseContent
 
 @Composable
 fun NicknameSettingScreen(

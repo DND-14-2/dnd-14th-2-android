@@ -1,7 +1,5 @@
 package com.smtm.pickle.presentation.mypage
 
-import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
-
 data class MyPageUiState(
     val profile: ProfileState = ProfileState(),
     val statistics: StatisticsState = StatisticsState(),
@@ -11,15 +9,7 @@ data class MyPageUiState(
         val nickname: String = "",
         val badgeName: String = "",
         val invitationCode: String = "",
-        val editingNickname: String = "",
-        val inputState: InputState = InputState.Idle,
-        val isCheckingDuplicate: Boolean = false,
-        val isAvailable: Boolean? = null,
-        val isNicknameModified: Boolean = false,
-    ) {
-        val canSubmit: Boolean
-            get() = inputState is InputState.Success && isAvailable == true
-    }
+    )
 
     data class StatisticsState(
         val selectedTabIndex: Int = 0,

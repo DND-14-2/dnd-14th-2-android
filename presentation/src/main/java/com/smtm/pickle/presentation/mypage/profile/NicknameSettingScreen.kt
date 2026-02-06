@@ -19,22 +19,19 @@ import com.smtm.pickle.presentation.designsystem.components.textfield.model.Inpu
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.login.nickname.components.CheckDuplicateButton
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
-import com.smtm.pickle.presentation.mypage.MyPageUiState
-import com.smtm.pickle.presentation.mypage.MyPageViewModel
 import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBaseContent
 
 @Composable
 fun NicknameSettingScreen(
     onBackClick: () -> Unit,
-    viewModel: MyPageViewModel = hiltViewModel(),
+    viewModel: NicknameSettingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.startNicknameEditing()
+    LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                MyPageViewModel.MyPageEffect.NavigateBack -> onBackClick()
+                NicknameSettingViewModel.NicknameSettingEffect.NavigateBack -> onBackClick()
             }
         }
     }
@@ -50,7 +47,7 @@ fun NicknameSettingScreen(
 
 @Composable
 fun NicknameSettingContent(
-    uiState: MyPageUiState,
+    uiState: NicknameSettingUiState,
     onNicknameChange: (String) -> Unit,
     onCheckDuplicate: () -> Unit,
     onSaveClick: () -> Unit,
@@ -71,32 +68,32 @@ fun NicknameSettingContent(
                     .padding(horizontal = 16.dp),
                 text = stringResource(R.string.edit_button_title),
                 onClick = onSaveClick,
-                enabled = uiState.profile.canSubmit,
+                enabled = uiState.canSubmit,
                 textColor = PickleTheme.colors.base0
             )
         }
     ) {
         PickleTextFieldWithSupporting(
-            inputState = uiState.profile.inputState,
-            value = uiState.profile.editingNickname,
+            inputState = uiState.inputState,
+            value = uiState.editingNickname,
             onValueChange = onNicknameChange,
             hint = stringResource(R.string.nickname_hint),
             defaultSupportingText = stringResource(R.string.nickname_helper),
             trailingIcon = {
-                if (uiState.profile.isNicknameModified) {
+                if (uiState.isNicknameModified) {
                     when {
-                        uiState.profile.isAvailable == true -> {
+                        uiState.isAvailable == true -> {
                             TrailingIcon(R.drawable.ic_textfield_success)
                         }
 
-                        uiState.profile.inputState is InputState.Error -> {
+                        uiState.inputState is InputState.Error -> {
                             TrailingIcon(R.drawable.ic_snackbar_fail)
                         }
 
-                        uiState.profile.inputState is InputState.Success -> {
+                        uiState.inputState is InputState.Success -> {
                             CheckDuplicateButton(
                                 onClick = onCheckDuplicate,
-                                enabled = !uiState.profile.isCheckingDuplicate && uiState.profile.isAvailable == null
+                                enabled = !uiState.isCheckingDuplicate && uiState.isAvailable == null
                             )
                         }
                     }
@@ -111,7 +108,7 @@ fun NicknameSettingContent(
 private fun NicknameSettingPreview() {
     PickleTheme {
         NicknameSettingContent(
-            uiState = MyPageUiState(),
+            uiState = NicknameSettingUiState(),
             onNicknameChange = {},
             onCheckDuplicate = {},
             onSaveClick = {},

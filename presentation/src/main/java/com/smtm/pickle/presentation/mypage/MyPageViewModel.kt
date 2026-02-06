@@ -1,14 +1,9 @@
 package com.smtm.pickle.presentation.mypage
 
 import androidx.lifecycle.ViewModel
-import com.smtm.pickle.presentation.R
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.nickname.CheckNicknameAvailableUseCase
 import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
-import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
-import com.smtm.pickle.presentation.common.constant.NicknameValidation
-import com.smtm.pickle.presentation.common.utils.NicknameUtils
-import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
+import com.smtm.pickle.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,13 +13,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val checkNicknameAvailableUseCase: CheckNicknameAvailableUseCase,
-    private val saveNicknameUseCase: SaveNicknameUseCase,
     getNicknameUseCase: GetNicknameUseCase
 ) : ViewModel() {
 
@@ -54,96 +46,13 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun onNicknameChanged(nickname: String) {
-        val correctNickname = nickname.take(NicknameValidation.MAX_NICKNAME_LENGTH)
-
-        _uiState.update { state ->
-            state.copy(
-                profile = state.profile.copy(
-                    editingNickname = correctNickname,
-                    inputState = NicknameUtils.validateNicknameFormat(correctNickname),
-                    isCheckingDuplicate = false,
-                    isAvailable = null,
-                    isNicknameModified = true
-                )
-            )
-        }
-    }
-
-    fun checkDuplicate() {
-        val state = uiState.value
-        if (state.profile.inputState !is InputState.Success) return
-        val requestedNickname = state.profile.editingNickname
-
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    profile = it.profile.copy(
-                        isCheckingDuplicate = true,
-                        isAvailable = null,
-                    )
-                )
-            }
-
-            val isAvailable = checkNicknameAvailableUseCase(requestedNickname)
-                .onFailure { e -> Timber.e(e, "닉네임 중복 체크 실패") }
-                .getOrDefault(false)
-
-            _uiState.update {
-                if (it.profile.editingNickname != requestedNickname) return@update it
-
-                it.copy(
-                    profile = it.profile.copy(
-                        isCheckingDuplicate = false,
-                        isAvailable = isAvailable,
-                        inputState = if (isAvailable) {
-                            InputState.Success("사용 가능한 닉네임이에요!")
-                        } else {
-                            InputState.Error("이미 사용중인 닉네임이에요.")
-                        }
-                    )
-                )
-            }
-        }
-    }
-
-    fun saveNickname() {
-        viewModelScope.launch {
-            saveNicknameUseCase(uiState.value.profile.editingNickname)
-                .onSuccess {
-                    _effect.emit(MyPageEffect.NavigateBack)
-                }
-                .onFailure { e ->
-                    Timber.e(e, "닉네임 저장 실패")
-                }
-        }
-    }
-
-    fun startNicknameEditing() {
-        _uiState.update { state ->
-            state.copy(
-                profile = state.profile.copy(
-                    editingNickname = state.profile.nickname,
-                    inputState = InputState.Idle,
-                    isCheckingDuplicate = false,
-                    isAvailable = null,
-                    isNicknameModified = false
-                )
-            )
-        }
-    }
-
-    private fun validateFormat(nickname: String): InputState =
-        NicknameUtils.validateNicknameFormat(nickname)
 
     private fun createMockUiState(): MyPageUiState {
         return MyPageUiState(
             profile = MyPageUiState.ProfileState(
                 nickname = "유저 닉네임",
-                editingNickname = "유저 닉네임",
                 badgeName = "배지명",
                 invitationCode = "PICKLE2026",
-                inputState = InputState.Idle
             ),
             statistics = MyPageUiState.StatisticsState(
                 selectedTabIndex = 0,

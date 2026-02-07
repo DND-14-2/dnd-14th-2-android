@@ -39,20 +39,19 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun onStatisticsTabSelected(index: Int) {
-        _uiState.update {
-            it.copy(
-                statistics = it.statistics.copy(selectedTabIndex = index)
+        _uiState.update { state ->
+            state.copy(
+                statistics = state.statistics.copy(selectedTabIndex = index)
             )
         }
     }
-
 
     private fun createMockUiState(): MyPageUiState {
         return MyPageUiState(
             profile = MyPageUiState.ProfileState(
                 nickname = "유저 닉네임",
                 badgeName = "배지명",
-                invitationCode = "PICKLE2026",
+                invitationCode = "PICKLE2026"
             ),
             statistics = MyPageUiState.StatisticsState(
                 selectedTabIndex = 0,

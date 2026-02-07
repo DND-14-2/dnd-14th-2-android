@@ -2,16 +2,22 @@ package com.smtm.pickle.presentation.ledger.create.component.secondstep
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun LedgerCreateSecondBottomButtons(
@@ -25,22 +31,42 @@ fun LedgerCreateSecondBottomButtons(
             .padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        PickleButton(
-            modifier = Modifier.width(96.dp),
-            text = stringResource(R.string.common_previous),
-            color = PickleTheme.colors.gray100,
-            textColor = PickleTheme.colors.gray600,
+        Button(
+            modifier = Modifier
+                .height(Dimensions.buttonHeight)
+                .width(96.dp),
             onClick = onPreviousClick,
-        )
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PickleTheme.colors.gray100,
+            ),
+            shape = RoundedCornerShape(Dimensions.radius)
+        ) {
+            Text(
+                text = stringResource(R.string.common_previous),
+                style = PickleTheme.typography.body1Bold,
+                color = PickleTheme.colors.gray600,
+            )
+        }
 
-        PickleButton(
-            modifier = Modifier.weight(1f),
-            text = stringResource(R.string.ledger_create_success),
-            color = if (enabledSuccess) PickleTheme.colors.primary400 else PickleTheme.colors.gray100,
-            textColor = if (enabledSuccess) PickleTheme.colors.base0 else PickleTheme.colors.gray600,
+        Button(
+            modifier = Modifier
+                .height(Dimensions.buttonHeight)
+                .fillMaxWidth()
+                .weight(1f),
             onClick = onSuccessClick,
             enabled = enabledSuccess,
-        )
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PickleTheme.colors.primary400,
+                disabledContainerColor = PickleTheme.colors.background100,
+            ),
+            shape = RoundedCornerShape(Dimensions.radius)
+        ) {
+            Text(
+                text = stringResource(R.string.ledger_create_success),
+                style = PickleTheme.typography.body1Bold,
+                color = if (enabledSuccess) PickleTheme.colors.base0 else PickleTheme.colors.gray600,
+            )
+        }
     }
 }
 

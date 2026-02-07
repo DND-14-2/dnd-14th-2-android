@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.ledger.create
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateAppBar
+import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateExitDialog
 import com.smtm.pickle.presentation.ledger.create.component.firststep.LedgerCreateFirstStepContent
 import com.smtm.pickle.presentation.ledger.create.component.secondstep.LedgerCreateSecondContent
 import java.time.LocalDate
@@ -37,12 +39,27 @@ fun LedgerCreateScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    BackHandler {
+        viewModel.showExitDialog()
+    }
+
+    if (uiState.showExitDialog) {
+        LedgerCreateExitDialog(
+            onDismiss = viewModel::dismissExitDialog,
+            onExitButtonClick = viewModel::confirmExit
+        )
+    }
+
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
                     LedgerCreateEffect.NavigateToHome -> {
                         onNavigateToHome()
+                    }
+
+                    LedgerCreateEffect.NavigateBack -> {
+                        onNavigateBack()
                     }
                 }
             }
@@ -60,7 +77,7 @@ fun LedgerCreateScreen(
         selectPaymentMethod = viewModel::selectPaymentMethod,
         setMemo = viewModel::setMemo,
         createLedger = viewModel::createLedger,
-        onNavigationClick = onNavigateBack,
+        onNavigationClick = viewModel::showExitDialog,
     )
 }
 

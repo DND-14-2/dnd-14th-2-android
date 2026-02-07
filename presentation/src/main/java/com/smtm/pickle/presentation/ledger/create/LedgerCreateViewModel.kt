@@ -85,12 +85,28 @@ class LedgerCreateViewModel @Inject constructor(
             _effect.emit(LedgerCreateEffect.NavigateToHome)
         }
     }
+
+    fun showExitDialog() {
+        _uiState.update { state -> state.copy(showExitDialog = true) }
+    }
+
+    fun dismissExitDialog() {
+        _uiState.update { it.copy(showExitDialog = false) }
+    }
+
+    fun confirmExit() {
+        _uiState.update { it.copy(showExitDialog = false) }
+        viewModelScope.launch {
+            _effect.emit(LedgerCreateEffect.NavigateBack)
+        }
+    }
 }
 
 data class LedgerCreateUiState(
     val step: LedgerCreateStep = LedgerCreateStep.First,
     val firstStepState: FirstStepState = FirstStepState(),
     val secondStepState: SecondStepState = SecondStepState(),
+    val showExitDialog: Boolean = false,
 ) {
     data class FirstStepState(
         val amount: String = "",
@@ -114,6 +130,7 @@ data class LedgerCreateUiState(
 
 sealed interface LedgerCreateEffect {
     data object NavigateToHome : LedgerCreateEffect
+    data object NavigateBack : LedgerCreateEffect
 }
 
 enum class LedgerCreateStep { First, Second }

@@ -1,19 +1,23 @@
 package com.smtm.pickle.presentation.mypage
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
+import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
+import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.mypage.components.profile.MyPageProfileSection
+import com.smtm.pickle.presentation.mypage.tabs.statistics.StatisticsTab
 
 @Composable
 fun MyPageScreen(
@@ -22,43 +26,77 @@ fun MyPageScreen(
     onNavigateSetting: () -> Unit,
     onNavigateAlarmSetting: () -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     MyPageContent(
+        uiState = uiState,
         onNavigateMyLedger = onNavigateMyLedger,
         onNavigateSetting = onNavigateSetting,
-        onNavigateAlarmSetting = onNavigateAlarmSetting,
+        onStatisticsTabSelected = viewModel::onStatisticsTabSelected,
     )
 }
 
 @Composable
 private fun MyPageContent(
+    uiState: MyPageUiState,
     onNavigateMyLedger: () -> Unit,
     onNavigateSetting: () -> Unit,
-    onNavigateAlarmSetting: () -> Unit,
+    onStatisticsTabSelected: (Int) -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Green.copy(0.5f)
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(PickleTheme.colors.background50)
         ) {
-            Button(onClick = onNavigateMyLedger) {
-                Text("내 가계부")
+            stickyHeader("top_bar") {
+                PickleAppBar(
+                    title = "마이페이지",
+                    actions = {
+                        PickleIconButtonWithTouchCustom(
+                            iconRes = R.drawable.ic_appbar_setting,
+                            contentDescription = "설정",
+                            onClick = onNavigateSetting,
+                            iconSize = 48.dp,
+                        )
+                    },
+                    isInScaffold = false
+                )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Button(onClick = onNavigateSetting) {
-                Text("설정 이동")
+            item("profile") {
+                MyPageProfileSection(
+                    modifier = Modifier.background(PickleTheme.colors.base0),
+                    nickname = uiState.profile.nickname,
+                    badgeName = uiState.profile.badgeName,
+                    onNicknameEditClick = {},
+                    onMyBadgeClick = {},
+                )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Button(onClick = onNavigateAlarmSetting) {
-                Text("알림 설정 이동")
+            item("tab") {
+                StatisticsTab(
+                    statisticsState = uiState.statistics,
+                    onMyLedgerClick = onNavigateMyLedger,
+                    onTabSelected = onStatisticsTabSelected,
+                )
             }
         }
+    }
+}
+
+
+@Preview
+@Composable
+private fun MyPageScreenPreview() {
+    PickleTheme {
+        MyPageContent(
+            uiState = MyPageUiState(),
+            onNavigateMyLedger = { },
+            onNavigateSetting = { },
+            onStatisticsTabSelected = { },
+        )
     }
 }

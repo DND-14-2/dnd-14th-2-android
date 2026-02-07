@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.designsystem.components.textfield
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -156,13 +157,27 @@ fun PickleTextField(
                             color = PickleTheme.colors.gray500,
                         )
                     },
-                    leadingIcon = leadingIcon,
-                    trailingIcon = trailingIcon,
+                    leadingIcon = leadingIcon?.let { icon ->
+                        {
+                            Box(modifier = Modifier.padding(start = 12.dp)) { icon() }
+                        }
+                    },
+                    trailingIcon = trailingIcon?.let { icon ->
+                        {
+                            Box(modifier = Modifier.padding(end = 12.dp)) { icon() }
+                        }
+                    },
                     singleLine = isSingleLine,
                     enabled = enabled,
                     isError = inputState is InputState.Error,
                     interactionSource = interactionSource,
                     colors = textFieldColor,
+                    contentPadding = OutlinedTextFieldDefaults.contentPadding(
+                        start = if (leadingIcon == null) 16.dp else 8.dp,
+                        end = if (trailingIcon == null) 16.dp else 8.dp,
+                        top = 0.dp,
+                        bottom = 0.dp,
+                    ),
                     container = {
                         OutlinedTextFieldDefaults.Container(
                             enabled = enabled,
@@ -456,10 +471,9 @@ object PickleTextField {
     ) {
         val leadingIcon = remember {
             @Composable {
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.ic_search_magnifier),
                     contentDescription = null,
-                    modifier = Modifier.size(Dimensions.iconMedium)
                 )
             }
         }
@@ -536,5 +550,17 @@ private fun TextFieldWithSupporting() {
             email.contains("@") -> InputState.Success(null)
             else -> InputState.Error("이메일을 다시 확인해주세요")
         },
+    )
+}
+
+@Preview
+@Composable
+private fun TextFieldWithSearch() {
+    var searchValue by remember { mutableStateOf("aaa") }
+
+    PickleTextField.Search(
+        value = searchValue,
+        onValueChange = { searchValue = it },
+        hint = "검색어를 입력해주세요"
     )
 }

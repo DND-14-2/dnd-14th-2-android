@@ -22,7 +22,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -74,13 +73,6 @@ private fun OnboardingContent(
     Scaffold(
         topBar = {
             PickleAppBar(
-                navigationItem = if (pagerState.currentPage == 0) {
-                    NavigationItem.None
-                } else {
-                    NavigationItem.Back(
-                        onClick = onPrevPage
-                    )
-                },
                 actions = {
                     TextButton(onClick = onSkipOrFinish) {
                         Text(

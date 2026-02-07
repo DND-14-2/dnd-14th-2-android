@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,13 +24,69 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.AppBarAlignment
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextField
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickleAppBar(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    color: Color = PickleTheme.colors.base0,
+    isInScaffold: Boolean = true,
+    alignment: AppBarAlignment = AppBarAlignment.Center,
+    navigationItem: NavigationItem = NavigationItem.None,
+    actions: @Composable (RowScope.() -> Unit) = {}
+) {
+    Box(
+        modifier = modifier
+            .then(if (isInScaffold) Modifier.statusBarsPadding() else Modifier)
+            .fillMaxWidth()
+            .background(color = color)
+            .padding(horizontal = 16.dp)
+            .height(Dimensions.appbarHeight)
+    ) {
+        when (alignment) {
+            AppBarAlignment.Start -> {
+                Row(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NavigationIcon(navigationItem)
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    if (title != null) {
+                        Text(text = title, style = PickleTheme.typography.body1Bold)
+                    }
+                }
+            }
+
+            AppBarAlignment.Center -> {
+                Box(modifier = Modifier.align(Alignment.CenterStart)) {
+                    NavigationIcon(navigationItem)
+                }
+
+                if (title != null) {
+                    Box(modifier = Modifier.align(Alignment.Center)) {
+                        Text(text = title, style = PickleTheme.typography.body1Bold)
+                    }
+                }
+            }
+        }
+        Row(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            content = actions
+        )
+    }
+}
+
+
+@Composable
+fun PickleAppBarWithBottomContent(
     modifier: Modifier = Modifier,
     title: String? = null,
     color: Color = PickleTheme.colors.base0,
@@ -41,48 +96,13 @@ fun PickleAppBar(
     bottomContent: (@Composable () -> Unit)? = null
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = color)
-                .statusBarsPadding()
-                .height(Dimensions.appbarHeight)
-        ) {
-            when (alignment) {
-                AppBarAlignment.Start -> {
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterStart),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        NavigationIcon(navigationItem)
-
-                        if (title != null) {
-                            Text(text = title, style = PickleTheme.typography.body1Bold)
-                        }
-                    }
-                }
-
-                AppBarAlignment.Center -> {
-                    Box(modifier = Modifier.align(Alignment.CenterStart)) {
-                        NavigationIcon(navigationItem)
-                    }
-
-                    if (title != null) {
-                        Box(modifier = Modifier.align(Alignment.Center)) {
-                            Text(text = title, style = PickleTheme.typography.body1Bold)
-                        }
-                    }
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                content = actions
-            )
-        }
+        PickleAppBar(
+            color = color,
+            alignment = alignment,
+            navigationItem = navigationItem,
+            title = title,
+            actions = actions
+        )
         bottomContent?.invoke()
     }
 }
@@ -102,16 +122,15 @@ fun PickleSearchAppBar(
             .background(PickleTheme.colors.base0)
             .statusBarsPadding()
             .height(Dimensions.appbarHeight)
-            .padding(end = 16.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBackClick) {
-            Icon(
-                painter = painterResource(R.drawable.ic_appbar_back_left_align),
-                contentDescription = "뒤로가기",
-                tint = Color.Unspecified,
-            )
-        }
+        PickleIconButtonWithTouchCustom(
+            iconRes = R.drawable.ic_appbar_back_left_align,
+            contentDescription = "뒤로가기",
+            onClick = onBackClick
+        )
+        Spacer(modifier = Modifier.width(4.dp))
 
         PickleTextField.Search(
             value = searchValue,
@@ -126,14 +145,11 @@ fun PickleSearchAppBar(
 private fun NavigationIcon(item: NavigationItem) {
     when (item) {
         is NavigationItem.Back -> {
-            IconButton(onClick = item.onClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_appbar_back),
-                    contentDescription = "뒤로가기",
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                )
-            }
+            PickleIconButtonWithTouchCustom(
+                iconRes = R.drawable.ic_appbar_back,
+                contentDescription = "뒤로가기",
+                onClick = item.onClick
+            )
         }
 
         NavigationItem.PickleLogo -> {

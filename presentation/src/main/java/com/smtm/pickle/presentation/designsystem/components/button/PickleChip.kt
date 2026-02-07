@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
@@ -67,6 +68,7 @@ fun PickleChip(
     Surface(
         modifier = modifier
             .height(height)
+            .clip(getChipShape(shape))
             .then(
                 if (onClick == null) Modifier else Modifier.clickable(onClick = onClick)
             ),

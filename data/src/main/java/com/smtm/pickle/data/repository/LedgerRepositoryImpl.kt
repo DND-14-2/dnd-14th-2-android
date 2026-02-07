@@ -79,4 +79,10 @@ class LedgerRepositoryImpl @Inject constructor(
         }
         return months
     }
+
+    override suspend fun getLedger(id: Long): Ledger {
+        val remoteLedger = ledgerApi.getLedger(id)
+        ledgerDao.insert(remoteLedger.toEntity())
+        return remoteLedger.toDomain()
+    }
 }

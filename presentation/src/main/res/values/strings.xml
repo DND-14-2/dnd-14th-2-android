@@ -90,6 +90,9 @@
     <string name="ledger_payment_method_debit_card">체크카드</string>
     <string name="ledger_payment_method_cash">현금</string>
 
+    <!-- Ledger Detail -->
+    <string name="ledger_detail_title">가계부 내역</string>
+
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 

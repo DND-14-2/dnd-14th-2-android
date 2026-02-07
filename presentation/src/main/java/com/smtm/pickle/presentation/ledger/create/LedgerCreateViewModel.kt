@@ -86,12 +86,21 @@ class LedgerCreateViewModel @Inject constructor(
 
     fun createLedger(date: LocalDate) {
         val firstStepState = _uiState.value.firstStepState
+        val amount = firstStepState.amount.toLongOrNull()
+        val category = firstStepState.selectedCategory?.toDomain()
         val secondStepState = _uiState.value.secondStepState
-        val amount = firstStepState.amount.toLongOrNull() ?: return
-        val type = firstStepState.selectedLedgerType.toDomain()
-        val category = firstStepState.selectedCategory?.toDomain() ?: return
+        val paymentMethod = secondStepState.selectedPaymentMethod?.toDomain()
+
+        if (amount == null || category == null || paymentMethod == null) {
+            Timber.e("createLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod")
+            viewModelScope.launch {
+                _effect.emit(LedgerCreateEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
+            }
+            return
+        }
+
         val description = firstStepState.description.ifEmpty { getDefaultDescription(category) }
-        val paymentMethod = secondStepState.selectedPaymentMethod?.toDomain() ?: return
+        val type = firstStepState.selectedLedgerType.toDomain()
         val memo = secondStepState.memo.ifBlank { null }
 
         viewModelScope.launch {
@@ -107,6 +116,7 @@ class LedgerCreateViewModel @Inject constructor(
                 _effect.emit(LedgerCreateEffect.NavigateToHome)
             }.onFailure { e ->
                 Timber.e(e, "createLedger() failed")
+                _effect.emit(LedgerCreateEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
             }
         }
     }
@@ -178,6 +188,7 @@ data class LedgerCreateUiState(
 sealed interface LedgerCreateEffect {
     data object NavigateToHome : LedgerCreateEffect
     data object NavigateBack : LedgerCreateEffect
+    data class ShowSnackBar(val msg: String) : LedgerCreateEffect
 }
 
 enum class LedgerCreateStep { First, Second }

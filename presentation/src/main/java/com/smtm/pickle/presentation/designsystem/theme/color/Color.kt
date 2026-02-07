@@ -12,13 +12,13 @@ object ColorPalette {
     val base100 = Color(0xFF202020)
 
     // Primary Colors
-    val primary50 = Color(0xFFEAFFFD)
-    val primary100 = Color(0xFFCFF5F2)
-    val primary200 = Color(0xFFB4F3ED)
-    val primary300 = Color(0xFF89E9E0)
-    val primary400 = Color(0xFF4ADFD1)
-    val primary500 = Color(0xFF24B0A2)
-    val primary600 = Color(0xFF1D9D90)
+    val primary50 = Color(0xFFECFAF9)
+    val primary100 = Color(0xFFD4F3F1)
+    val primary200 = Color(0xFFAEE8E5)
+    val primary300 = Color(0xFF74D6D3)
+    val primary400 = Color(0xFF2BC4C1)
+    val primary500 = Color(0xFF22A3A0)
+    val primary600 = Color(0xFF187674)
 
     // Gray System
     val gray50 = Color(0xFFF6F6F9)

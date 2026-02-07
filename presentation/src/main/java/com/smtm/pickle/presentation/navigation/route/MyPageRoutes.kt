@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 data object MyLedgerRoute
 
 @Serializable
+data object MyBadgeRoute
+
+@Serializable
 data object SettingRoute
 
 @Serializable

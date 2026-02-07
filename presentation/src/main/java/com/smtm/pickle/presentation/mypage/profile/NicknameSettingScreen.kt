@@ -55,7 +55,7 @@ fun NicknameSettingContent(
     modifier: Modifier = Modifier,
 ) {
     NicknameSettingBaseContent(
-        title = stringResource(R.string.edit_nickname_title),
+        title = stringResource(R.string.nickname_edit_title),
         instruction = stringResource(R.string.nickname_change_instruction),
         onBackClick = onBackClick,
         modifier = modifier,
@@ -66,7 +66,7 @@ fun NicknameSettingContent(
                     .imePadding()
                     .padding(bottom = 12.dp)
                     .padding(horizontal = 16.dp),
-                text = stringResource(R.string.edit_button_title),
+                text = stringResource(R.string.nickname_edit_button),
                 onClick = onSaveClick,
                 enabled = uiState.canSubmit,
                 textColor = PickleTheme.colors.base0

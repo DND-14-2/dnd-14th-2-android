@@ -4,8 +4,6 @@
     <string name="nav_home">홈</string>
     <string name="nav_verdict">판결</string>
     <string name="nav_mypage">마이페이지</string>
-    <string name="profile_title">내 프로필</string>
-    <string name="nickname_label">닉네임</string>
 
     <!-- Login -->
     <string name="login_kakao_start">카카오톡으로 시작하기</string>
@@ -13,9 +11,11 @@
     <string name="login_tooltip_fast">3초만에 로그인하기!</string>
 
     <!-- Nickname -->
+    <string name="profile_title">내 프로필</string>
+    <string name="nickname_label">닉네임</string>
     <string name="nickname_title">닉네임 입력</string>
-    <string name="edit_nickname_title">닉네임 수정</string>
-    <string name="edit_button_title">변경하기</string>
+    <string name="nickname_edit_title">닉네임 수정</string>
+    <string name="nickname_edit_button">변경하기</string>
     <string name="nickname_instruction">닉네임을 설정해주세요</string>
     <string name="nickname_change_instruction">변경할 닉네임을 입력해주세요.</string>
     <string name="nickname_hint">최대 5자까지 입력 가능해요</string>

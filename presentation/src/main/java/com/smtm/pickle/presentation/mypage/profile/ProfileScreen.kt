@@ -58,7 +58,7 @@ fun ProfileContent(
                 trailingIcon = {
                     Image(
                         painter = painterResource(R.drawable.ic_mypage_arrow_right),
-                        contentDescription = "닉네임 설정",
+                        contentDescription = stringResource(R.string.nickname_edit_title),
                     )
                 }
             )

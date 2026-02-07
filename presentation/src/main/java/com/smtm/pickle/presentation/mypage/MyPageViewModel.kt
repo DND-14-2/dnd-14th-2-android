@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,9 +18,11 @@ class MyPageViewModel @Inject constructor(
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
     fun onStatisticsTabSelected(index: Int) {
-        _uiState.value = _uiState.value.copy(
-            statistics = _uiState.value.statistics.copy(selectedTabIndex = index)
-        )
+        _uiState.update { state ->
+            state.copy(
+                statistics = state.statistics.copy(selectedTabIndex = index)
+            )
+        }
     }
 
     private fun createMockUiState(): MyPageUiState {

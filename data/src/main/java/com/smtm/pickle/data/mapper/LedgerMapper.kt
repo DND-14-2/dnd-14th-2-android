@@ -62,6 +62,11 @@ fun RemoteLedgerType.toDomain(): LedgerType = when (this) {
     RemoteLedgerType.Expense -> LedgerType.Expense
 }
 
+fun LedgerType.toRemote(): RemoteLedgerType = when (this) {
+    LedgerType.Income -> RemoteLedgerType.Income
+    LedgerType.Expense -> RemoteLedgerType.Expense
+}
+
 fun RemoteLedgerCategory.toDomain(): LedgerCategory = when (this) {
     RemoteLedgerCategory.Food -> LedgerCategory.Food
     RemoteLedgerCategory.Transport -> LedgerCategory.Transport
@@ -82,9 +87,37 @@ fun RemoteLedgerCategory.toDomain(): LedgerCategory = when (this) {
     RemoteLedgerCategory.Other -> LedgerCategory.Other
 }
 
+fun LedgerCategory.toRemote(): RemoteLedgerCategory = when (this) {
+    LedgerCategory.Food -> RemoteLedgerCategory.Food
+    LedgerCategory.Transport -> RemoteLedgerCategory.Transport
+    LedgerCategory.Housing -> RemoteLedgerCategory.Housing
+    LedgerCategory.Shopping -> RemoteLedgerCategory.Shopping
+    LedgerCategory.HealthMedical -> RemoteLedgerCategory.HealthMedical
+    LedgerCategory.EducationSelfDevelopment -> RemoteLedgerCategory.EducationSelfDevelopment
+    LedgerCategory.LeisureHobby -> RemoteLedgerCategory.LeisureHobby
+    LedgerCategory.SavingFinance -> RemoteLedgerCategory.SavingFinance
+    LedgerCategory.Salary -> RemoteLedgerCategory.Salary
+    LedgerCategory.SideIncome -> RemoteLedgerCategory.SideIncome
+    LedgerCategory.Bonus -> RemoteLedgerCategory.Bonus
+    LedgerCategory.Allowance -> RemoteLedgerCategory.Allowance
+    LedgerCategory.PartTimeIncome -> RemoteLedgerCategory.PartTimeIncome
+    LedgerCategory.FinancialIncome -> RemoteLedgerCategory.FinancialIncome
+    LedgerCategory.SplitBill -> RemoteLedgerCategory.SplitBill
+    LedgerCategory.Transfer -> RemoteLedgerCategory.Transfer
+    LedgerCategory.Other -> RemoteLedgerCategory.Other
+
+}
+
 fun RemotePaymentMethod.toDomain(): PaymentMethod = when (this) {
     RemotePaymentMethod.BankTransfer -> PaymentMethod.BankTransfer
     RemotePaymentMethod.CreditCard -> PaymentMethod.CreditCard
     RemotePaymentMethod.Cash -> PaymentMethod.Cash
     RemotePaymentMethod.DebitCard -> PaymentMethod.DebitCard
+}
+
+fun PaymentMethod.toRemote(): RemotePaymentMethod = when (this) {
+    PaymentMethod.BankTransfer -> RemotePaymentMethod.BankTransfer
+    PaymentMethod.CreditCard -> RemotePaymentMethod.CreditCard
+    PaymentMethod.Cash -> RemotePaymentMethod.Cash
+    PaymentMethod.DebitCard -> RemotePaymentMethod.DebitCard
 }

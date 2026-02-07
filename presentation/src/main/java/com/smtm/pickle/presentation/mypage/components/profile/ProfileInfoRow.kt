@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.button.PickleBadge
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
@@ -33,7 +33,7 @@ fun ProfileInfoRow(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PickleProfile(type = ProfileType.Large)
+        PickleProfile(sizyType = ProfileSizeType.Large)
         Spacer(modifier = Modifier.width(16.dp))
 
         Column {

@@ -1,9 +1,10 @@
 package com.smtm.pickle.presentation.designsystem.components.profile.model
 
 import androidx.compose.ui.unit.Dp
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType.Large
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType.NORMAL
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType.InSetting
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType.InSetting
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType.Large
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType.NORMAL
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType.SMALL
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 /**
@@ -13,7 +14,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
  * @property NORMAL 홈이나 리스트에서 사용. `size: 60 dp`, `cornerRadius: 20 dp`
  * @property SMALL 디자인상 선언 되었으나 아직 사용처 없음. `size: 40 dp`, `cornerRadius: 14 dp`
  */
-enum class ProfileType(val size: Dp, val cornerRadius: Dp) {
+enum class ProfileSizeType(val size: Dp, val cornerRadius: Dp) {
     InSetting(Dimensions.profileSizeInSetting, Dimensions.profileRadiusInSetting),
     Large(Dimensions.profileSizeLarge, Dimensions.profileRadiusLarge),
     NORMAL(Dimensions.profileSize, Dimensions.profileRadius),

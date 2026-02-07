@@ -2,7 +2,10 @@ package com.smtm.pickle.presentation.designsystem.components.profile
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,42 +28,85 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileStatus
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun PickleProfile(
-    @DrawableRes iconRes: Int = R.drawable.ic_profile_default,
-    type: ProfileType = ProfileType.NORMAL,
     modifier: Modifier = Modifier,
+    @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
+    sizyType: ProfileSizeType = ProfileSizeType.NORMAL,
+    selected: Boolean = false,
+    isNewBadge: Boolean = false,
     enabled: Boolean = false,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
 ) {
-    Surface(
-        modifier = modifier.size(type.size),
-        shape = RoundedCornerShape(type.cornerRadius),
-        border = BorderStroke(width = 1.dp, color = PickleTheme.colors.gray200),
-        color = PickleTheme.colors.gray100,
-        enabled = enabled,
-        onClick = onClick,
-    ) {
-        Icon(
-            painter = painterResource(iconRes),
-            contentDescription = null,
-            tint = Color.Unspecified
-        )
+    val colors = PickleTheme.colors
+
+    val clickableModifier = remember(onClick) {
+        if (onClick != null) {
+            Modifier.clickable(enabled = enabled, onClick = onClick)
+        } else {
+            Modifier
+        }
     }
+    val border = remember(selected) {
+        if (selected) {
+            BorderStroke(width = 2.dp, color = colors.primary400)
+        } else {
+            BorderStroke(width = 1.dp, color = colors.gray200)
+        }
+    }
+
+    Box(
+        modifier = Modifier.padding(top = 2.dp)
+    ) {
+        Surface(
+            modifier = modifier
+                .size(sizyType.size)
+                .then(clickableModifier),
+            shape = RoundedCornerShape(sizyType.cornerRadius),
+            border = border,
+            color = PickleTheme.colors.gray100,
+        ) {
+            Image(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(sizyType.size),
+            )
+        }
+
+        if (selected) {
+            BadgeStateIcon(R.drawable.ic_common_check)
+        }
+
+        if (isNewBadge) {
+            BadgeStateIcon(R.drawable.ic_common_new)
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.BadgeStateIcon(@DrawableRes badgeIconRes: Int) {
+    Icon(
+        painter = painterResource(id = badgeIconRes),
+        contentDescription = null,
+        modifier = Modifier
+            .align(alignment = Alignment.TopEnd)
+            .offset(4.5.dp, (-4.5).dp),
+        tint = Color.Unspecified,
+    )
 }
 
 @Composable
 fun PickleCircleProfile(
     nickname: String,
-    status: ProfileStatus = ProfileStatus.DEFAULT,
-    @DrawableRes iconRes: Int = R.drawable.ic_profile_default,
-    selected: Boolean = false,
     modifier: Modifier = Modifier,
+    @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
+    status: ProfileStatus = ProfileStatus.DEFAULT,
+    selected: Boolean = false,
 ) {
     val colors = PickleTheme.colors
 
@@ -98,10 +144,9 @@ fun PickleCircleProfile(
                 border = border,
                 shape = CircleShape
             ) {
-                Icon(
+                Image(
                     painter = painterResource(iconRes),
                     contentDescription = null,
-                    tint = Color.Unspecified
                 )
             }
 
@@ -143,7 +188,13 @@ private fun getStatus(status: ProfileStatus): String {
 @Composable
 private fun PickleProfilePreview() {
     PickleTheme {
-        PickleProfile(type = ProfileType.InSetting)
+        Row {
+            PickleProfile(sizyType = ProfileSizeType.InSetting)
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            PickleProfile(sizyType = ProfileSizeType.InSetting, selected = true)
+        }
     }
 }
 

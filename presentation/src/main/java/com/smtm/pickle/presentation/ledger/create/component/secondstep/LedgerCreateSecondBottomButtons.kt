@@ -38,13 +38,13 @@ fun LedgerCreateSecondBottomButtons(
             onClick = onPreviousClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = PickleTheme.colors.gray100,
+                contentColor = PickleTheme.colors.gray600,
             ),
             shape = RoundedCornerShape(Dimensions.radius)
         ) {
             Text(
                 text = stringResource(R.string.common_previous),
                 style = PickleTheme.typography.body1Bold,
-                color = PickleTheme.colors.gray600,
             )
         }
 
@@ -58,13 +58,14 @@ fun LedgerCreateSecondBottomButtons(
             colors = ButtonDefaults.buttonColors(
                 containerColor = PickleTheme.colors.primary400,
                 disabledContainerColor = PickleTheme.colors.background100,
+                contentColor = PickleTheme.colors.base0,
+                disabledContentColor = PickleTheme.colors.gray600,
             ),
             shape = RoundedCornerShape(Dimensions.radius)
         ) {
             Text(
                 text = stringResource(R.string.ledger_create_success),
                 style = PickleTheme.typography.body1Bold,
-                color = if (enabledSuccess) PickleTheme.colors.base0 else PickleTheme.colors.gray600,
             )
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 class LedgerDetailReceiptShape : Shape {
     override fun createOutline(
@@ -16,8 +17,12 @@ class LedgerDetailReceiptShape : Shape {
         density: Density
     ): Outline {
         val cornerRadius = with(density) { 12.dp.toPx() }
-        val zigzagWidth = 20f
-        val zigzagHeight = 20f
+        val desiredZigzagWidth = 40f
+
+        // 전체 너비에 맞춰서 톱니 개수 계산
+        val zigzagCount = (size.width / desiredZigzagWidth).roundToInt()
+        val actualZigzagWidth = size.width / zigzagCount
+        val zigzagHeight = 30f
 
         val path = Path().apply {
             // 좌측 상단 라운드 코너에서 시작
@@ -42,19 +47,22 @@ class LedgerDetailReceiptShape : Shape {
                 forceMoveTo = false
             )
 
-            // 우측 세로선 (톱니 시작점까지)
-            lineTo(size.width, size.height - zigzagHeight)
+            // 우측 세로선 (톱니 시작 위치까지)
+            lineTo(size.width, size.height)
 
-            // 하단 톱니 모양 (우측에서 좌측으로)
-            var currentX = size.width
-            while (currentX > 0) {
-                lineTo(currentX - zigzagWidth / 2, size.height)
-                lineTo(currentX - zigzagWidth, size.height - zigzagHeight)
-                currentX -= zigzagWidth
+            // 하단 톱니 모양 (우측에서 좌측으로) - 순수 이등변 삼각형
+            for (i in 0 until zigzagCount) {
+                val leftX = size.width - ((i + 1) * actualZigzagWidth)
+                val midX = size.width - ((i + 0.5f) * actualZigzagWidth)
+
+                // 위에서 아래 꼭지점으로 (좌측 변)
+                lineTo(midX, size.height + zigzagHeight)
+
+                // 꼭지점에서 다시 위로 (우측 변)
+                lineTo(leftX, size.height)
             }
 
             // 좌측 세로선으로 복귀
-            lineTo(0f, size.height - zigzagHeight)
             lineTo(0f, cornerRadius)
 
             close()

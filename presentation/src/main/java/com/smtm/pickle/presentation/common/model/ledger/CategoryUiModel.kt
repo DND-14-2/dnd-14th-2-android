@@ -98,3 +98,23 @@ fun LedgerCategory.toUiModel(): CategoryUiModel = when (this) {
     LedgerCategory.Transfer -> CategoryUiModel.Transfer
     LedgerCategory.Other -> CategoryUiModel.Other
 }
+
+fun CategoryUiModel.toDomain(): LedgerCategory = when (this) {
+    CategoryUiModel.Food -> LedgerCategory.Food
+    CategoryUiModel.Transport -> LedgerCategory.Transport
+    CategoryUiModel.Housing -> LedgerCategory.Housing
+    CategoryUiModel.Shopping -> LedgerCategory.Shopping
+    CategoryUiModel.HealthMedical -> LedgerCategory.HealthMedical
+    CategoryUiModel.EducationSelfDevelopment -> LedgerCategory.EducationSelfDevelopment
+    CategoryUiModel.LeisureHobby -> LedgerCategory.LeisureHobby
+    CategoryUiModel.SavingFinance -> LedgerCategory.SavingFinance
+    CategoryUiModel.Salary -> LedgerCategory.Salary
+    CategoryUiModel.SideIncome -> LedgerCategory.SideIncome
+    CategoryUiModel.Bonus -> LedgerCategory.Bonus
+    CategoryUiModel.Allowance -> LedgerCategory.Allowance
+    CategoryUiModel.PartTimeIncome -> LedgerCategory.PartTimeIncome
+    CategoryUiModel.FinancialIncome -> LedgerCategory.FinancialIncome
+    CategoryUiModel.SplitBill -> LedgerCategory.SplitBill
+    CategoryUiModel.Transfer -> LedgerCategory.Transfer
+    CategoryUiModel.Other -> LedgerCategory.Other
+}

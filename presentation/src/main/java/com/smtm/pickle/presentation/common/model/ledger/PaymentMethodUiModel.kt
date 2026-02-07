@@ -34,3 +34,10 @@ fun PaymentMethod.toUiModel(): PaymentMethodUiModel = when (this) {
     PaymentMethod.DebitCard -> PaymentMethodUiModel.DebitCard
     PaymentMethod.Cash -> PaymentMethodUiModel.Cash
 }
+
+fun PaymentMethodUiModel.toDomain(): PaymentMethod = when (this) {
+    PaymentMethodUiModel.BankTransfer -> PaymentMethod.BankTransfer
+    PaymentMethodUiModel.CreditCard -> PaymentMethod.CreditCard
+    PaymentMethodUiModel.DebitCard -> PaymentMethod.DebitCard
+    PaymentMethodUiModel.Cash -> PaymentMethod.Cash
+}

@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.components
+package com.smtm.pickle.presentation.mypage.mybadge.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
-import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
+import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileSizeType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
@@ -27,7 +27,7 @@ fun MyPageBadgeBottomSheetContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PickleProfile(type = ProfileType.InSetting)
+        PickleProfile(sizyType = ProfileSizeType.InSetting)
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(

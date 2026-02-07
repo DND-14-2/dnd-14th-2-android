@@ -23,6 +23,7 @@ import com.smtm.pickle.presentation.mypage.tabs.statistics.StatisticsTab
 fun MyPageScreen(
     viewModel: MyPageViewModel = hiltViewModel(),
     onNavigateMyLedger: () -> Unit,
+    onNavigateMyBadge: () -> Unit,
     onNavigateSetting: () -> Unit,
     onNavigateAlarmSetting: () -> Unit,
 ) {
@@ -31,6 +32,7 @@ fun MyPageScreen(
     MyPageContent(
         uiState = uiState,
         onNavigateMyLedger = onNavigateMyLedger,
+        onNavigateMyBadge = onNavigateMyBadge,
         onNavigateSetting = onNavigateSetting,
         onStatisticsTabSelected = viewModel::onStatisticsTabSelected,
     )
@@ -40,6 +42,7 @@ fun MyPageScreen(
 private fun MyPageContent(
     uiState: MyPageUiState,
     onNavigateMyLedger: () -> Unit,
+    onNavigateMyBadge: () -> Unit,
     onNavigateSetting: () -> Unit,
     onStatisticsTabSelected: (Int) -> Unit
 ) {
@@ -72,7 +75,7 @@ private fun MyPageContent(
                     nickname = uiState.profile.nickname,
                     badgeName = uiState.profile.badgeName,
                     onNicknameEditClick = {},
-                    onMyBadgeClick = {},
+                    onMyBadgeClick = onNavigateMyBadge,
                 )
             }
 
@@ -95,6 +98,7 @@ private fun MyPageScreenPreview() {
         MyPageContent(
             uiState = MyPageUiState(),
             onNavigateMyLedger = { },
+            onNavigateMyBadge = { },
             onNavigateSetting = { },
             onStatisticsTabSelected = { },
         )

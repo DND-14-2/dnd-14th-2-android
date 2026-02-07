@@ -34,6 +34,7 @@ import com.smtm.pickle.presentation.navigation.route.JurorDetailRoute
 import com.smtm.pickle.presentation.navigation.route.JurorListRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
+import com.smtm.pickle.presentation.navigation.route.MyBadgeRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyPageTabRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
@@ -170,6 +171,9 @@ private fun MainContent(
                     MyPageScreen(
                         onNavigateMyLedger = {
                             rootNavController.navigate(MyLedgerRoute)
+                        },
+                        onNavigateMyBadge = {
+                            rootNavController.navigate(MyBadgeRoute)
                         },
                         onNavigateSetting = {
                             rootNavController.navigate(SettingRoute)

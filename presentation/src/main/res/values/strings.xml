@@ -76,4 +76,8 @@
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 
+    <!-- MyPage -->
+    <string name="my_page_judge_activity">심판 활동</string>
+    <string name="my_page_jury_activity">배심 활동</string>
+    <string name="my_page_activity_badge">활동 배지</string>
 </resources>

@@ -22,7 +22,7 @@ import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.mypage.components.MyPageBadgeBottomSheetContent
+import com.smtm.pickle.presentation.mypage.mybadge.components.MyPageBadgeBottomSheetContent
 import com.smtm.pickle.presentation.mypage.mybadge.components.MyBadgeList
 import com.smtm.pickle.presentation.mypage.mybadge.components.MyBadgeSummary
 import com.smtm.pickle.presentation.mypage.mybadge.model.BadgeType

@@ -8,15 +8,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +45,7 @@ fun LedgerDescriptionInputField(
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
+    var isFocused by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -55,8 +62,9 @@ fun LedgerDescriptionInputField(
                 .height(Dimensions.inputHeight)
                 .clip(RoundedCornerShape(Dimensions.radius))
                 .background(PickleTheme.colors.gray50)
+                .onFocusChanged { isFocused = it.isFocused }
                 .then(
-                    if (value.isNotEmpty()) {
+                    if (isFocused) {
                         Modifier.border(
                             shape = RoundedCornerShape(Dimensions.radius),
                             width = 1.5.dp,
@@ -82,11 +90,13 @@ fun LedgerDescriptionInputField(
             ),
             decorationBox = { innerTextField ->
                 Row(
-                    modifier = Modifier.padding(start = 16.dp),
+                    modifier = Modifier.padding(horizontal = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 4.dp)
                     ) {
                         if (value.isEmpty()) {
                             Text(
@@ -98,11 +108,13 @@ fun LedgerDescriptionInputField(
                         innerTextField()
                     }
                     if (value.isNotEmpty()) {
+                        Spacer(modifier = Modifier.width(4.dp))
+
                         PickleIconButton(
                             painter = painterResource(R.drawable.ic_description_close),
                             onClick = { onValueChange("") },
                             iconSize = 20.dp,
-                            buttonSize = 48.dp
+                            buttonSize = 24.dp
                         )
                     }
                 }

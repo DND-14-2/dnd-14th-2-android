@@ -15,9 +15,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,6 +43,7 @@ fun LedgerCreateMemo(
     onMemoChange: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    var isFocused by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -56,8 +62,9 @@ fun LedgerCreateMemo(
                 .height(160.dp)
                 .clip(RoundedCornerShape(Dimensions.radius))
                 .background(PickleTheme.colors.gray50)
+                .onFocusChanged { isFocused = it.isFocused }
                 .then(
-                    if (memo.isNotEmpty()) {
+                    if (isFocused) {
                         Modifier.border(
                             shape = RoundedCornerShape(Dimensions.radius),
                             width = 1.5.dp,

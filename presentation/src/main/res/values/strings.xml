@@ -34,10 +34,14 @@
     <string name="common_expense">지출</string>
     <string name="common_minus_str">-%s</string>
     <string name="common_plus_str">+%s</string>
+    <string name="common_yyyy_mm_dd_dot">%d.%02d.%02d</string>
     <string name="common_yyyy_mm_dd">%d년 %d월 %d일</string>
     <string name="common_yyyy_mm">%d년 %d월</string>
     <string name="common_mm_dd">%d월 %d일</string>
     <string name="common_currency_won">₩</string>
+    <string name="common_amount">금액</string>
+    <string name="common_negative">아니요</string>
+    <string name="common_positive">네</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>
@@ -89,6 +93,12 @@
     <string name="ledger_payment_method_credit_card">신용카드</string>
     <string name="ledger_payment_method_debit_card">체크카드</string>
     <string name="ledger_payment_method_cash">현금</string>
+
+    <!-- Ledger Detail -->
+    <string name="ledger_detail_title">가계부 내역</string>
+    <string name="ledger_detail_receipt_payment_method_title">유형</string>
+    <string name="ledger_detail_delete_dialog_title">가계부 내역을 삭제하시겠어요?</string>
+    <string name="ledger_detail_delete_dialog_description">삭제하면 되돌릴 수 없어요.</string>
 
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>

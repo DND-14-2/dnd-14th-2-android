@@ -13,6 +13,7 @@ import com.smtm.pickle.domain.model.ledger.PaymentMethod
 import com.smtm.pickle.domain.repository.LedgerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,6 +43,20 @@ class LedgerRepositoryImpl @Inject constructor(
                     }
                 }
             }
+            .distinctUntilChanged()
+    }
+
+    override fun observeLedger(ledgerId: Long): Flow<Ledger> {
+        return ledgerDao.observeLedger(ledgerId)
+            .map { entity ->
+                try {
+                    entity.toDomain()
+                } catch (e: Exception) {
+                    Timber.e(e, "Invalid entity skipped: id=${entity.id}")
+                    null
+                }
+            }
+            .filterNotNull()
             .distinctUntilChanged()
     }
 
@@ -85,6 +100,11 @@ class LedgerRepositoryImpl @Inject constructor(
         return months
     }
 
+    override suspend fun syncLedger(id: Long) {
+        val remoteLedger = ledgerApi.getLedger(id)
+        ledgerDao.insert(remoteLedger.toEntity())
+    }
+
     override suspend fun createLedger(
         amount: Long,
         type: LedgerType,
@@ -106,5 +126,10 @@ class LedgerRepositoryImpl @Inject constructor(
         val remoteLedger = ledgerApi.createLedger(requestBody)
         val ledgerEntity = remoteLedger.toEntity()
         ledgerDao.insert(ledgerEntity)
+    }
+
+    override suspend fun deleteLedger(id: Long) {
+        ledgerApi.deleteLedger(id)
+        ledgerDao.delete(id)
     }
 }

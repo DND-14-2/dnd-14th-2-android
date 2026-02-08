@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.common.extension.pickleShadow
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -24,6 +25,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 fun PickleCard(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
+    conerRadius: Dp = Dimensions.radiusSurface,
     color: Color = PickleTheme.colors.base0,
     hasBorder: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
@@ -39,7 +41,7 @@ fun PickleCard(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(Dimensions.radiusSurface),
+        shape = RoundedCornerShape(conerRadius),
         color = color,
         contentColor = colors.gray700,
         border = border,

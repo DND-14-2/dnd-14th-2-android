@@ -93,4 +93,13 @@
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 
+    <!-- Setting -->
+    <string name="setting_account_title">계정 설정</string>
+    <string name="setting_account_logout">로그아웃</string>
+    <string name="setting_account_secession">계정탈퇴</string>
+    <string name="setting_service_title">서비스 설정</string>
+    <string name="setting_service_privacy_policy">개인정보 처리방침</string>
+    <string name="setting_service_notification">알림 설정</string>
+    <string name="setting_service_version">앱 버전 정보</string>
+
 </resources>

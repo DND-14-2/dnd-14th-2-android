@@ -17,7 +17,9 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         MyLedgerScreen()
     }
     composable<MyBadgeRoute> {
-        MyBadgeScreen()
+        MyBadgeScreen(
+            onNavigateBack = navController::popBackStack
+        )
     }
     composable<SettingRoute> {
         SettingScreen()

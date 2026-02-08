@@ -1,20 +1,30 @@
 package com.smtm.pickle.presentation.mypage.mybadge
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.presentation.mypage.mybadge.model.BadgeType
 import com.smtm.pickle.presentation.mypage.mybadge.model.BadgeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyBadgeViewModel @Inject constructor(
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow<List<BadgeUiState>>(emptyList())
     val uiState: StateFlow<List<BadgeUiState>> = _uiState.asStateFlow()
+
+    private val _effect = MutableSharedFlow<MyBadgeEffect>()
+    val effect: SharedFlow<MyBadgeEffect> = _effect.asSharedFlow()
+
 
     init {
         // TODO: 사용자가 보유한 배지 ID 목록을 가져오기
@@ -34,12 +44,27 @@ class MyBadgeViewModel @Inject constructor(
 
     fun changeBadge(badgeId: Int) {
         val selectedBadge = BadgeType.fromId(badgeId)
-        _uiState.update { currentList ->
-            currentList.map { state ->
-                state.copy(isSelected = state.type == selectedBadge)
+        viewModelScope.launch {
+            _uiState.update { currentList ->
+                currentList.map { state ->
+                    state.copy(isSelected = state.type == selectedBadge)
+                }
             }
+            _effect.emit(MyBadgeEffect.ShowSnackBar(msg = "배지를 변경했어요!"))
         }
     }
 
-    // TODO: 뱃지 변경 Flow 함수 
+    // TODO: 뱃지 변경 Flow 함수
+
+
+    fun onBackClick() {
+        viewModelScope.launch {
+            _effect.emit(MyBadgeEffect.NavigateBack)
+        }
+    }
+
+    sealed interface MyBadgeEffect {
+        data object NavigateBack : MyBadgeEffect
+        data class ShowSnackBar(val msg: String) : MyBadgeEffect
+    }
 }

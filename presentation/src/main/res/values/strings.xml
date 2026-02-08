@@ -97,4 +97,7 @@
     <string name="my_page_judge_activity">심판 활동</string>
     <string name="my_page_jury_activity">배심 활동</string>
     <string name="my_page_activity_badge">활동 배지</string>
+
+    <!-- MyBadge -->
+    <string name="my_badge_title">내 배지</string>
 </resources>

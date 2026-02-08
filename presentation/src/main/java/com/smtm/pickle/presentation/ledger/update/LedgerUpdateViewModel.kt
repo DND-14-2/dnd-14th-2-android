@@ -68,8 +68,7 @@ class LedgerUpdateViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "loadLedger() failed for ledgerId=$ledgerId")
-                _effect.emit(LedgerUpdateEffect.ShowSnackBar("데이터를 불러오는데 실패했습니다."))
-                _effect.emit(LedgerUpdateEffect.NavigateBack)
+                _effect.emit(LedgerUpdateEffect.NavigateBackWithMessage("데이터를 불러오는데 실패했습니다."))
             }
         }
     }
@@ -134,7 +133,7 @@ class LedgerUpdateViewModel @Inject constructor(
         val paymentMethod = secondStepState.selectedPaymentMethod?.toDomain()
         val date = _uiState.value.date
 
-        if (amount == null || category == null || paymentMethod == null || date == null) {
+        if (amount == null || amount <= 0 || category == null || paymentMethod == null || date == null) {
             Timber.e("updateLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod, date=$date")
             viewModelScope.launch {
                 _effect.emit(LedgerUpdateEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
@@ -234,6 +233,7 @@ data class LedgerUpdateUiState(
 sealed interface LedgerUpdateEffect {
     data object NavigateBack : LedgerUpdateEffect
     data class ShowSnackBar(val msg: String) : LedgerUpdateEffect
+    data class NavigateBackWithMessage(val msg: String) : LedgerUpdateEffect
 }
 
 enum class LedgerUpdateStep { First, Second }

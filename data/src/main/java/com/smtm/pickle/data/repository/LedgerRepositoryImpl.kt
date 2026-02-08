@@ -48,7 +48,14 @@ class LedgerRepositoryImpl @Inject constructor(
 
     override fun observeLedger(ledgerId: Long): Flow<Ledger> {
         return ledgerDao.observeLedger(ledgerId)
-            .map { entity -> entity.toDomain() }
+            .map { entity ->
+                try {
+                    entity.toDomain()
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to map ledger entity: id=$ledgerId")
+                    throw e
+                }
+            }
             .distinctUntilChanged()
     }
 

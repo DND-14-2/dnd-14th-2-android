@@ -70,6 +70,15 @@ fun LedgerUpdateScreen(
                             )
                         )
                     }
+
+                    is LedgerUpdateEffect.NavigateBackWithMessage -> {
+                        snackbarState.show(
+                            PickleSnackbar.toastError(
+                                message = effect.msg,
+                            )
+                        )
+                        onNavigateBack()
+                    }
                 }
             }
         }

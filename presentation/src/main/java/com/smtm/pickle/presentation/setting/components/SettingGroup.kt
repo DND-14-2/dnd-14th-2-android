@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.setting.components
+package com.smtm.pickle.presentation.setting.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
-import com.smtm.pickle.presentation.mypage.setting.model.SettingItem
-import com.smtm.pickle.presentation.mypage.setting.model.SettingSection
+import com.smtm.pickle.presentation.setting.model.SettingItem
+import com.smtm.pickle.presentation.setting.model.SettingSection
 
 @Composable
 fun SettingGroup(section: SettingSection) {

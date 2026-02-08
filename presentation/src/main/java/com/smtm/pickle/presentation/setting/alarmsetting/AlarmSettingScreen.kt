@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.alarmsetting
+package com.smtm.pickle.presentation.setting.alarmsetting
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

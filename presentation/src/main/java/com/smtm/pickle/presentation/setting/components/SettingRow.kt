@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.setting.components
+package com.smtm.pickle.presentation.setting.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
-import com.smtm.pickle.presentation.mypage.setting.model.SettingItem
-import com.smtm.pickle.presentation.mypage.setting.model.SettingTrailingType
+import com.smtm.pickle.presentation.setting.model.SettingItem
+import com.smtm.pickle.presentation.setting.model.SettingTrailingType
 
 @Composable
 fun SettingRow(item: SettingItem) {

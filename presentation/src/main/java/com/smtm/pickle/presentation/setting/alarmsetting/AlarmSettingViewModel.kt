@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.alarmsetting
+package com.smtm.pickle.presentation.setting.alarmsetting
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

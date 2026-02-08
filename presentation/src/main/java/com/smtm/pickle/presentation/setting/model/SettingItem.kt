@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.setting.model
+package com.smtm.pickle.presentation.setting.model
 
 data class SettingItem(
     val title: String,

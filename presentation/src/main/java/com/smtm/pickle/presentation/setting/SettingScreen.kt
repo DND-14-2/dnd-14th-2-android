@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.setting
+package com.smtm.pickle.presentation.setting
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -18,10 +18,10 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.mypage.setting.components.SettingGroup
-import com.smtm.pickle.presentation.mypage.setting.model.SettingItem
-import com.smtm.pickle.presentation.mypage.setting.model.SettingSection
-import com.smtm.pickle.presentation.mypage.setting.model.SettingTrailingType
+import com.smtm.pickle.presentation.setting.components.SettingGroup
+import com.smtm.pickle.presentation.setting.model.SettingItem
+import com.smtm.pickle.presentation.setting.model.SettingSection
+import com.smtm.pickle.presentation.setting.model.SettingTrailingType
 import timber.log.Timber
 
 @Composable

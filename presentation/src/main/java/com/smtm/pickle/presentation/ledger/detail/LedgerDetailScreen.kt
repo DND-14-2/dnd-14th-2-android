@@ -104,7 +104,9 @@ private fun LedgerDetailContent(
             LedgerDetailUiState.Loading -> {
                 Box {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center)
                     )
                 }
             }

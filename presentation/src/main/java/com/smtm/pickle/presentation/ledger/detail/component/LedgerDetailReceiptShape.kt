@@ -20,7 +20,7 @@ class LedgerDetailReceiptShape : Shape {
         val desiredZigzagWidth = 40f
 
         // 전체 너비에 맞춰서 톱니 개수 계산
-        val zigzagCount = (size.width / desiredZigzagWidth).roundToInt()
+        val zigzagCount = (size.width / desiredZigzagWidth).roundToInt().coerceAtLeast(1)
         val actualZigzagWidth = size.width / zigzagCount
         val zigzagHeight = 30f
 

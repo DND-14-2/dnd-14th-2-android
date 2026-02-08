@@ -2,29 +2,42 @@ package com.smtm.pickle.presentation.common.model.ledger
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.smtm.pickle.domain.model.ledger.PaymentMethod
 import com.smtm.pickle.presentation.R
 
-sealed class PaymentMethodUiModel(
+enum class PaymentMethodUiModel(
     @StringRes val stringResId: Int,
     @DrawableRes val iconResId: Int,
 ) {
-    data object BankTransfer : PaymentMethodUiModel(
+    BankTransfer(
         stringResId = R.string.ledger_payment_method_bank_transfer,
         iconResId = R.drawable.ic_ledger_payment_method_bank_transfer,
-    )
-
-    data object CreditCard : PaymentMethodUiModel(
+    ),
+    CreditCard(
         stringResId = R.string.ledger_payment_method_credit_card,
         iconResId = R.drawable.ic_ledger_payment_method_credit_card,
-    )
-
-    data object DebitCard : PaymentMethodUiModel(
+    ),
+    DebitCard(
         stringResId = R.string.ledger_payment_method_debit_card,
         iconResId = R.drawable.ic_ledger_payment_method_debit_card,
-    )
-
-    data object Cash : PaymentMethodUiModel(
+    ),
+    Cash(
         stringResId = R.string.ledger_payment_method_cash,
         iconResId = R.drawable.ic_ledger_payment_method_cash,
-    )
+    ),
+}
+
+
+fun PaymentMethod.toUiModel(): PaymentMethodUiModel = when (this) {
+    PaymentMethod.BankTransfer -> PaymentMethodUiModel.BankTransfer
+    PaymentMethod.CreditCard -> PaymentMethodUiModel.CreditCard
+    PaymentMethod.DebitCard -> PaymentMethodUiModel.DebitCard
+    PaymentMethod.Cash -> PaymentMethodUiModel.Cash
+}
+
+fun PaymentMethodUiModel.toDomain(): PaymentMethod = when (this) {
+    PaymentMethodUiModel.BankTransfer -> PaymentMethod.BankTransfer
+    PaymentMethodUiModel.CreditCard -> PaymentMethod.CreditCard
+    PaymentMethodUiModel.DebitCard -> PaymentMethod.DebitCard
+    PaymentMethodUiModel.Cash -> PaymentMethod.Cash
 }

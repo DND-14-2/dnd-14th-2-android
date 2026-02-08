@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.common.model.ledger
 
+import com.smtm.pickle.domain.model.ledger.Ledger
 import java.time.LocalDate
 
 data class LedgerUiModel(
@@ -9,7 +10,17 @@ data class LedgerUiModel(
     val category: CategoryUiModel,
     val description: String,
     val occurredOn: LocalDate,
-    val dateText: String,
     val paymentMethod: PaymentMethodUiModel,
     val memo: String?
+)
+
+fun Ledger.toUiModel(): LedgerUiModel = LedgerUiModel(
+    id = id.value,
+    type = type.toUiModel(),
+    amount = amount.value,
+    category = category.toUiModel(),
+    description = description,
+    occurredOn = occurredOn,
+    paymentMethod = paymentMethod.toUiModel(),
+    memo = memo
 )

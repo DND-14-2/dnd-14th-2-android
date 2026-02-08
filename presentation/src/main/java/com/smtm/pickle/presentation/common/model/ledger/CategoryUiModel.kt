@@ -2,94 +2,119 @@ package com.smtm.pickle.presentation.common.model.ledger
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.smtm.pickle.domain.model.ledger.LedgerCategory
 import com.smtm.pickle.presentation.R
 
-sealed class CategoryUiModel(
+enum class CategoryUiModel(
     @StringRes val stringResId: Int,
     @DrawableRes val iconResId: Int,
 ) {
-    data object Food : CategoryUiModel(
+    Food(
         stringResId = R.string.ledger_category_food,
         iconResId = R.drawable.ic_ledger_category_food,
-    )
-
-    data object Transport : CategoryUiModel(
+    ),
+    Transport(
         stringResId = R.string.ledger_category_transport,
         iconResId = R.drawable.ic_ledger_category_transport,
-    )
-
-    data object Housing : CategoryUiModel(
+    ),
+    Housing(
         stringResId = R.string.ledger_category_housing,
         iconResId = R.drawable.ic_ledger_category_housing,
-    )
-
-    data object Shopping : CategoryUiModel(
+    ),
+    Shopping(
         stringResId = R.string.ledger_category_shopping,
         iconResId = R.drawable.ic_ledger_category_shopping,
-    )
-
-    data object HealthMedical : CategoryUiModel(
+    ),
+    HealthMedical(
         stringResId = R.string.ledger_category_health_medical,
         iconResId = R.drawable.ic_ledger_category_health_medical,
-    )
-
-    data object EducationSelfDevelopment : CategoryUiModel(
+    ),
+    EducationSelfDevelopment(
         stringResId = R.string.ledger_category_education_self_development,
         iconResId = R.drawable.ic_ledger_category_education_self_development,
-    )
-
-    data object LeisureHobby : CategoryUiModel(
+    ),
+    LeisureHobby(
         stringResId = R.string.ledger_category_leisure_hobby,
         iconResId = R.drawable.ic_ledger_category_leisure_hobby,
-    )
-
-    data object SavingFinance : CategoryUiModel(
+    ),
+    SavingFinance(
         stringResId = R.string.ledger_category_saving_finance,
         iconResId = R.drawable.ic_ledger_category_saving_finance,
-    )
-
-    data object Salary : CategoryUiModel(
+    ),
+    Salary(
         stringResId = R.string.ledger_category_salary,
         iconResId = R.drawable.ic_ledger_category_salary,
-    )
-
-    data object SideIncome : CategoryUiModel(
+    ),
+    SideIncome(
         stringResId = R.string.ledger_category_side_income,
         iconResId = R.drawable.ic_ledger_category_side_income,
-    )
-
-    data object Bonus : CategoryUiModel(
+    ),
+    Bonus(
         stringResId = R.string.ledger_category_bonus,
         iconResId = R.drawable.ic_ledger_category_bonus,
-    )
-
-    data object Allowance : CategoryUiModel(
+    ),
+    Allowance(
         stringResId = R.string.ledger_category_allowance,
         iconResId = R.drawable.ic_ledger_category_allowance,
-    )
-
-    data object PartTimeIncome : CategoryUiModel(
+    ),
+    PartTimeIncome(
         stringResId = R.string.ledger_category_part_time_income,
         iconResId = R.drawable.ic_ledger_category_part_time_income,
-    )
-
-    data object FinancialIncome : CategoryUiModel(
+    ),
+    FinancialIncome(
         stringResId = R.string.ledger_category_financial_income,
         iconResId = R.drawable.ic_ledger_category_financial_income,
-    )
-
-    data object SplitBill : CategoryUiModel(
+    ),
+    SplitBill(
         stringResId = R.string.ledger_category_split_bill,
         iconResId = R.drawable.ic_ledger_category_split_bill,
-    )
-
-    data object Transfer : CategoryUiModel(
+    ),
+    Transfer(
         stringResId = R.string.ledger_category_transfer,
         iconResId = R.drawable.ic_ledger_category_transfer,
-    )
-
-    data object Other : CategoryUiModel(
+    ),
+    Other(
         stringResId = R.string.ledger_category_other,
         iconResId = R.drawable.ic_ledger_category_other,
-    )
+    ),
+}
+
+fun LedgerCategory.toUiModel(): CategoryUiModel = when (this) {
+    LedgerCategory.Food -> CategoryUiModel.Food
+    LedgerCategory.Transport -> CategoryUiModel.Transport
+    LedgerCategory.Housing -> CategoryUiModel.Housing
+    LedgerCategory.Shopping -> CategoryUiModel.Shopping
+    LedgerCategory.HealthMedical -> CategoryUiModel.HealthMedical
+    LedgerCategory.EducationSelfDevelopment -> CategoryUiModel.EducationSelfDevelopment
+    LedgerCategory.LeisureHobby -> CategoryUiModel.LeisureHobby
+    LedgerCategory.SavingFinance -> CategoryUiModel.SavingFinance
+    LedgerCategory.Salary -> CategoryUiModel.Salary
+    LedgerCategory.SideIncome -> CategoryUiModel.SideIncome
+    LedgerCategory.Bonus -> CategoryUiModel.Bonus
+    LedgerCategory.Allowance -> CategoryUiModel.Allowance
+    LedgerCategory.PartTimeIncome -> CategoryUiModel.PartTimeIncome
+    LedgerCategory.FinancialIncome -> CategoryUiModel.FinancialIncome
+    LedgerCategory.SplitBill -> CategoryUiModel.SplitBill
+    LedgerCategory.Transfer -> CategoryUiModel.Transfer
+    LedgerCategory.Other -> CategoryUiModel.Other
+}
+
+fun CategoryUiModel.toDomain(): LedgerCategory = when (this) {
+    CategoryUiModel.Food -> LedgerCategory.Food
+    CategoryUiModel.Transport -> LedgerCategory.Transport
+    CategoryUiModel.Housing -> LedgerCategory.Housing
+    CategoryUiModel.Shopping -> LedgerCategory.Shopping
+    CategoryUiModel.HealthMedical -> LedgerCategory.HealthMedical
+    CategoryUiModel.EducationSelfDevelopment -> LedgerCategory.EducationSelfDevelopment
+    CategoryUiModel.LeisureHobby -> LedgerCategory.LeisureHobby
+    CategoryUiModel.SavingFinance -> LedgerCategory.SavingFinance
+    CategoryUiModel.Salary -> LedgerCategory.Salary
+    CategoryUiModel.SideIncome -> LedgerCategory.SideIncome
+    CategoryUiModel.Bonus -> LedgerCategory.Bonus
+    CategoryUiModel.Allowance -> LedgerCategory.Allowance
+    CategoryUiModel.PartTimeIncome -> LedgerCategory.PartTimeIncome
+    CategoryUiModel.FinancialIncome -> LedgerCategory.FinancialIncome
+    CategoryUiModel.SplitBill -> LedgerCategory.SplitBill
+    CategoryUiModel.Transfer -> LedgerCategory.Transfer
+    CategoryUiModel.Other -> LedgerCategory.Other
 }

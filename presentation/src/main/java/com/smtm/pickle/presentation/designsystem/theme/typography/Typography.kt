@@ -4,11 +4,14 @@ import Pretendard
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Immutable
 data class PickleTypography(
+    val fontFamily: FontFamily = Pretendard,
+
     // HeadLine
     val head1Bold: TextStyle,
     val head2SemiBold: TextStyle,

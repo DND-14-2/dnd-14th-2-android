@@ -102,13 +102,13 @@ private fun LedgerDetailContent(
 
         when (uiState) {
             LedgerDetailUiState.Loading -> {
-                Box {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center)
-                    )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
                 }
+
             }
 
             is LedgerDetailUiState.Success -> {

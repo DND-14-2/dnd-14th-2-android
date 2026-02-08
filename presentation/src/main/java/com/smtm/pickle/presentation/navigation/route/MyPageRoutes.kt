@@ -10,3 +10,6 @@ data object SettingRoute
 
 @Serializable
 data object AlarmSettingRoute
+
+@Serializable
+data object PrivacyPolicyRoute

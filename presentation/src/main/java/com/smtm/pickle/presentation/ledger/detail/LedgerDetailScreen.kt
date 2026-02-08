@@ -9,8 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LedgerDetailScreen() {
-
+fun LedgerDetailScreen(
+    onNavigateBack: () -> Unit = {},
+    onNavigateToUpdate: (Long) -> Unit = {},
+) {
     LedgerDetailContent()
 }
 

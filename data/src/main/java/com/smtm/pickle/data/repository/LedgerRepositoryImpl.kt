@@ -6,6 +6,7 @@ import com.smtm.pickle.data.mapper.toRemote
 import com.smtm.pickle.data.source.local.database.dao.LedgerDao
 import com.smtm.pickle.data.source.remote.api.LedgerApi
 import com.smtm.pickle.data.source.remote.model.ledger.LedgerCreateRequest
+import com.smtm.pickle.data.source.remote.model.ledger.LedgerUpdateRequest
 import com.smtm.pickle.domain.model.ledger.Ledger
 import com.smtm.pickle.domain.model.ledger.LedgerCategory
 import com.smtm.pickle.domain.model.ledger.LedgerType
@@ -42,6 +43,12 @@ class LedgerRepositoryImpl @Inject constructor(
                     }
                 }
             }
+            .distinctUntilChanged()
+    }
+
+    override fun observeLedger(ledgerId: Long): Flow<Ledger> {
+        return ledgerDao.observeLedger(ledgerId)
+            .map { entity -> entity.toDomain() }
             .distinctUntilChanged()
     }
 
@@ -104,6 +111,30 @@ class LedgerRepositoryImpl @Inject constructor(
             memo = memo
         )
         val remoteLedger = ledgerApi.createLedger(requestBody)
+        val ledgerEntity = remoteLedger.toEntity()
+        ledgerDao.insert(ledgerEntity)
+    }
+
+    override suspend fun updateLedger(
+        ledgerId: Long,
+        amount: Long,
+        type: LedgerType,
+        category: LedgerCategory,
+        description: String,
+        occurredOn: LocalDate,
+        paymentMethod: PaymentMethod,
+        memo: String?
+    ) {
+        val requestBody = LedgerUpdateRequest(
+            amount = amount,
+            type = type.toRemote(),
+            category = category.toRemote(),
+            description = description,
+            occurredOn = occurredOn.toString(),
+            paymentMethod = paymentMethod.toRemote(),
+            memo = memo
+        )
+        val remoteLedger = ledgerApi.updateLedger(ledgerId, requestBody)
         val ledgerEntity = remoteLedger.toEntity()
         ledgerDao.insert(ledgerEntity)
     }

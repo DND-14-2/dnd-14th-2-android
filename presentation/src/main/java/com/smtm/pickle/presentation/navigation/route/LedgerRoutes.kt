@@ -26,6 +26,6 @@ data class LedgerDetailRoute(
 )
 
 @Serializable
-data class LedgerEditRoute(
+data class LedgerUpdateRoute(
     val ledgerId: Long
 )

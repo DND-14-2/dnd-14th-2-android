@@ -6,10 +6,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.smtm.pickle.presentation.ledger.create.LedgerCreateScreen
 import com.smtm.pickle.presentation.ledger.detail.LedgerDetailScreen
-import com.smtm.pickle.presentation.ledger.edit.LedgerEditScreen
+import com.smtm.pickle.presentation.ledger.update.LedgerUpdateScreen
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
-import com.smtm.pickle.presentation.navigation.route.LedgerEditRoute
+import com.smtm.pickle.presentation.navigation.route.LedgerUpdateRoute
 import com.smtm.pickle.presentation.navigation.route.MainRoute
 
 fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
@@ -30,11 +30,23 @@ fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
         )
     }
 
-    composable<LedgerEditRoute> {
-        LedgerEditScreen()
+    composable<LedgerUpdateRoute> {
+        LedgerUpdateScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+        )
     }
 
-    composable<LedgerDetailRoute> {
-        LedgerDetailScreen()
+    composable<LedgerDetailRoute> { backStackEntry ->
+        val route = backStackEntry.toRoute<LedgerDetailRoute>()
+        LedgerDetailScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateToUpdate = { ledgerId ->
+                navController.navigate(LedgerUpdateRoute(ledgerId = ledgerId))
+            },
+        )
     }
 }

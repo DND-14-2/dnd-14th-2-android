@@ -84,6 +84,13 @@
     <string name="ledger_create_exit_dialog_negative">나가기</string>
     <string name="ledger_create_exit_dialog_positive">작성하기</string>
 
+    <!-- Ledger Update -->
+    <string name="ledger_update_exit_dialog_title">수정을 취소하시겠어요?</string>
+    <string name="ledger_update_exit_dialog_description">지금까지 내용들은 저장되지 않아요</string>
+    <string name="ledger_update_exit_dialog_negative">나가기</string>
+    <string name="ledger_update_exit_dialog_positive">수정하기</string>
+    <string name="ledger_update_success">입력완료</string>
+
     <!-- Ledger Payment Method -->
     <string name="ledger_payment_method_bank_transfer">계좌이체</string>
     <string name="ledger_payment_method_credit_card">신용카드</string>

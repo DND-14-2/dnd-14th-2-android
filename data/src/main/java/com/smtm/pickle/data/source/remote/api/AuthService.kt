@@ -3,6 +3,7 @@ package com.smtm.pickle.data.source.remote.api
 import com.smtm.pickle.data.source.remote.model.auth.LoginRequest
 import com.smtm.pickle.data.source.remote.model.auth.LoginResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 
 interface AuthService {
@@ -10,4 +11,6 @@ interface AuthService {
     @POST("oauth/login")
     suspend fun socialLogin(@Body request: LoginRequest): LoginResponse
 
+    @DELETE("users/me")
+    suspend fun withdrawAccount()
 }

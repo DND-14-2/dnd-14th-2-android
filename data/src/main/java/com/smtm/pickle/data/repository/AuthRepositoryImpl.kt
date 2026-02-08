@@ -47,4 +47,7 @@ class AuthRepositoryImpl @Inject constructor(
             ).getOrThrow()
         }
 
+    override suspend fun withdrawAccount(): Result<Unit> = runCatching {
+        authService.withdrawAccount()
+    }
 }

@@ -9,9 +9,9 @@ import com.smtm.pickle.presentation.navigation.route.LoginRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.PrivacyPolicyRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
-import com.smtm.pickle.presentation.setting.privacypolicy.PrivacyPolicyScreen
 import com.smtm.pickle.presentation.setting.SettingScreen
 import com.smtm.pickle.presentation.setting.alarmsetting.AlarmSettingScreen
+import com.smtm.pickle.presentation.setting.privacypolicy.PrivacyPolicyScreen
 
 fun NavGraphBuilder.myPageDestinations(navController: NavController) {
     composable<MyLedgerRoute> {
@@ -23,9 +23,14 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
                 navController.navigate(PrivacyPolicyRoute)
             },
             onNavigateToLogin = {
-                navController.navigate(LoginRoute)
+                navController.navigate(LoginRoute) {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
             },
-            onNavigateToBack = {
+            onNavigateBack = {
                 navController.popBackStack()
             },
         )

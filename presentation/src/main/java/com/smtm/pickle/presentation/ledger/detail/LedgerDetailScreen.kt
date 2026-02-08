@@ -102,7 +102,7 @@ private fun LedgerDetailContent(
 
         when (uiState) {
             LedgerDetailUiState.Loading -> {
-                Box() {
+                Box {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center)
                     )
@@ -116,7 +116,7 @@ private fun LedgerDetailContent(
             }
 
             LedgerDetailUiState.Error -> {
-
+                // TODO Implement Error Content
             }
         }
     }

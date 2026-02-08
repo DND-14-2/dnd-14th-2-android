@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
@@ -44,6 +45,7 @@ fun LazyListScope.dailyLedgerInfoSection(
     ledgers: List<LedgerUiModel>,
     totalIncome: Long,
     totalExpense: Long,
+    onLedgerClick: (LedgerId) -> Unit,
 ) {
     item("selected_date") {
         SelectedDate(
@@ -92,7 +94,7 @@ fun LazyListScope.dailyLedgerInfoSection(
                 },
                 mainIconResId = item.category.iconResId,
                 subIconResId = item.paymentMethod.iconResId,
-                onClick = { }
+                onClick = { onLedgerClick(LedgerId(item.id)) }
             )
         }
     }
@@ -293,7 +295,8 @@ private fun DailyLedgerInfoSectionEmptyPreview() {
                 date = LocalDate.now(),
                 ledgers = emptyList(),
                 totalIncome = 0L,
-                totalExpense = 0L
+                totalExpense = 0L,
+                onLedgerClick = {},
             )
         }
     }
@@ -345,7 +348,8 @@ private fun DailyLedgerInfoSectionWithDataPreview() {
                 date = LocalDate.now(),
                 ledgers = sampleLedgers,
                 totalIncome = 2500000L,
-                totalExpense = 16500L
+                totalExpense = 16500L,
+                onLedgerClick = {},
             )
         }
     }

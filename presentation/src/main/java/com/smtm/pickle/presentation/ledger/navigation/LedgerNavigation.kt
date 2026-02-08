@@ -35,6 +35,13 @@ fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
     }
 
     composable<LedgerDetailRoute> {
-        LedgerDetailScreen()
+        LedgerDetailScreen(
+            onNavigateToHome = {
+                navController.navigate(MainRoute) {
+                    popUpTo(MainRoute) { inclusive = false }
+                    launchSingleTop = true
+                }
+            }
+        )
     }
 }

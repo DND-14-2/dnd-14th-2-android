@@ -21,6 +21,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
+import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
 import com.smtm.pickle.presentation.home.component.HomeTopBar
@@ -33,7 +34,7 @@ import java.time.YearMonth
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onSelectedDateChange: (LocalDate) -> Unit,
-    onNavigateToLedgerDetail: (Long) -> Unit,
+    onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -79,7 +80,7 @@ private fun HomeContent(
     onMonthChanged: (YearMonth) -> Unit,
     onDateClick: (LocalDate) -> Unit,
     onNavigateToMyPage: () -> Unit,
-    onNavigateToLedgerDetail: (Long) -> Unit,
+    onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -124,6 +125,7 @@ private fun HomeContent(
                     ledgers = dailyLedgerState.ledgers,
                     totalIncome = dailyLedgerState.totalIncome,
                     totalExpense = dailyLedgerState.totalExpense,
+                    onLedgerClick = onNavigateToLedgerDetail
                 )
             }
         }

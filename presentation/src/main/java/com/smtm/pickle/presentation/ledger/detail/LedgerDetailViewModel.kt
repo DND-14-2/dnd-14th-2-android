@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.domain.usecase.ledger.DeleteLedgerUseCase
-import com.smtm.pickle.domain.usecase.ledger.GetLedgerUseCase
+import com.smtm.pickle.domain.usecase.ledger.ObserveLedgerUseCase
+import com.smtm.pickle.domain.usecase.ledger.SyncLedgerUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
@@ -17,6 +18,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getLedgerUseCase: GetLedgerUseCase,
+    private val observeLedgerUseCase: ObserveLedgerUseCase,
+    private val syncLedgerUseCase: SyncLedgerUseCase,
     private val deleteLedgerUseCase: DeleteLedgerUseCase,
 ) : ViewModel() {
 
@@ -42,21 +47,36 @@ class LedgerDetailViewModel @Inject constructor(
     val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
 
     init {
-        initializeData()
+        observeLedger()
+        syncLedger()
     }
 
-    private fun initializeData() {
-        viewModelScope.launch {
-            getLedgerUseCase(ledgerId)
-                .onSuccess { ledger ->
-                    _uiState.update {
-                        LedgerDetailUiState.Success(ledger = ledger.toUiModel())
-                    }
+    private fun observeLedger() {
+        observeLedgerUseCase(ledgerId)
+            .onEach { ledger ->
+                _uiState.update {
+                    LedgerDetailUiState.Success(ledger = ledger.toUiModel())
                 }
+            }
+            .catch { e ->
+                Timber.e(e, "Failed to observe ledger: id=${ledgerId.value}")
+                _uiState.update {
+                    LedgerDetailUiState.Error
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun syncLedger() {
+        viewModelScope.launch {
+            syncLedgerUseCase(ledgerId)
                 .onFailure { e ->
-                    Timber.e(e, "Failed to get ledger: id=${ledgerId.value}")
-                    _uiState.update {
-                        LedgerDetailUiState.Error
+                    Timber.e(e, "Failed to sync ledger: id=${ledgerId.value}")
+                    // Room 데이터가 없는 경우에만 에러 처리
+                    if (_uiState.value is LedgerDetailUiState.Loading) {
+                        _uiState.update {
+                            LedgerDetailUiState.Error
+                        }
                     }
                 }
         }

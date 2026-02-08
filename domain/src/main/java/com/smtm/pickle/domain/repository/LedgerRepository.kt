@@ -10,10 +10,11 @@ import java.time.LocalDate
 interface LedgerRepository {
 
     fun observeLedgers(from: LocalDate, to: LocalDate): Flow<List<Ledger>>
+    fun observeLedger(ledgerId: Long): Flow<Ledger>
 
     // 동기화: 외부 데이터 -> Room 캐시 보장
     suspend fun ensureSynced(from: LocalDate, to: LocalDate)
-    suspend fun getLedger(id: Long): Ledger
+    suspend fun syncLedger(id: Long)
     suspend fun createLedger(
         amount: Long,
         type: LedgerType,
@@ -23,5 +24,6 @@ interface LedgerRepository {
         paymentMethod: PaymentMethod,
         memo: String?,
     )
+
     suspend fun deleteLedger(id: Long)
 }

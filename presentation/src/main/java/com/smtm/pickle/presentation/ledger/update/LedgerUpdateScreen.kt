@@ -70,15 +70,6 @@ fun LedgerUpdateScreen(
                             )
                         )
                     }
-
-                    is LedgerUpdateEffect.NavigateBackWithMessage -> {
-                        snackbarState.show(
-                            PickleSnackbar.toastError(
-                                message = effect.msg,
-                            )
-                        )
-                        onNavigateBack()
-                    }
                 }
             }
         }
@@ -86,7 +77,8 @@ fun LedgerUpdateScreen(
 
     SnackbarHost(snackbarState = snackbarState)
 
-    if (uiState.isLoading) {
+    val date = uiState.date
+    if (uiState.isLoading || date == null) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,7 +89,7 @@ fun LedgerUpdateScreen(
         }
     } else {
         LedgerUpdateContent(
-            date = uiState.date ?: return,
+            date = date,
             uiState = uiState,
             setAmount = viewModel::setAmount,
             selectLedgerType = viewModel::selectLedgerType,

@@ -68,7 +68,7 @@ class LedgerUpdateViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "loadLedger() failed for ledgerId=$ledgerId")
-                _effect.emit(LedgerUpdateEffect.NavigateBackWithMessage("데이터를 불러오는데 실패했습니다."))
+                _effect.emit(LedgerUpdateEffect.NavigateBack)
             }
         }
     }
@@ -233,7 +233,6 @@ data class LedgerUpdateUiState(
 sealed interface LedgerUpdateEffect {
     data object NavigateBack : LedgerUpdateEffect
     data class ShowSnackBar(val msg: String) : LedgerUpdateEffect
-    data class NavigateBackWithMessage(val msg: String) : LedgerUpdateEffect
 }
 
 enum class LedgerUpdateStep { First, Second }

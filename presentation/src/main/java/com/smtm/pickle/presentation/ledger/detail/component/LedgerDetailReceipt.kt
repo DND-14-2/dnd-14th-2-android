@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.ledger.detail.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +34,7 @@ import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import java.time.LocalDate
 
-private val shadowElevationValue = 4.dp
+private val shadowElevationValue = 30.dp
 
 @Composable
 fun LedgerDetailReceipt(
@@ -46,24 +49,21 @@ fun LedgerDetailReceipt(
         color = PickleTheme.colors.base0,
         shadowElevation = shadowElevationValue
     ) {
-        Column(
-
-        ) {
-            // 헤더
+        Column {
             ReceiptHeader(
                 categoryIconResId = ledger.category.iconResId,
                 title = ledger.description
             )
 
-            // 바디
+            ReceiptDivider()
+
             ReceiptBody(
                 date = ledger.occurredOn,
                 amount = ledger.amount,
-                type = ledger.type,
+                ledgerType = ledger.type,
                 paymentMethod = ledger.paymentMethod,
                 memo = ledger.memo
             )
-            //
         }
     }
 
@@ -111,81 +111,46 @@ private fun ReceiptHeader(
 }
 
 @Composable
+private fun ReceiptDivider(modifier: Modifier = Modifier) {
+    val color = PickleTheme.colors.gray300
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(1.dp)
+    ) {
+        drawLine(
+            color = color,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                intervals = floatArrayOf(10f, 10f), // 선 길이, 간격
+                phase = 0f
+            )
+        )
+    }
+}
+
+@Composable
 private fun ReceiptBody(
     modifier: Modifier = Modifier,
     date: LocalDate,
     amount: Long,
-    type: LedgerTypeUiModel,
+    ledgerType: LedgerTypeUiModel,
     paymentMethod: PaymentMethodUiModel,
     memo: String?,
 ) {
     Column(
-        modifier = Modifier
-            .padding(20.dp),
+        modifier = modifier.padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
-            style = PickleTheme.typography.body4Medium,
-            color = PickleTheme.colors.gray500,
-            textAlign = TextAlign.Start,
-        )
+        ReceiptBodyDate(date = date)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 11.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            Text(
-                text = "금액",
-                style = PickleTheme.typography.body2Medium,
-                color = PickleTheme.colors.gray600,
-            )
+        ReceiptBodyAmount(amount = amount, ledgerType = ledgerType)
 
-            val amountStr = if (type == LedgerTypeUiModel.Expense)
-                stringResource(R.string.common_plus_str, amount.toMoneyFormat())
-            else
-                stringResource(R.string.common_minus_str, amount.toMoneyFormat())
-            val amountColor = if (type == LedgerTypeUiModel.Expense)
-                PickleTheme.colors.primary500
-            else
-                PickleTheme.colors.error50
-
-            Text(
-                modifier = Modifier.weight(1f),
-                text = amountStr,
-                style = PickleTheme.typography.body2Medium,
-                color = amountColor,
-                textAlign = TextAlign.End
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 11.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            Text(
-                text = "유형",
-                style = PickleTheme.typography.body2Medium,
-                color = PickleTheme.colors.gray600,
-            )
-
-            Text(
-                modifier = Modifier.weight(1f),
-                text = stringResource(paymentMethod.stringResId),
-                style = PickleTheme.typography.body2Medium,
-                color = PickleTheme.colors.gray700,
-                textAlign = TextAlign.End
-            )
-        }
+        ReceiptBodyPaymentMethod(paymentMethod = paymentMethod)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -193,6 +158,93 @@ private fun ReceiptBody(
             modifier = Modifier.padding(bottom = 30.dp),
             memo = memo ?: "",
             onMemoChange = {}
+        )
+    }
+}
+
+@Composable
+private fun ReceiptBodyDate(
+    modifier: Modifier = Modifier,
+    date: LocalDate,
+) {
+    Text(
+        modifier = modifier.fillMaxWidth(),
+        text = stringResource(R.string.common_yyyy_mm_dd_dot, date.year, date.monthValue, date.dayOfMonth),
+        style = PickleTheme.typography.body4Medium,
+        color = PickleTheme.colors.gray500,
+        textAlign = TextAlign.Start,
+    )
+}
+
+@Composable
+private fun ReceiptBodyAmount(
+    modifier: Modifier = Modifier,
+    amount: Long,
+    ledgerType: LedgerTypeUiModel,
+) {
+    val (amountStr, color) = when (ledgerType) {
+        LedgerTypeUiModel.Income -> {
+            Pair(
+                stringResource(R.string.common_plus_str, amount.toMoneyFormat()),
+                PickleTheme.colors.primary500
+            )
+        }
+
+        LedgerTypeUiModel.Expense -> {
+            Pair(
+                stringResource(R.string.common_minus_str, amount.toMoneyFormat()),
+                PickleTheme.colors.error50
+            )
+        }
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 11.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.common_amount),
+            style = PickleTheme.typography.body2Medium,
+            color = PickleTheme.colors.gray600,
+        )
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = amountStr,
+            style = PickleTheme.typography.body2Medium,
+            color = color,
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@Composable
+private fun ReceiptBodyPaymentMethod(
+    modifier: Modifier = Modifier,
+    paymentMethod: PaymentMethodUiModel,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 11.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.ledger_detail_receipt_payment_method_title),
+            style = PickleTheme.typography.body2Medium,
+            color = PickleTheme.colors.gray600,
+        )
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(paymentMethod.stringResId),
+            style = PickleTheme.typography.body2Medium,
+            color = PickleTheme.colors.gray700,
+            textAlign = TextAlign.End
         )
     }
 }

@@ -10,8 +10,11 @@ import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,6 +32,12 @@ class LedgerDetailViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<LedgerDetailUiState> = MutableStateFlow(LedgerDetailUiState.Loading)
     val uiState: StateFlow<LedgerDetailUiState> = _uiState.asStateFlow()
+
+    private val _effect: MutableSharedFlow<LedgerDetailEffect> = MutableSharedFlow(replay = 0)
+    val effect: SharedFlow<LedgerDetailEffect> = _effect.asSharedFlow()
+
+    private val _showDeleteDialog = MutableStateFlow(false)
+    val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
 
     init {
         initializeData()
@@ -50,6 +59,27 @@ class LedgerDetailViewModel @Inject constructor(
                 }
         }
     }
+
+    fun showDeleteDialog() {
+        _showDeleteDialog.update { true }
+    }
+
+    fun dismissDeleteDialog() {
+        _showDeleteDialog.update { false }
+    }
+
+    fun deleteLedger() {
+        viewModelScope.launch {
+            dismissDeleteDialog()
+            _effect.emit(LedgerDetailEffect.NavigateToHome)
+        }
+    }
+
+    fun navigateToHome() {
+        viewModelScope.launch {
+            _effect.emit(LedgerDetailEffect.NavigateToHome)
+        }
+    }
 }
 
 sealed interface LedgerDetailUiState {
@@ -59,4 +89,8 @@ sealed interface LedgerDetailUiState {
     ) : LedgerDetailUiState
 
     data object Error : LedgerDetailUiState
+}
+
+sealed interface LedgerDetailEffect {
+    data object NavigateToHome : LedgerDetailEffect
 }

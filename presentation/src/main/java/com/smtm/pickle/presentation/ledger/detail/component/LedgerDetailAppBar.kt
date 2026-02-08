@@ -59,7 +59,7 @@ fun LedgerDetailAppBar(
 
         PickleIconButton(
             painter = painterResource(R.drawable.ic_ledger_detail_trashcan),
-            onClick = onEditClick,
+            onClick = onDeleteClick,
             buttonSize = 32.dp,
         )
     }

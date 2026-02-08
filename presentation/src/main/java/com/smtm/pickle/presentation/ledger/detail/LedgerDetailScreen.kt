@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,8 +16,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailAppBar
+import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailDeleteDialog
 import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailReceipt
 
 private val GradTop = Color(0xFFECFAF9)
@@ -24,18 +29,44 @@ private val GradBottom = Color(0xFFC4EEEB)
 
 @Composable
 fun LedgerDetailScreen(
-    viewModel: LedgerDetailViewModel = hiltViewModel()
+    viewModel: LedgerDetailViewModel = hiltViewModel(),
+    onNavigateToHome: () -> Unit,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showDeleteDialog by viewModel.showDeleteDialog.collectAsStateWithLifecycle()
+
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    LedgerDetailEffect.NavigateToHome -> {
+                        onNavigateToHome()
+                    }
+                }
+            }
+        }
+    }
+
+    if (showDeleteDialog) {
+        LedgerDetailDeleteDialog(
+            onDismiss = viewModel::dismissDeleteDialog,
+            onDeleteButtonClick = viewModel::deleteLedger,
+        )
+    }
 
     LedgerDetailContent(
         uiState = uiState,
+        onNavigateToHome = viewModel::navigateToHome,
+        onDeleteButtonClick = viewModel::showDeleteDialog,
     )
 }
 
 @Composable
 private fun LedgerDetailContent(
     uiState: LedgerDetailUiState,
+    onNavigateToHome: () -> Unit,
+    onDeleteButtonClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -47,9 +78,9 @@ private fun LedgerDetailContent(
             ),
     ) {
         LedgerDetailAppBar(
-            onBackClick = {},
+            onBackClick = onNavigateToHome,
             onEditClick = {},
-            onDeleteClick = {}
+            onDeleteClick = onDeleteButtonClick
         )
 
         Spacer(modifier = Modifier.height(60.dp))

@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.ledger.create.component.secondstep
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -55,6 +56,17 @@ fun LedgerCreateMemo(
                 .height(160.dp)
                 .clip(RoundedCornerShape(Dimensions.radius))
                 .background(PickleTheme.colors.gray50)
+                .then(
+                    if (memo.isNotEmpty()) {
+                        Modifier.border(
+                            shape = RoundedCornerShape(Dimensions.radius),
+                            width = 1.5.dp,
+                            color = PickleTheme.colors.primary400
+                        )
+                    } else {
+                        Modifier
+                    }
+                )
                 .padding(12.dp),
             value = memo,
             textStyle = PickleTheme.typography.body3Regular,

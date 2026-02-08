@@ -38,8 +38,8 @@ android {
         applicationId = "com.smtm.pickle"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.pickleVersionCode.get().toInt()
+        versionName = libs.versions.pickleVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

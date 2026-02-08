@@ -1,4 +1,8 @@
 [versions]
+# Pickle Version
+pickleVersionCode = "1"
+pickleVersionName = "1.0.0"
+
 # Android Gradle Plugin
 agp = "8.13.2"
 

@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -60,9 +59,6 @@ fun LedgerDescriptionInputField(
         BasicTextField(
             modifier = Modifier
                 .height(Dimensions.inputHeight)
-                .clip(RoundedCornerShape(Dimensions.radius))
-                .background(PickleTheme.colors.gray50)
-                .onFocusChanged { isFocused = it.isFocused }
                 .then(
                     if (isFocused) {
                         Modifier.border(
@@ -73,7 +69,12 @@ fun LedgerDescriptionInputField(
                     } else {
                         Modifier
                     }
-                ),
+                )
+                .background(
+                    PickleTheme.colors.gray50,
+                    shape = RoundedCornerShape(Dimensions.radius),
+                )
+                .onFocusChanged { isFocused = it.isFocused },
             value = value,
             textStyle = PickleTheme.typography.body3Regular.copy(color = PickleTheme.colors.gray800),
             onValueChange = { value ->

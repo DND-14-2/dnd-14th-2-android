@@ -60,9 +60,6 @@ fun LedgerCreateMemo(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(160.dp)
-                .clip(RoundedCornerShape(Dimensions.radius))
-                .background(PickleTheme.colors.gray50)
-                .onFocusChanged { isFocused = it.isFocused }
                 .then(
                     if (isFocused) {
                         Modifier.border(
@@ -74,6 +71,11 @@ fun LedgerCreateMemo(
                         Modifier
                     }
                 )
+                .background(
+                    PickleTheme.colors.gray50,
+                    shape = RoundedCornerShape(Dimensions.radius),
+                )
+                .onFocusChanged { isFocused = it.isFocused }
                 .padding(12.dp),
             value = memo,
             textStyle = PickleTheme.typography.body3Regular,

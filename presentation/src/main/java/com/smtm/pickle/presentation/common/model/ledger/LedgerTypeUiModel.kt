@@ -15,3 +15,8 @@ fun LedgerType.toUiModel(): LedgerTypeUiModel = when (this) {
     LedgerType.Income -> LedgerTypeUiModel.Income
     LedgerType.Expense -> LedgerTypeUiModel.Expense
 }
+
+fun LedgerTypeUiModel.toDomain(): LedgerType = when (this) {
+    LedgerTypeUiModel.Income -> LedgerType.Income
+    LedgerTypeUiModel.Expense -> LedgerType.Expense
+}

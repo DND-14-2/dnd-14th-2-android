@@ -141,8 +141,8 @@ private fun MainContent(
                 composable<HomeTabRoute> {
                     HomeScreen(
                         onSelectedDateChange = onSelectedDateChange,
-                        onNavigateToLedgerDetail = { id ->
-                            rootNavController.navigate(LedgerDetailRoute(id))
+                        onNavigateToLedgerDetail = { ledgerId ->
+                            rootNavController.navigate(LedgerDetailRoute(ledgerId.value))
                         }
                     )
                 }

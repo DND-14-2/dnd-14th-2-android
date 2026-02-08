@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -21,6 +22,9 @@ import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
+import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateAppBar
 import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateExitDialog
@@ -38,6 +42,7 @@ fun LedgerCreateScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarState = remember { SnackbarState() }
 
     BackHandler {
         viewModel.showExitDialog()
@@ -61,10 +66,20 @@ fun LedgerCreateScreen(
                     LedgerCreateEffect.NavigateBack -> {
                         onNavigateBack()
                     }
+
+                    is LedgerCreateEffect.ShowSnackBar -> {
+                        snackbarState.show(
+                            PickleSnackbar.toastError(
+                                message = effect.msg,
+                            )
+                        )
+                    }
                 }
             }
         }
     }
+
+    SnackbarHost(snackbarState = snackbarState)
 
     LedgerCreateContent(
         date = date,

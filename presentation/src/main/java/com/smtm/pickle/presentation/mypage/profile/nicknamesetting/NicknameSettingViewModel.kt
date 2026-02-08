@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.profile
+package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,15 +34,19 @@ class NicknameSettingViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<NicknameSettingEffect>(replay = 0)
     val effect: SharedFlow<NicknameSettingEffect> = _effect.asSharedFlow()
 
+    private var savedNickname: String? = null
+
     init {
         initializeNickname()
     }
 
     private fun initializeNickname() {
         viewModelScope.launch {
-            val currentNickname = getNicknameUseCase().first()
+            val nickname = getNicknameUseCase().first()
+            savedNickname = nickname
+
             _uiState.update {
-                it.copy(editingNickname = currentNickname)
+                it.copy(editingNickname = nickname)
             }
         }
     }
@@ -53,7 +57,7 @@ class NicknameSettingViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 editingNickname = correctNickname,
-                inputState = NicknameUtils.validateNicknameFormat(correctNickname),
+                inputState = NicknameUtils.validateNicknameFormat(correctNickname, savedNickname),
                 isCheckingDuplicate = false,
                 isAvailable = null,
                 isNicknameModified = true
@@ -74,23 +78,33 @@ class NicknameSettingViewModel @Inject constructor(
                 )
             }
 
-            val isAvailable = checkNicknameAvailableUseCase(requestedNickname)
-                .onFailure { e -> Timber.e(e, "닉네임 중복 체크 실패") }
-                .getOrDefault(false)
+            checkNicknameAvailableUseCase(requestedNickname)
+                .onSuccess { isAvailable ->
+                    _uiState.update {
+                        if (it.editingNickname != requestedNickname) return@update it
 
-            _uiState.update {
-                if (it.editingNickname != requestedNickname) return@update it
-
-                it.copy(
-                    isCheckingDuplicate = false,
-                    isAvailable = isAvailable,
-                    inputState = if (isAvailable) {
-                        InputState.Success("사용 가능한 닉네임이에요!")
-                    } else {
-                        InputState.Error("이미 사용중인 닉네임이에요.")
+                        it.copy(
+                            isCheckingDuplicate = false,
+                            isAvailable = isAvailable,
+                            inputState = if (isAvailable) {
+                                InputState.Success("사용 가능한 닉네임이에요!")
+                            } else {
+                                InputState.Error("중복된 닉네임이에요.")
+                            }
+                        )
                     }
-                )
-            }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "닉네임 중복 체크 실패")
+                    _uiState.update {
+                        if (it.editingNickname != requestedNickname) return@update it
+                        it.copy(
+                            isCheckingDuplicate = false,
+                            isAvailable = null,
+                            inputState = InputState.Error("중복 확인에 실패했어요. 다시 시도해 주세요.")
+                        )
+                    }
+                }
         }
     }
 
@@ -103,6 +117,12 @@ class NicknameSettingViewModel @Inject constructor(
                 .onFailure { e ->
                     Timber.e(e, "닉네임 저장 실패")
                 }
+        }
+    }
+
+    fun onBackClick() {
+        viewModelScope.launch {
+            _effect.emit(NicknameSettingEffect.NavigateBack)
         }
     }
 

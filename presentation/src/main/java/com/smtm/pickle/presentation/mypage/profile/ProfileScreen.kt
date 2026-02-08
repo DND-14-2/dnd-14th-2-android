@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -12,7 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextField
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -24,14 +28,27 @@ import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBas
 fun ProfileScreen(
     onNicknameEditClick: () -> Unit,
     onBackClick: () -> Unit,
-    viewModel: MyPageViewModel = hiltViewModel(),
+    viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val nickname by viewModel.nickname.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    ProfileViewModel.ProfileEffect.NavigateToBack -> onBackClick()
+                    ProfileViewModel.ProfileEffect.NavigateToNicknameSetting -> onNicknameEditClick()
+                }
+            }
+        }
+    }
+
 
     ProfileContent(
-        nickname = uiState.profile.nickname,
-        onNicknameEditClick = onNicknameEditClick,
-        onBackClick = onBackClick
+        nickname = nickname,
+        onNicknameEditClick = viewModel::onNicknameEditClick,
+        onBackClick = viewModel::onBackClick
     )
 }
 

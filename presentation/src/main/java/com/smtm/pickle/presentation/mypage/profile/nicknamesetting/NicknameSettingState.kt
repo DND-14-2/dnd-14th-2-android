@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.profile
+package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 

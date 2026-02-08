@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.profile
+package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -41,7 +41,7 @@ fun NicknameSettingScreen(
         onNicknameChange = viewModel::onNicknameChanged,
         onCheckDuplicate = viewModel::checkDuplicate,
         onSaveClick = viewModel::saveNickname,
-        onBackClick = onBackClick,
+        onBackClick = viewModel::onBackClick,
     )
 }
 

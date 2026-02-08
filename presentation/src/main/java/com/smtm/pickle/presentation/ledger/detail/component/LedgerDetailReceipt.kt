@@ -156,8 +156,7 @@ private fun ReceiptBody(
 
         LedgerDetailMemo(
             modifier = Modifier.padding(bottom = 30.dp),
-            memo = memo ?: "",
-            onMemoChange = {}
+            memo = memo,
         )
     }
 }

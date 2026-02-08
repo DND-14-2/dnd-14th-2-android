@@ -41,11 +41,14 @@ fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
     composable<LedgerDetailRoute> { backStackEntry ->
         val route = backStackEntry.toRoute<LedgerDetailRoute>()
         LedgerDetailScreen(
-            onNavigateBack = {
-                navController.popBackStack()
+            onNavigateToHome = {
+                navController.navigate(MainRoute) {
+                    popUpTo(MainRoute) { inclusive = false }
+                    launchSingleTop = true
+                }
             },
-            onNavigateToUpdate = { ledgerId ->
-                navController.navigate(LedgerUpdateRoute(ledgerId = ledgerId))
+            onNavigateToUpdate = {
+                navController.navigate(LedgerUpdateRoute(ledgerId = route.ledgerId))
             },
         )
     }

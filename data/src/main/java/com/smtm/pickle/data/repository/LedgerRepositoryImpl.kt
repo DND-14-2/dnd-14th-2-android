@@ -14,6 +14,7 @@ import com.smtm.pickle.domain.model.ledger.PaymentMethod
 import com.smtm.pickle.domain.repository.LedgerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -52,10 +53,11 @@ class LedgerRepositoryImpl @Inject constructor(
                 try {
                     entity.toDomain()
                 } catch (e: Exception) {
-                    Timber.e(e, "Failed to map ledger entity: id=$ledgerId")
-                    throw e
+                    Timber.e(e, "Invalid entity skipped: id=${entity.id}")
+                    null
                 }
             }
+            .filterNotNull()
             .distinctUntilChanged()
     }
 
@@ -97,6 +99,11 @@ class LedgerRepositoryImpl @Inject constructor(
             current = current.plusMonths(1)
         }
         return months
+    }
+
+    override suspend fun syncLedger(id: Long) {
+        val remoteLedger = ledgerApi.getLedger(id)
+        ledgerDao.insert(remoteLedger.toEntity())
     }
 
     override suspend fun createLedger(
@@ -144,5 +151,10 @@ class LedgerRepositoryImpl @Inject constructor(
         val remoteLedger = ledgerApi.updateLedger(ledgerId, requestBody)
         val ledgerEntity = remoteLedger.toEntity()
         ledgerDao.insert(ledgerEntity)
+    }
+
+    override suspend fun deleteLedger(id: Long) {
+        ledgerApi.deleteLedger(id)
+        ledgerDao.delete(id)
     }
 }

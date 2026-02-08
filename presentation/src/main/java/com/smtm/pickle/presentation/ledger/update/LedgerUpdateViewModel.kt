@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.smtm.pickle.domain.model.ledger.LedgerCategory
+import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.UpdateLedgerUseCase
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
@@ -49,7 +50,7 @@ class LedgerUpdateViewModel @Inject constructor(
     private fun loadLedger() {
         viewModelScope.launch {
             try {
-                val ledger = observeLedgerUseCase(ledgerId).first()
+                val ledger = observeLedgerUseCase(LedgerId(ledgerId)).first()
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,

@@ -15,6 +15,7 @@ interface LedgerRepository {
 
     // 동기화: 외부 데이터 -> Room 캐시 보장
     suspend fun ensureSynced(from: LocalDate, to: LocalDate)
+    suspend fun syncLedger(id: Long)
 
     suspend fun createLedger(
         amount: Long,
@@ -36,4 +37,6 @@ interface LedgerRepository {
         paymentMethod: PaymentMethod,
         memo: String?,
     )
+
+    suspend fun deleteLedger(id: Long)
 }

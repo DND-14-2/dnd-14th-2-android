@@ -113,4 +113,9 @@ class LedgerRepositoryImpl @Inject constructor(
         val ledgerEntity = remoteLedger.toEntity()
         ledgerDao.insert(ledgerEntity)
     }
+
+    override suspend fun deleteLedger(id: Long) {
+        ledgerApi.deleteLedger(id)
+        ledgerDao.delete(id)
+    }
 }

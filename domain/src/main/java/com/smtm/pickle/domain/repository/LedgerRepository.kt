@@ -23,4 +23,5 @@ interface LedgerRepository {
         paymentMethod: PaymentMethod,
         memo: String?,
     )
+    suspend fun deleteLedger(id: Long)
 }

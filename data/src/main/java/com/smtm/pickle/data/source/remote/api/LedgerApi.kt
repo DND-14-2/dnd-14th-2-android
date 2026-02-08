@@ -4,9 +4,10 @@ import com.smtm.pickle.data.source.remote.model.ledger.LedgerCreateRequest
 import com.smtm.pickle.data.source.remote.model.ledger.LedgersResponse
 import com.smtm.pickle.data.source.remote.model.ledger.RemoteLedger
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface LedgerApi {
@@ -26,4 +27,9 @@ interface LedgerApi {
     suspend fun createLedger(
         @Body ledger: LedgerCreateRequest
     ): RemoteLedger
+
+    @DELETE("ledgers/{ledgerId}")
+    suspend fun deleteLedger(
+        @Path("ledgerId") id: Long
+    )
 }

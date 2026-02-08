@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.smtm.pickle.domain.model.ledger.LedgerId
+import com.smtm.pickle.domain.usecase.ledger.DeleteLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.GetLedgerUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class LedgerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getLedgerUseCase: GetLedgerUseCase,
+    private val deleteLedgerUseCase: DeleteLedgerUseCase,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<LedgerDetailRoute>()
@@ -71,7 +73,14 @@ class LedgerDetailViewModel @Inject constructor(
     fun deleteLedger() {
         viewModelScope.launch {
             dismissDeleteDialog()
-            _effect.emit(LedgerDetailEffect.NavigateToHome)
+            deleteLedgerUseCase(ledgerId)
+                .onSuccess {
+                    _effect.emit(LedgerDetailEffect.NavigateToHome)
+                }
+                .onFailure { e ->
+                    Timber.e(e, "Failed to delete ledger: id=${ledgerId.value}")
+                    _effect.emit(LedgerDetailEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
+                }
         }
     }
 
@@ -93,4 +102,5 @@ sealed interface LedgerDetailUiState {
 
 sealed interface LedgerDetailEffect {
     data object NavigateToHome : LedgerDetailEffect
+    data class ShowSnackBar(val msg: String) : LedgerDetailEffect
 }

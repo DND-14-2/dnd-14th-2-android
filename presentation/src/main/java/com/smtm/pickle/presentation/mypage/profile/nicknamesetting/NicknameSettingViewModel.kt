@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,7 +41,7 @@ class NicknameSettingViewModel @Inject constructor(
 
     private fun initializeNickname() {
         viewModelScope.launch {
-            val nickname = getNicknameUseCase().first()
+            val nickname = getNicknameUseCase()
             savedNickname = nickname
 
             _uiState.update {

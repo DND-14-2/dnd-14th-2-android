@@ -21,5 +21,7 @@ class FakeNicknameRepository @Inject constructor() : NicknameRepository {
         _nicknameFlow.value = nickname
     }
 
-    override fun getNickname(): Flow<String> = _nicknameFlow.asStateFlow()
+    override suspend fun getNickname(): String = _nicknameFlow.value
+
+    override fun observeNickname(): Flow<String> = _nicknameFlow.asStateFlow()
 }

@@ -2,7 +2,7 @@ package com.smtm.pickle.presentation.mypage.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
+import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    getNicknameUseCase: GetNicknameUseCase
+    getNicknameUseCase: ObserveNicknameUseCase
 ) : ViewModel() {
 
     private val _effect = MutableSharedFlow<ProfileEffect>(replay = 0)

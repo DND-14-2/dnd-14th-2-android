@@ -31,7 +31,7 @@ fun NicknameSettingScreen(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                NicknameSettingViewModel.NicknameSettingEffect.NavigateBack -> onBackClick()
+                NicknameSettingEffect.NavigateToBack -> onBackClick()
             }
         }
     }

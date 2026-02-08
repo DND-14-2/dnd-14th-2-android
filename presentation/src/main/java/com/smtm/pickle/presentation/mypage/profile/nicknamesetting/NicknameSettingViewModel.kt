@@ -112,7 +112,7 @@ class NicknameSettingViewModel @Inject constructor(
         viewModelScope.launch {
             saveNicknameUseCase(uiState.value.editingNickname)
                 .onSuccess {
-                    _effect.emit(NicknameSettingEffect.NavigateBack)
+                    _effect.emit(NicknameSettingEffect.NavigateToBack)
                 }
                 .onFailure { e ->
                     Timber.e(e, "닉네임 저장 실패")
@@ -122,11 +122,11 @@ class NicknameSettingViewModel @Inject constructor(
 
     fun onBackClick() {
         viewModelScope.launch {
-            _effect.emit(NicknameSettingEffect.NavigateBack)
+            _effect.emit(NicknameSettingEffect.NavigateToBack)
         }
     }
+}
 
-    sealed interface NicknameSettingEffect {
-        data object NavigateBack : NicknameSettingEffect
-    }
+sealed interface NicknameSettingEffect {
+    data object NavigateToBack : NicknameSettingEffect
 }

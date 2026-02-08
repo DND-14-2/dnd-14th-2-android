@@ -38,9 +38,9 @@ class ProfileViewModel @Inject constructor(
             _effect.emit(ProfileEffect.NavigateToBack)
         }
     }
+}
 
-    sealed interface ProfileEffect {
-        data object NavigateToBack : ProfileEffect
-        data object NavigateToNicknameSetting : ProfileEffect
-    }
+sealed interface ProfileEffect {
+    data object NavigateToBack : ProfileEffect
+    data object NavigateToNicknameSetting : ProfileEffect
 }

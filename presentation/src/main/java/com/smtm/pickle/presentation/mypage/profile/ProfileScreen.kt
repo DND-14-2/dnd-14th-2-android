@@ -21,7 +21,6 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextField
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
-import com.smtm.pickle.presentation.mypage.MyPageViewModel
 import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBaseContent
 
 @Composable
@@ -37,13 +36,12 @@ fun ProfileScreen(
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
-                    ProfileViewModel.ProfileEffect.NavigateToBack -> onBackClick()
-                    ProfileViewModel.ProfileEffect.NavigateToNicknameSetting -> onNicknameEditClick()
+                    ProfileEffect.NavigateToBack -> onBackClick()
+                    ProfileEffect.NavigateToNicknameSetting -> onNicknameEditClick()
                 }
             }
         }
     }
-
 
     ProfileContent(
         nickname = nickname,

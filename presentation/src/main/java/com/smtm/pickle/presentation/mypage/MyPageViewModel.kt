@@ -2,7 +2,7 @@ package com.smtm.pickle.presentation.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
+import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import com.smtm.pickle.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,14 +17,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    getNicknameUseCase: GetNicknameUseCase
+    getNicknameUseCase: ObserveNicknameUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(createMockUiState())
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
-
-    private val _effect = MutableSharedFlow<MyPageEffect>(replay = 0)
-    val effect: SharedFlow<MyPageEffect> = _effect.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -113,9 +110,5 @@ class MyPageViewModel @Inject constructor(
                 )
             ),
         )
-    }
-
-    sealed interface MyPageEffect {
-        data object NavigateBack : MyPageEffect
     }
 }

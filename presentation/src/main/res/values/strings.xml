@@ -100,6 +100,13 @@
     <string name="ledger_detail_delete_dialog_title">가계부 내역을 삭제하시겠어요?</string>
     <string name="ledger_detail_delete_dialog_description">삭제하면 되돌릴 수 없어요.</string>
 
+    <!-- Ledger Edit -->
+    <string name="ledger_edit_exit_dialog_title">수정을 취소하시겠어요?</string>
+    <string name="ledger_edit_exit_dialog_description">지금까지 내용들은 저장되지 않아요</string>
+    <string name="ledger_edit_exit_dialog_negative">나가기</string>
+    <string name="ledger_edit_exit_dialog_positive">작성하기</string>
+    <string name="ledger_edit_success">입력완료</string>
+
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 

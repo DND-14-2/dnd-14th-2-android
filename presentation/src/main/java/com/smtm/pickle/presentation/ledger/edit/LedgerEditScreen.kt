@@ -2,13 +2,16 @@ package com.smtm.pickle.presentation.ledger.edit
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -110,38 +113,47 @@ private fun LedgerEditContent(
             .systemBarsPadding()
             .clearFocusOnBackgroundTab(focusManager),
     ) {
-        LedgerCreateAppBar(
-            modifier = Modifier,
-            title = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
-            onNavigationClick = onNavigationClick,
-        )
-
-        when (uiState.step) {
-            LedgerEditStep.First -> {
-                LedgerCreateFirstStepContent(
-                    amount = uiState.firstStepState.amount,
-                    selectedLedgerType = uiState.firstStepState.selectedLedgerType,
-                    selectedCategory = uiState.firstStepState.selectedCategory,
-                    description = uiState.firstStepState.description,
-                    isNextEnabled = uiState.firstStepState.isNextEnabled,
-                    onAmountChange = setAmount,
-                    onLedgerTypeClick = selectLedgerType,
-                    onCategoryClick = selectCategory,
-                    onDescriptionChange = setDescription,
-                    onNextClick = { setStep(LedgerEditStep.Second) },
-                )
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
             }
+        } else {
+            LedgerCreateAppBar(
+                modifier = Modifier,
+                title = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
+                onNavigationClick = onNavigationClick,
+            )
 
-            LedgerEditStep.Second -> {
-                LedgerCreateSecondContent(
-                    selectedPaymentMethod = uiState.secondStepState.selectedPaymentMethod,
-                    memo = uiState.secondStepState.memo,
-                    isSuccessEnabled = uiState.secondStepState.isSuccessEnabled,
-                    onPaymentMethodClick = selectPaymentMethod,
-                    onMemoChange = setMemo,
-                    onPreviousClick = { setStep(LedgerEditStep.First) },
-                    onSuccessClick = updateLedger,
-                )
+            when (uiState.step) {
+                LedgerEditStep.First -> {
+                    LedgerCreateFirstStepContent(
+                        amount = uiState.firstStepState.amount,
+                        selectedLedgerType = uiState.firstStepState.selectedLedgerType,
+                        selectedCategory = uiState.firstStepState.selectedCategory,
+                        description = uiState.firstStepState.description,
+                        isNextEnabled = uiState.firstStepState.isNextEnabled,
+                        onAmountChange = setAmount,
+                        onLedgerTypeClick = selectLedgerType,
+                        onCategoryClick = selectCategory,
+                        onDescriptionChange = setDescription,
+                        onNextClick = { setStep(LedgerEditStep.Second) },
+                    )
+                }
+
+                LedgerEditStep.Second -> {
+                    LedgerCreateSecondContent(
+                        selectedPaymentMethod = uiState.secondStepState.selectedPaymentMethod,
+                        memo = uiState.secondStepState.memo,
+                        isSuccessEnabled = uiState.secondStepState.isSuccessEnabled,
+                        onPaymentMethodClick = selectPaymentMethod,
+                        onMemoChange = setMemo,
+                        onPreviousClick = { setStep(LedgerEditStep.First) },
+                        onSuccessClick = updateLedger,
+                    )
+                }
             }
         }
     }

@@ -54,6 +54,7 @@ class LedgerEditViewModel @Inject constructor(
                 .onSuccess { ledger ->
                     _uiState.update { state ->
                         state.copy(
+                            isLoading = false,
                             date = ledger.occurredOn,
                             firstStepState = state.firstStepState.copy(
                                 amount = ledger.amount.value.toString(),
@@ -206,6 +207,7 @@ class LedgerEditViewModel @Inject constructor(
 }
 
 data class LedgerUpdateUiState(
+    val isLoading: Boolean = true,
     val step: LedgerEditStep = LedgerEditStep.First,
     val date: LocalDate = LocalDate.now(),
     val firstStepState: FirstStepState = FirstStepState(),

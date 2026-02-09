@@ -25,5 +25,18 @@ interface LedgerRepository {
         memo: String?,
     )
 
+    suspend fun getLedger(ledgerId: Long): Ledger?
+
+    suspend fun editLedger(
+        ledgerId: Long,
+        amount: Long,
+        type: LedgerType,
+        category: LedgerCategory,
+        description: String,
+        occurredOn: LocalDate,
+        paymentMethod: PaymentMethod,
+        memo: String?,
+    )
+
     suspend fun deleteLedger(id: Long)
 }

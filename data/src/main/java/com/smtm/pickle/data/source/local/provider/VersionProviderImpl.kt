@@ -5,9 +5,11 @@ import com.smtm.pickle.domain.provider.VersionProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class VersionProviderImpl @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context
 ) : VersionProvider {
     override val versionName: String
         get() = try {

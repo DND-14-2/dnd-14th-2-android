@@ -152,6 +152,9 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }
+            .catch {
+                Timber.e(it, "observeNicknameUseCase() failed")
+            }
             .launchIn(viewModelScope)
     }
 }
@@ -162,7 +165,7 @@ data class HomeUiState(
     val dailyLedger: DailyLedgerState = DailyLedgerState(),
 ) {
     data class ProfileState(
-        val nickname: String = "익명 닉네임",
+        val nickname: String = "사용자",
         val badge: String = "뱃지명",
         val monthlyTotalIncome: Long = 10_000_000,
         val monthlyTotalExpense: Long = 5_000_000,

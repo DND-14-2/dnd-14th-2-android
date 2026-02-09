@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.smtm.pickle.domain.model.ledger.LedgerCategory
 import com.smtm.pickle.domain.model.ledger.LedgerId
-import com.smtm.pickle.domain.usecase.ledger.ObserveLedgerUseCase
+import com.smtm.pickle.domain.usecase.ledger.GetLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.UpdateLedgerUseCase
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LedgerUpdateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val observeLedgerUseCase: ObserveLedgerUseCase,
+    private val getLedgerUseCase: GetLedgerUseCase,
     private val updateLedgerUseCase: UpdateLedgerUseCase,
 ) : ViewModel() {
 
@@ -50,7 +49,13 @@ class LedgerUpdateViewModel @Inject constructor(
     private fun loadLedger() {
         viewModelScope.launch {
             try {
-                val ledger = observeLedgerUseCase(LedgerId(ledgerId)).first()
+                val ledger = getLedgerUseCase(LedgerId(ledgerId))
+                if (ledger == null) {
+                    Timber.e("loadLedger() ledger not found: ledgerId=$ledgerId")
+                    _effect.emit(LedgerUpdateEffect.ShowSnackBar("가계부 내역을 찾을 수 없습니다"))
+                    _effect.emit(LedgerUpdateEffect.NavigateBack)
+                    return@launch
+                }
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
@@ -69,6 +74,7 @@ class LedgerUpdateViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "loadLedger() failed for ledgerId=$ledgerId")
+                _effect.emit(LedgerUpdateEffect.ShowSnackBar("가계부 내역을 불러올 수 없습니다"))
                 _effect.emit(LedgerUpdateEffect.NavigateBack)
             }
         }

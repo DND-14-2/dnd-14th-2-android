@@ -47,6 +47,10 @@ class LedgerRepositoryImpl @Inject constructor(
             .distinctUntilChanged()
     }
 
+    override suspend fun getLedger(ledgerId: Long): Ledger? {
+        return ledgerDao.getLedger(ledgerId)?.toDomain()
+    }
+
     override fun observeLedger(ledgerId: Long): Flow<Ledger> {
         return ledgerDao.observeLedger(ledgerId)
             .map { entity ->

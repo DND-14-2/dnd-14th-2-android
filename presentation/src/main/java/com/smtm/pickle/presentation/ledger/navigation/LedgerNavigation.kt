@@ -31,17 +31,25 @@ fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
     }
 
     composable<LedgerEditRoute> {
-        LedgerEditScreen()
+        LedgerEditScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            }
+        )
     }
 
-    composable<LedgerDetailRoute> {
+    composable<LedgerDetailRoute> { backStackEntry ->
+        val route = backStackEntry.toRoute<LedgerDetailRoute>()
         LedgerDetailScreen(
             onNavigateToHome = {
                 navController.navigate(MainRoute) {
                     popUpTo(MainRoute) { inclusive = false }
                     launchSingleTop = true
                 }
-            }
+            },
+            onNavigateToEdit = {
+                navController.navigate(LedgerEditRoute(ledgerId = route.ledgerId))
+            },
         )
     }
 }

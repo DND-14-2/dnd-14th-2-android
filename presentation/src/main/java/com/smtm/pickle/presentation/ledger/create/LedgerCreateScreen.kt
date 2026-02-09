@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -107,9 +108,10 @@ private fun LedgerCreateContent(
     setStep: (LedgerCreateStep) -> Unit,
     selectPaymentMethod: (PaymentMethodUiModel) -> Unit,
     setMemo: (String) -> Unit,
-    createLedger: (LocalDate) -> Unit,
+    createLedger: (LocalDate, String?) -> Unit,
     onNavigationClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -149,7 +151,12 @@ private fun LedgerCreateContent(
                     onPaymentMethodClick = selectPaymentMethod,
                     onMemoChange = setMemo,
                     onPreviousClick = { setStep(LedgerCreateStep.First) },
-                    onSuccessClick = { createLedger(date) },
+                    onSuccessClick = {
+                        val defaultDescription = uiState.firstStepState.selectedCategory?.let {
+                            context.getString(it.stringResId)
+                        }
+                        createLedger(date, defaultDescription)
+                    },
                 )
             }
         }

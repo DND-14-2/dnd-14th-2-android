@@ -109,6 +109,12 @@ class LedgerDetailViewModel @Inject constructor(
             _effect.emit(LedgerDetailEffect.NavigateToHome)
         }
     }
+
+    fun navigateToUpdate() {
+        viewModelScope.launch {
+            _effect.emit(LedgerDetailEffect.NavigateToEdit)
+        }
+    }
 }
 
 sealed interface LedgerDetailUiState {
@@ -122,5 +128,6 @@ sealed interface LedgerDetailUiState {
 
 sealed interface LedgerDetailEffect {
     data object NavigateToHome : LedgerDetailEffect
+    data object NavigateToEdit : LedgerDetailEffect
     data class ShowSnackBar(val msg: String) : LedgerDetailEffect
 }

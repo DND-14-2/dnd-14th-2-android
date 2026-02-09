@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -83,7 +84,7 @@ fun LedgerEditScreen(
         setStep = viewModel::setStep,
         selectPaymentMethod = viewModel::selectPaymentMethod,
         setMemo = viewModel::setMemo,
-        updateLedger = viewModel::updateLedger,
+        updateLedger = viewModel::editLedger,
         onNavigationClick = viewModel::showExitDialog,
     )
 
@@ -100,9 +101,10 @@ private fun LedgerEditContent(
     setStep: (LedgerEditStep) -> Unit,
     selectPaymentMethod: (PaymentMethodUiModel) -> Unit,
     setMemo: (String) -> Unit,
-    updateLedger: () -> Unit,
+    updateLedger: (String?) -> Unit,
     onNavigationClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val date = uiState.date
 
@@ -151,7 +153,12 @@ private fun LedgerEditContent(
                         onPaymentMethodClick = selectPaymentMethod,
                         onMemoChange = setMemo,
                         onPreviousClick = { setStep(LedgerEditStep.First) },
-                        onSuccessClick = updateLedger,
+                        onSuccessClick = {
+                            val defaultDescription = uiState.firstStepState.selectedCategory?.let {
+                                context.getString(it.stringResId)
+                            }
+                            updateLedger(defaultDescription)
+                        },
                     )
                 }
             }

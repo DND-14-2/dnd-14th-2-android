@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.smtm.pickle.domain.model.ledger.LedgerCategory
 import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.domain.usecase.ledger.EditLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.GetLedgerUseCase
@@ -129,7 +128,7 @@ class LedgerEditViewModel @Inject constructor(
         }
     }
 
-    fun updateLedger() {
+    fun editLedger(defaultDescription: String?) {
         val firstStepState = _uiState.value.firstStepState
         val amount = firstStepState.amount.toLongOrNull()
         val category = firstStepState.selectedCategory?.toDomain()
@@ -137,7 +136,7 @@ class LedgerEditViewModel @Inject constructor(
         val paymentMethod = secondStepState.selectedPaymentMethod?.toDomain()
         val date = _uiState.value.date
 
-        if (amount == null || amount <= 0 || category == null || paymentMethod == null) {
+        if (amount == null || amount <= 0 || category == null || paymentMethod == null || defaultDescription == null) {
             Timber.e("updateLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod, date=$date")
             viewModelScope.launch {
                 _effect.emit(LedgerEditEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
@@ -145,7 +144,7 @@ class LedgerEditViewModel @Inject constructor(
             return
         }
 
-        val description = firstStepState.description.ifEmpty { getDefaultDescription(category) }
+        val description = firstStepState.description.ifEmpty { defaultDescription }
         val type = firstStepState.selectedLedgerType.toDomain()
         val memo = secondStepState.memo.ifBlank { null }
 
@@ -165,28 +164,6 @@ class LedgerEditViewModel @Inject constructor(
                 Timber.e(e, "updateLedger() failed")
                 _effect.emit(LedgerEditEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
             }
-        }
-    }
-
-    private fun getDefaultDescription(category: LedgerCategory): String {
-        return when (category) {
-            LedgerCategory.Food -> "식비"
-            LedgerCategory.Transport -> "교통비"
-            LedgerCategory.Housing -> "주거비"
-            LedgerCategory.Shopping -> "쇼핑"
-            LedgerCategory.HealthMedical -> "의료/건강"
-            LedgerCategory.EducationSelfDevelopment -> "교육/자기계발"
-            LedgerCategory.LeisureHobby -> "여가/취미"
-            LedgerCategory.SavingFinance -> "저축/금융"
-            LedgerCategory.Salary -> "월급"
-            LedgerCategory.SideIncome -> "부수입"
-            LedgerCategory.Bonus -> "상여"
-            LedgerCategory.Allowance -> "용돈"
-            LedgerCategory.PartTimeIncome -> "아르바이트"
-            LedgerCategory.FinancialIncome -> "금융수입"
-            LedgerCategory.SplitBill -> "더치페이"
-            LedgerCategory.Transfer -> "이체"
-            LedgerCategory.Other -> "기타"
         }
     }
 

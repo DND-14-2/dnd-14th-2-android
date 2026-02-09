@@ -24,7 +24,7 @@ interface LedgerDao {
     fun observeLedger(id: Long): Flow<LedgerEntity>
 
     @Query("SELECT * FROM ledger_table WHERE id = :id")
-    suspend fun getLedger(id: Long): LedgerEntity?
+    suspend fun getLedger(id: Long): LedgerEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: LedgerEntity)

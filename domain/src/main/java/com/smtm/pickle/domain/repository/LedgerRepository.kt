@@ -25,7 +25,7 @@ interface LedgerRepository {
         memo: String?,
     )
 
-    suspend fun getLedger(ledgerId: Long): Ledger?
+    suspend fun getLedger(ledgerId: Long): Ledger
 
     suspend fun editLedger(
         ledgerId: Long,

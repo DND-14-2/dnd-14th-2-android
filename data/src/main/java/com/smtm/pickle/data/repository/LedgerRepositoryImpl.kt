@@ -129,13 +129,8 @@ class LedgerRepositoryImpl @Inject constructor(
         ledgerDao.insert(ledgerEntity)
     }
 
-    override suspend fun getLedger(ledgerId: Long): Ledger? {
-        return try {
-            ledgerDao.getLedger(ledgerId)?.toDomain()
-        } catch (e: Exception) {
-            Timber.e(e, "Invalid entity skipped: id=$ledgerId")
-            null
-        }
+    override suspend fun getLedger(ledgerId: Long): Ledger {
+        return ledgerDao.getLedger(ledgerId).toDomain()
     }
 
     override suspend fun editLedger(

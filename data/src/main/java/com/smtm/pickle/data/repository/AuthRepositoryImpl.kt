@@ -4,7 +4,6 @@ import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.source.remote.api.AuthService
 import com.smtm.pickle.data.source.remote.datasource.GoogleAuthDataSource
 import com.smtm.pickle.data.source.remote.model.auth.LoginRequest
-import com.smtm.pickle.domain.common.utils.runSuspendCatching
 import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.model.auth.SocialLoginType
 import com.smtm.pickle.domain.provider.TokenProvider
@@ -50,5 +49,6 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun withdrawAccount(): Result<Unit> = runCatching {
         authService.withdrawAccount()
+        tokenProvider.clearToken()
     }
 }

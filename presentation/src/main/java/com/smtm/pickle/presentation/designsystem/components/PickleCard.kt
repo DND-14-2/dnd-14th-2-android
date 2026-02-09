@@ -25,7 +25,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 fun PickleCard(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    conerRadius: Dp = Dimensions.radiusSurface,
+    cornerRadius: Dp = Dimensions.radiusSurface,
     color: Color = PickleTheme.colors.base0,
     hasBorder: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
@@ -41,7 +41,7 @@ fun PickleCard(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(conerRadius),
+        shape = RoundedCornerShape(cornerRadius),
         color = color,
         contentColor = colors.gray700,
         border = border,

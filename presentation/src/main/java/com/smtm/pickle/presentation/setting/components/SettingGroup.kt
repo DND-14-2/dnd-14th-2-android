@@ -25,7 +25,7 @@ fun SettingGroup(section: SettingSection) {
         )
 
         PickleCard(
-            conerRadius = Dimensions.radius,
+            cornerRadius = Dimensions.radius,
             contentPadding = PaddingValues(0.dp)
         ) {
             Column {

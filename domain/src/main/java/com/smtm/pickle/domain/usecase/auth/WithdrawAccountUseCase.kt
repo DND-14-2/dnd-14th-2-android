@@ -8,6 +8,6 @@ class WithdrawAccountUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(): Result<Unit> = runSuspendCatching {
-        authRepository.withdrawAccount()
+        authRepository.withdrawAccount().getOrThrow()
     }
 }

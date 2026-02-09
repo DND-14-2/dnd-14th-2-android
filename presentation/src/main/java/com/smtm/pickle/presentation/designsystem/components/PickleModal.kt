@@ -120,6 +120,8 @@ object PickleDialog {
             PickleButton(
                 text = cancelText,
                 onClick = onCancelClick,
+                color = PickleTheme.colors.base0,
+                textColor = PickleTheme.colors.gray500
             )
         }
     }

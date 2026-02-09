@@ -58,23 +58,17 @@ class SettingViewModel @Inject constructor(
 
     fun confirmLogout() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, dialogState = SettingDialogState.None)
+            }
+
             logoutUseCase()
                 .onSuccess {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = true,
-                            dialogState = SettingDialogState.None
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
                     _effect.emit(SettingEffect.NavigateToLogin)
                 }
                 .onFailure {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            dialogState = SettingDialogState.None
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
                     _effect.emit(SettingEffect.ShowSnackBar("로그아웃에 실패했습니다."))
                 }
         }
@@ -82,23 +76,17 @@ class SettingViewModel @Inject constructor(
 
     fun confirmWithdraw() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, dialogState = SettingDialogState.None)
+            }
+
             withdrawAccountUseCase()
                 .onSuccess {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = true,
-                            dialogState = SettingDialogState.None
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
                     _effect.emit(SettingEffect.NavigateToLogin)
                 }
                 .onFailure {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            dialogState = SettingDialogState.None
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
                     _effect.emit(SettingEffect.ShowSnackBar("회원탈퇴에 실패했습니다."))
                 }
         }

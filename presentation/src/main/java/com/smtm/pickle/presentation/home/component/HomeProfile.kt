@@ -25,7 +25,6 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun HomeProfile(
     modifier: Modifier = Modifier,
-    badge: String,
     nickname: String,
     income: Long,
     expense: Long,
@@ -100,7 +99,6 @@ fun HomeProfile(
 private fun HomeProfilePreview() {
     PickleTheme {
         HomeProfile(
-            badge = "뱃지명",
             nickname = "나의닉네임",
             income = 1000000,
             expense = 500000,

@@ -36,19 +36,17 @@ fun PrivacyPolicyContent(onBackClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(PickleTheme.colors.base0)
-                .padding(vertical = 20.dp)
         ) {
             stickyHeader("top_bar") {
                 PickleAppBar(
                     title = stringResource(R.string.privacy_policy_title),
                     navigationItem = NavigationItem.Back(onClick = onBackClick),
-                    isInScaffold = false
                 )
             }
 
             item("privacy_policy") {
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
                 ) {
                     PrivacyPolicySubTitle()
 

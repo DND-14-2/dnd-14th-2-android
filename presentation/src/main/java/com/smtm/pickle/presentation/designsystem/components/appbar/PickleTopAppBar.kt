@@ -34,14 +34,14 @@ fun PickleAppBar(
     modifier: Modifier = Modifier,
     title: String? = null,
     color: Color = PickleTheme.colors.base0,
-    isInScaffold: Boolean = true,
+    isInMainRoute: Boolean = false,
     alignment: AppBarAlignment = AppBarAlignment.Center,
     navigationItem: NavigationItem = NavigationItem.None,
     actions: @Composable (RowScope.() -> Unit) = {}
 ) {
     Box(
         modifier = modifier
-            .then(if (isInScaffold) Modifier.statusBarsPadding() else Modifier)
+            .then(if (!isInMainRoute) Modifier.statusBarsPadding() else Modifier)
             .fillMaxWidth()
             .background(color = color)
             .padding(horizontal = 16.dp)

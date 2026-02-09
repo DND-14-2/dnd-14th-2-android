@@ -23,12 +23,12 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 @Composable
 fun LedgerUpdateExitDialog(
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit,
-    onExitButtonClick: () -> Unit,
+    onContinueEdit: () -> Unit,
+    onConfirmExit: () -> Unit,
 ) {
     PickleDialog(
         modifier = modifier,
-        onDismiss = onDismiss,
+        onDismiss = onContinueEdit,
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 40.dp, bottom = 20.dp),
     ) {
         Text(
@@ -60,7 +60,7 @@ fun LedgerUpdateExitDialog(
                     containerColor = PickleTheme.colors.gray100,
                     contentColor = PickleTheme.colors.gray600
                 ),
-                onClick = onExitButtonClick
+                onClick = onConfirmExit
             ) {
                 Text(
                     text = stringResource(R.string.ledger_update_exit_dialog_negative),
@@ -77,7 +77,7 @@ fun LedgerUpdateExitDialog(
                     containerColor = PickleTheme.colors.primary400,
                     contentColor = PickleTheme.colors.base0
                 ),
-                onClick = onDismiss,
+                onClick = onContinueEdit,
             ) {
                 Text(
                     text = stringResource(R.string.ledger_update_exit_dialog_positive),
@@ -93,8 +93,8 @@ fun LedgerUpdateExitDialog(
 private fun LedgerUpdateExitDialogPreview() {
     PickleTheme {
         LedgerUpdateExitDialog(
-            onDismiss = {},
-            onExitButtonClick = {}
+            onContinueEdit = {},
+            onConfirmExit = {}
         )
     }
 }

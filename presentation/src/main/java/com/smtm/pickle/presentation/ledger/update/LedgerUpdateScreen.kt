@@ -50,8 +50,8 @@ fun LedgerUpdateScreen(
 
     if (uiState.showExitDialog) {
         LedgerUpdateExitDialog(
-            onDismiss = viewModel::dismissExitDialog,
-            onExitButtonClick = viewModel::confirmExit
+            onContinueEdit = viewModel::dismissExitDialog,
+            onConfirmExit = viewModel::confirmExit
         )
     }
 

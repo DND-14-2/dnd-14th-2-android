@@ -68,7 +68,9 @@ fun SettingScreen(
                     }
 
                     is SettingEffect.ShowSnackBar -> {
-                        PickleSnackbar.toastError(message = effect.msg)
+                        snackbarState.show(
+                            PickleSnackbar.toastError(message = effect.msg)
+                        )
                     }
                 }
             }

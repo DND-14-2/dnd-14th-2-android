@@ -1,21 +1,39 @@
 package com.smtm.pickle.presentation.mypage
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import com.smtm.pickle.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-
+    getNicknameUseCase: ObserveNicknameUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(createMockUiState())
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getNicknameUseCase().collect { nickname ->
+                _uiState.update { state ->
+                    state.copy(
+                        profile = state.profile.copy(nickname = nickname)
+                    )
+                }
+            }
+        }
+    }
 
     fun onStatisticsTabSelected(index: Int) {
         _uiState.update { state ->

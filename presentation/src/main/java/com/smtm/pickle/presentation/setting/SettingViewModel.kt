@@ -7,38 +7,94 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.auth.LogoutUseCase
 import com.smtm.pickle.domain.usecase.auth.WithdrawAccountUseCase
+import com.smtm.pickle.domain.usecase.service.GetPickleVersionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
-    private val withdrawAccountUseCase: WithdrawAccountUseCase
+    private val withdrawAccountUseCase: WithdrawAccountUseCase,
+    private val getPickleVersionUseCase: GetPickleVersionUseCase
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(SettingUiState())
+    val uiState: StateFlow<SettingUiState> = _uiState.asStateFlow()
 
     private val _effect = MutableSharedFlow<SettingEffect>(replay = 0)
     val effect: SharedFlow<SettingEffect> = _effect.asSharedFlow()
 
-    fun onLogoutClick() {
-        viewModelScope.launch {
-            // TODO 로그아웃 확인 다이얼로그
 
-            logoutUseCase()
-            _effect.emit(SettingEffect.NavigateToLogin)
+    init {
+        _uiState.update { it.copy(version = getPickleVersionUseCase()) }
+    }
+
+
+    fun onLogoutClick() {
+        _uiState.update {
+            it.copy(dialogState = SettingDialogState.Logout)
         }
     }
 
     fun onWithdrawClick() {
-        viewModelScope.launch {
-            // TODO 탈퇴 확인 다이얼로그
+        _uiState.update {
+            it.copy(dialogState = SettingDialogState.Withdraw)
+        }
+    }
 
-            withdrawAccountUseCase()
-            _effect.emit(SettingEffect.NavigateToLogin)
+    fun dismissDialog() {
+        _uiState.update {
+            it.copy(dialogState = SettingDialogState.None)
+        }
+    }
+
+    fun confirmLogout() {
+        viewModelScope.launch {
+            runCatching { logoutUseCase() }
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                            dialogState = SettingDialogState.None
+                        )
+                    }
+                    _effect.emit(SettingEffect.NavigateToLogin)
+                }
+                .onFailure {
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                    _effect.emit(SettingEffect.ShowSnackBar("로그아웃에 실패했습니다."))
+                }
+        }
+    }
+
+    fun confirmWithdraw() {
+        viewModelScope.launch {
+            runCatching { withdrawAccountUseCase() }
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                            dialogState = SettingDialogState.None
+                        )
+                    }
+                    _effect.emit(SettingEffect.NavigateToLogin)
+                }
+                .onFailure {
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                    _effect.emit(SettingEffect.ShowSnackBar("회원탈퇴에 실패했습니다."))
+                }
         }
     }
 
@@ -51,6 +107,12 @@ class SettingViewModel @Inject constructor(
     fun onBackClick() {
         viewModelScope.launch {
             _effect.emit(SettingEffect.NavigateBack)
+        }
+    }
+
+    fun onVersionClick() {
+        viewModelScope.launch {
+            _effect.emit(SettingEffect.OpenGooglePlay)
         }
     }
 
@@ -71,20 +133,24 @@ class SettingViewModel @Inject constructor(
             context.startActivity(webIntent)
         }
     }
-
-    fun getPickleVersion(context: Context): String {
-        return try {
-            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            packageInfo.versionName ?: "0.0.0"
-        } catch (e: Exception) {
-            Timber.e(e, "버전 정보 가져오기 실패")
-            "0.0.0"
-        }
-    }
 }
+
+data class SettingUiState(
+    val version: String = "0.0.0",
+    val isLoading: Boolean = false,
+    val dialogState: SettingDialogState = SettingDialogState.None
+)
 
 sealed interface SettingEffect {
     data object NavigateToPrivacyPolicy : SettingEffect
     data object NavigateToLogin : SettingEffect
     data object NavigateBack : SettingEffect
+    data object OpenGooglePlay : SettingEffect
+    data class ShowSnackBar(val msg: String) : SettingEffect
+}
+
+sealed interface SettingDialogState {
+    data object None : SettingDialogState
+    data object Logout : SettingDialogState
+    data object Withdraw : SettingDialogState
 }

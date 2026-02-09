@@ -116,6 +116,13 @@
     <string name="setting_service_privacy_policy">개인정보 처리방침</string>
     <string name="setting_service_notification">알림 설정</string>
     <string name="setting_service_version">앱 버전 정보</string>
+    <string name="setting_dialog_dismiss">돌아가기</string>
+    <string name="setting_dialog_logout_title">로그아웃하시겠어요?</string>
+    <string name="setting_dialog_logout_description">언제든 다시 로그인하고\n서비스를 이용할 수 있어요</string>
+    <string name="setting_dialog_logout_confirm">로그아웃</string>
+    <string name="setting_dialog_withdraw_title">정말 떠나실건가요?..</string>
+    <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
+    <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
 
     <!-- Privacy Policy -->
     <string name="privacy_policy_title">개인정보 처리방침</string>

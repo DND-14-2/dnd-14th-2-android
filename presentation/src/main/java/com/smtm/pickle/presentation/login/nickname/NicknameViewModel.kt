@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.nickname.CheckNicknameAvailableUseCase
 import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
-import com.smtm.pickle.presentation.common.constant.NicknameValidation.AVAILABLE_LENGTH
 import com.smtm.pickle.presentation.common.constant.NicknameValidation.MAX_NICKNAME_LENGTH
-import com.smtm.pickle.presentation.common.extension.isValidNicknameFormat
+import com.smtm.pickle.presentation.common.utils.NicknameUtils
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,7 +39,7 @@ class NicknameViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 nickname = correctNickname,
-                inputState = validateFormat(correctNickname),
+                inputState = NicknameUtils.validateNicknameFormat(correctNickname),
                 isCheckingDuplicate = false,
                 isAvailable = null
             )
@@ -95,13 +94,6 @@ class NicknameViewModel @Inject constructor(
         viewModelScope.launch {
             _effect.emit(NicknameEffect.NavigateToMain)
         }
-    }
-
-    private fun validateFormat(nickname: String): InputState {
-        if (nickname.isBlank()) return InputState.Idle
-        if (nickname.length > AVAILABLE_LENGTH) return InputState.Error("최대 5자 이내로 설정해주세요.")
-        if (!nickname.isValidNicknameFormat()) return InputState.Error("특수 문자 및 영어 대문자는 사용할 수 없어요.")
-        return InputState.Success(null)
     }
 
     sealed interface NicknameEffect {

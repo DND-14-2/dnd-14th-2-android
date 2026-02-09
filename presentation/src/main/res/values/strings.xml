@@ -11,8 +11,13 @@
     <string name="login_tooltip_fast">3초만에 로그인하기!</string>
 
     <!-- Nickname -->
+    <string name="profile_title">내 프로필</string>
+    <string name="nickname_label">닉네임</string>
     <string name="nickname_title">닉네임 입력</string>
+    <string name="nickname_edit_title">닉네임 수정</string>
+    <string name="nickname_edit_button">변경하기</string>
     <string name="nickname_instruction">닉네임을 설정해주세요</string>
+    <string name="nickname_change_instruction">변경할 닉네임을 입력해주세요.</string>
     <string name="nickname_hint">최대 5자까지 입력 가능해요</string>
     <string name="nickname_helper">특수 문자 및 영어 대문자는 사용할 수 없어요.</string>
     <string name="nickname_check_duplicate">중복 확인</string>

@@ -25,6 +25,7 @@ fun MyPageScreen(
     onNavigateMyLedger: () -> Unit,
     onNavigateSetting: () -> Unit,
     onNavigateAlarmSetting: () -> Unit,
+    onNavigateMyProfile: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -32,6 +33,7 @@ fun MyPageScreen(
         uiState = uiState,
         onNavigateMyLedger = onNavigateMyLedger,
         onNavigateSetting = onNavigateSetting,
+        onNavigateMyProfile = onNavigateMyProfile,
         onStatisticsTabSelected = viewModel::onStatisticsTabSelected,
     )
 }
@@ -41,6 +43,7 @@ private fun MyPageContent(
     uiState: MyPageUiState,
     onNavigateMyLedger: () -> Unit,
     onNavigateSetting: () -> Unit,
+    onNavigateMyProfile: () -> Unit,
     onStatisticsTabSelected: (Int) -> Unit
 ) {
     CompositionLocalProvider(
@@ -71,7 +74,7 @@ private fun MyPageContent(
                     modifier = Modifier.background(PickleTheme.colors.base0),
                     nickname = uiState.profile.nickname,
                     badgeName = uiState.profile.badgeName,
-                    onNicknameEditClick = {},
+                    onNicknameEditClick = onNavigateMyProfile,
                     onMyBadgeClick = {},
                 )
             }
@@ -96,6 +99,7 @@ private fun MyPageScreenPreview() {
             uiState = MyPageUiState(),
             onNavigateMyLedger = { },
             onNavigateSetting = { },
+            onNavigateMyProfile = { },
             onStatisticsTabSelected = { },
         )
     }

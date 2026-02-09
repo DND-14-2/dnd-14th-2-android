@@ -305,7 +305,7 @@ fun PickleTextFieldWithSupporting(
             Spacer(modifier = Modifier.height(4.dp))
 
             Row {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 PickleSupportingText(
                     message = it,
                     inputState = inputState,

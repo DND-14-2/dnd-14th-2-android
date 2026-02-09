@@ -32,7 +32,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun PickleProfile(
-    @DrawableRes iconRes: Int = R.drawable.ic_profile_default,
+    @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
     type: ProfileType = ProfileType.NORMAL,
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
@@ -58,7 +58,7 @@ fun PickleProfile(
 fun PickleCircleProfile(
     nickname: String,
     status: ProfileStatus = ProfileStatus.DEFAULT,
-    @DrawableRes iconRes: Int = R.drawable.ic_profile_default,
+    @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
     selected: Boolean = false,
     modifier: Modifier = Modifier,
 ) {

@@ -26,14 +26,13 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun ProfileInfoRow(
     nickname: String,
-    badge: String,
     onNicknameEditClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PickleProfile(type = ProfileType.Large)
+        PickleProfile(type = ProfileType.NORMAL)
         Spacer(modifier = Modifier.width(16.dp))
 
         Column {
@@ -57,9 +56,6 @@ fun ProfileInfoRow(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
-
-            PickleBadge(badge)
         }
     }
 }
@@ -70,7 +66,6 @@ private fun ProfileInfoRowPreview() {
     PickleTheme {
         ProfileInfoRow(
             nickname = "유저 닉네임",
-            badge = "배지명",
             onNicknameEditClick = {},
         )
     }

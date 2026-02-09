@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.navigation.graph
 
+import androidx.compose.animation.EnterTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
@@ -32,7 +33,9 @@ fun NavGraphBuilder.authNavGraph(
             OnboardingScreen(navigator = navigator)
         }
 
-        composable<LoginRoute> {
+        composable<LoginRoute>(
+            enterTransition = { EnterTransition.None },
+        ) {
             val navigator = rememberAuthNavigator(navController, onNavigateToMain)
             LoginScreen(navigator = navigator)
         }
@@ -58,7 +61,7 @@ private fun rememberAuthNavigator(
 
         override fun navigateToLogin() {
             navController.navigate(LoginRoute) {
-                popUpTo(OnboardingRoute) { inclusive = true }
+                popUpTo(AuthGraphRoute) { inclusive = false }
             }
         }
 

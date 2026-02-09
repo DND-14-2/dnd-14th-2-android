@@ -62,20 +62,17 @@ class LoginViewModel @Inject constructor(
                 _uiState.value = LoginUiState.Idle
                 Timber.d("로그인 성공")
 
-                getFirstLoginUseCase()
-                    .onSuccess { isFirstLogin ->
-                        if (isFirstLogin) {
-                            setFirstLoginUseCase(false)
-                                .onFailure { Timber.e(it, "setFirstLoginUseCase 실패") }
-                        }
+                val isFirstLogin = getFirstLoginUseCase().getOrDefault(false)
 
-                        val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
-                        else LoginEffect.NavigateToMain
+                if (isFirstLogin) {
+                    setFirstLoginUseCase(false)
+                        .onFailure { Timber.e(it, "setFirstLoginUseCase 실패") }
+                }
 
-                        _effect.emit(destination)
-                    }.onFailure { e ->
-                        Timber.e(e, "getFirstLoginUseCase 실패")
-                    }
+                val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
+                else LoginEffect.NavigateToMain
+
+                _effect.emit(destination)
             }.onFailure { error ->
                 _uiState.value = LoginUiState.Idle
                 _effect.emit(LoginEffect.ShowSnackbar("로그인에 실패했습니다. 잠시 후 다시 시도해주세요."))

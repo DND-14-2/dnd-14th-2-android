@@ -109,8 +109,6 @@ fun SettingScreen(
         SettingDialogState.None -> Unit
     }
 
-    SnackbarHost(snackbarState)
-
     SettingContent(
         version = uiState.version,
         onLogoutClick = viewModel::onLogoutClick,
@@ -119,6 +117,8 @@ fun SettingScreen(
         onBackClick = viewModel::onBackClick,
         onVersionClick = viewModel::onVersionClick
     )
+
+    SnackbarHost(snackbarState)
 }
 
 @Composable

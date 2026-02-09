@@ -9,12 +9,12 @@ import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -29,8 +29,8 @@ class LedgerCreateViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LedgerCreateUiState())
     val uiState: StateFlow<LedgerCreateUiState> = _uiState.asStateFlow()
 
-    private val _effect = MutableSharedFlow<LedgerCreateEffect>(replay = 0)
-    val effect: SharedFlow<LedgerCreateEffect> = _effect.asSharedFlow()
+    private val _effect: Channel<LedgerCreateEffect> = Channel<LedgerCreateEffect>(Channel.BUFFERED)
+    val effect: Flow<LedgerCreateEffect> = _effect.receiveAsFlow()
 
     fun setStep(step: LedgerCreateStep) {
         _uiState.update { state -> state.copy(step = step) }
@@ -94,7 +94,7 @@ class LedgerCreateViewModel @Inject constructor(
         if (amount == null || category == null || paymentMethod == null) {
             Timber.e("createLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod")
             viewModelScope.launch {
-                _effect.emit(LedgerCreateEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
+                _effect.send(LedgerCreateEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
             }
             return
         }
@@ -113,10 +113,10 @@ class LedgerCreateViewModel @Inject constructor(
                 paymentMethod = paymentMethod,
                 memo = memo,
             ).onSuccess {
-                _effect.emit(LedgerCreateEffect.NavigateToHome)
+                _effect.send(LedgerCreateEffect.NavigateToHome)
             }.onFailure { e ->
                 Timber.e(e, "createLedger() failed")
-                _effect.emit(LedgerCreateEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
+                _effect.send(LedgerCreateEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
             }
         }
     }
@@ -154,7 +154,7 @@ class LedgerCreateViewModel @Inject constructor(
     fun confirmExit() {
         _uiState.update { it.copy(showExitDialog = false) }
         viewModelScope.launch {
-            _effect.emit(LedgerCreateEffect.NavigateBack)
+            _effect.send(LedgerCreateEffect.NavigateBack)
         }
     }
 }

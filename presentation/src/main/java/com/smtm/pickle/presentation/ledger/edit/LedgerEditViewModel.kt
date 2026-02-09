@@ -144,7 +144,7 @@ class LedgerEditViewModel @Inject constructor(
             return
         }
 
-        val description = firstStepState.description.ifEmpty { defaultDescription }
+        val description = firstStepState.description.ifBlank { defaultDescription }
         val type = firstStepState.selectedLedgerType.toDomain()
         val memo = secondStepState.memo.ifBlank { null }
 

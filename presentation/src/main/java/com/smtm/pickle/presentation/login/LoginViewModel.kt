@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.common.utils.runSuspendCatching
 import com.smtm.pickle.domain.usecase.auth.GoogleLoginUseCase
 import com.smtm.pickle.domain.usecase.auth.KakaoLoginUseCase
 import com.smtm.pickle.domain.usecase.user.GetFirstLoginUseCase
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,21 +56,25 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
 
-            runCatching {
+            runSuspendCatching {
                 loginAction()
             }.onSuccess {
                 _uiState.value = LoginUiState.Idle
                 Timber.d("로그인 성공")
 
                 getFirstLoginUseCase()
-                    .take(1)
-                    .collect { isFirstLogin ->
-                        if (isFirstLogin) setFirstLoginUseCase(false)
+                    .onSuccess { isFirstLogin ->
+                        if (isFirstLogin) {
+                            setFirstLoginUseCase(false)
+                                .onFailure { Timber.e(it, "setFirstLoginUseCase 실패") }
+                        }
 
                         val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
                         else LoginEffect.NavigateToMain
 
                         _effect.emit(destination)
+                    }.onFailure { e ->
+                        Timber.e(e, "getFirstLoginUseCase 실패")
                     }
             }.onFailure { error ->
                 _uiState.value = LoginUiState.Idle

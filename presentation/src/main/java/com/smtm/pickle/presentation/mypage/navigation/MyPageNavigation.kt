@@ -4,9 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.smtm.pickle.presentation.mypage.myledger.MyLedgerScreen
-import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSettingScreen
 import com.smtm.pickle.presentation.mypage.profile.ProfileScreen
-import com.smtm.pickle.presentation.mypage.setting.SettingScreen
+import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSettingScreen
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
 import com.smtm.pickle.presentation.navigation.route.LoginRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
@@ -56,6 +55,13 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
     composable<NicknameSettingRoute> {
         NicknameSettingScreen(
             onBackClick = {
+                navController.popBackStack()
+            }
+        )
+    }
+    composable<PrivacyPolicyRoute> {
+        PrivacyPolicyScreen(
+            onNavigateBack = {
                 navController.popBackStack()
             }
         )

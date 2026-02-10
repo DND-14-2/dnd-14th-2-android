@@ -209,20 +209,20 @@ private fun DialogContent(
 
 private fun openGooglePlay(context: Context) {
     val packageName = context.packageName
+    val flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
     // Google Play Store Uri
-    val storeUri = "market://details?id=$packageName".toUri()
-    val storeIntent = Intent(Intent.ACTION_VIEW, storeUri)
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val storeIntent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
+        .addFlags(flags)
 
     // 웹 브라우저 Uri
-    val webUri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
-    val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+    val webIntent = Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=$packageName".toUri())
+        .addFlags(flags)
 
-    try {
+    runCatching {
         context.startActivity(storeIntent)
-    } catch (_: Exception) {
-        context.startActivity(webIntent)
+    }.onFailure {
+        runCatching { context.startActivity(webIntent) }
     }
 }
 

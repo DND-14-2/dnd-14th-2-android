@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.login
 
 import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.auth.KakaoLoginManagerEntryPoint
-import com.smtm.pickle.presentation.designsystem.components.PickleLogo
+import com.smtm.pickle.presentation.designsystem.components.PickleBrandLogo
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
@@ -104,9 +105,10 @@ fun LoginContent(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(PickleTheme.colors.base0)
             .padding(16.dp)
     ) {
-        PickleLogo(
+        PickleBrandLogo(
             modifier = Modifier
                 .align(Alignment.Center)
                 .offset(y = (-40).dp)

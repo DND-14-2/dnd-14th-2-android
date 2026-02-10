@@ -207,7 +207,7 @@ private fun DialogContent(
     )
 }
 
-fun openGooglePlay(context: Context) {
+private fun openGooglePlay(context: Context) {
     val packageName = context.packageName
 
     // Google Play Store Uri

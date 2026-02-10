@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.auth.LogoutUseCase
 import com.smtm.pickle.domain.usecase.auth.WithdrawAccountUseCase
-import com.smtm.pickle.domain.usecase.service.GetPickleVersionUseCase
+import com.smtm.pickle.presentation.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,6 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val withdrawAccountUseCase: WithdrawAccountUseCase,
-    private val getPickleVersionUseCase: GetPickleVersionUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingUiState())
@@ -34,7 +33,7 @@ class SettingViewModel @Inject constructor(
 
 
     init {
-        _uiState.update { it.copy(version = getPickleVersionUseCase()) }
+        _uiState.update { it.copy(version = BuildConfig.VERSION_NAME) }
     }
 
 

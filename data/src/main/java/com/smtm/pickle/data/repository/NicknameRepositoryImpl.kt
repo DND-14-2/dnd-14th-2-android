@@ -1,5 +1,7 @@
 package com.smtm.pickle.data.repository
 
+import com.smtm.pickle.data.source.remote.api.UserApi
+import com.smtm.pickle.data.source.remote.model.user.NicknameRequest
 import com.smtm.pickle.domain.repository.NicknameRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,19 +10,22 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FakeNicknameRepository @Inject constructor() : NicknameRepository {
+class NicknameRepositoryImpl @Inject constructor(
+    private val userApi: UserApi
+) : NicknameRepository {
 
-    private val savedNicknames = mutableSetOf<String>()
-    private val _nicknameFlow = MutableStateFlow("유저 닉네임")
+    private val _nicknameFlow = MutableStateFlow("")
 
-    override suspend fun isNicknameAvailable(nickname: String): Boolean =
-        nickname !in savedNicknames
+    // TODO: 중복 체크 API 삭제 예정
+    override suspend fun isNicknameAvailable(nickname: String): Boolean = true
+
 
     override suspend fun saveNickname(nickname: String) {
-        savedNicknames.add(nickname)
+        userApi.changeNickname(NicknameRequest(nickname))
         _nicknameFlow.value = nickname
     }
 
+    // TODO: 닉네임 조회 API 완료 후 연결
     override suspend fun getNickname(): String = _nicknameFlow.value
 
     override fun observeNickname(): Flow<String> = _nicknameFlow.asStateFlow()

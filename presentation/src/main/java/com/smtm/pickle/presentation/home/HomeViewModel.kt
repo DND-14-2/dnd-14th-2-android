@@ -6,6 +6,7 @@ import com.smtm.pickle.domain.model.ledger.summarize
 import com.smtm.pickle.domain.usecase.ledger.EnsureLedgersSyncedUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByDayUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByMonthUseCase
+import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.home.model.LedgerCalendarDay
@@ -34,6 +35,7 @@ class HomeViewModel @Inject constructor(
     private val observeLedgersByMonthUseCase: ObserveLedgersByMonthUseCase,
     private val observeLedgersByDayUseCase: ObserveLedgersByDayUseCase,
     private val ensureLedgersSyncedUseCase: EnsureLedgersSyncedUseCase,
+    private val observeNicknameUseCase: ObserveNicknameUseCase,
 ) : ViewModel() {
 
     private val selectedYearMonth = MutableStateFlow(YearMonth.now())
@@ -63,6 +65,7 @@ class HomeViewModel @Inject constructor(
     val effect: SharedFlow<HomeEffect> = _effect.asSharedFlow()
 
     init {
+        observeNickname()
         observeMonthLedgers()
         observeSelectedDateLedgers()
     }
@@ -137,6 +140,23 @@ class HomeViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
     }
+
+    private fun observeNickname() {
+        observeNicknameUseCase()
+            .onEach { nickname ->
+                _uiState.update { state ->
+                    state.copy(
+                        profile = state.profile.copy(
+                            nickname = nickname
+                        )
+                    )
+                }
+            }
+            .catch {
+                Timber.e(it, "observeNicknameUseCase() failed")
+            }
+            .launchIn(viewModelScope)
+    }
 }
 
 data class HomeUiState(
@@ -145,7 +165,7 @@ data class HomeUiState(
     val dailyLedger: DailyLedgerState = DailyLedgerState(),
 ) {
     data class ProfileState(
-        val nickname: String = "익명 닉네임",
+        val nickname: String = "사용자",
         val badge: String = "뱃지명",
         val monthlyTotalIncome: Long = 10_000_000,
         val monthlyTotalExpense: Long = 5_000_000,

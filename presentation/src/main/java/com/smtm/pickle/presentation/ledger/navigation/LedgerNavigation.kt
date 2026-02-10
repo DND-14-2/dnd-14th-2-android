@@ -10,7 +10,6 @@ import com.smtm.pickle.presentation.ledger.edit.LedgerEditScreen
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerEditRoute
-import com.smtm.pickle.presentation.navigation.route.MainRoute
 
 fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
     composable<LedgerCreateRoute> { backStackEntry ->
@@ -20,12 +19,6 @@ fun NavGraphBuilder.ledgerDestinations(navController: NavController) {
             date = initialDate,
             onNavigateBack = {
                 navController.popBackStack()
-            },
-            onNavigateToHome = {
-                navController.navigate(MainRoute) {
-                    popUpTo(MainRoute) { inclusive = false }
-                    launchSingleTop = true
-                }
             },
         )
     }

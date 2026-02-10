@@ -104,7 +104,6 @@ private fun HomeContent(
                 item("profile") {
                     HomeProfile(
                         nickname = profileState.nickname,
-                        badge = profileState.badge,
                         income = profileState.monthlyTotalIncome,
                         expense = profileState.monthlyTotalExpense,
                     )

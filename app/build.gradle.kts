@@ -32,6 +32,13 @@ android {
             keyAlias = localProperties.require("DEBUG_KEY_ALIAS")
             keyPassword = localProperties.require("DEBUG_KEY_PASSWORD")
         }
+
+        create("release") {
+            storeFile = file(localProperties.require("RELEASE_KEYSTORE_PATH"))
+            storePassword = localProperties.require("RELEASE_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.require("RELEASE_KEY_ALIAS")
+            keyPassword = localProperties.require("RELEASE_KEY_PASSWORD")
+        }
     }
 
     defaultConfig {
@@ -58,6 +65,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
         create("qa") {
             initWith(getByName("debug"))

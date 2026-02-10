@@ -8,3 +8,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+keystore/release.keystore
+/app/release/
+/app/debug/
+/app/qa/
+*.apk
+*.aab

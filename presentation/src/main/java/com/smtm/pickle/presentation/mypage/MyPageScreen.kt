@@ -73,9 +73,7 @@ private fun MyPageContent(
                 MyPageProfileSection(
                     modifier = Modifier.background(PickleTheme.colors.base0),
                     nickname = uiState.profile.nickname,
-                    badgeName = uiState.profile.badgeName,
                     onNicknameEditClick = onNavigateMyProfile,
-                    onMyBadgeClick = {},
                 )
             }
 

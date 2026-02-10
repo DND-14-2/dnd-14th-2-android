@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -18,14 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
-import com.smtm.pickle.presentation.designsystem.components.button.PickleBadge
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
 fun HomeProfile(
     modifier: Modifier = Modifier,
-    badge: String,
     nickname: String,
     income: Long,
     expense: Long,
@@ -46,11 +45,11 @@ fun HomeProfile(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            PickleBadge(text = badge)
             Text(
                 text = nickname,
                 style = PickleTheme.typography.head4SemiBold,
-                color = PickleTheme.colors.gray800
+                color = PickleTheme.colors.gray800,
+                modifier = Modifier.height(40.dp)
             )
         }
 
@@ -100,7 +99,6 @@ fun HomeProfile(
 private fun HomeProfilePreview() {
     PickleTheme {
         HomeProfile(
-            badge = "뱃지명",
             nickname = "나의닉네임",
             income = 1000000,
             expense = 500000,

@@ -16,21 +16,15 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 fun MyPageProfileSection(
     modifier: Modifier = Modifier,
     nickname: String,
-    badgeName: String,
     onNicknameEditClick: () -> Unit,
-    onMyBadgeClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 20.dp)
     ) {
         ProfileInfoRow(
             nickname = nickname,
-            badge = badgeName,
             onNicknameEditClick = onNicknameEditClick,
         )
-        Spacer(modifier = Modifier.height(20.dp))
-
-        ProfileMyBadgeCard(onMyBadgeClick = onMyBadgeClick)
     }
 }
 
@@ -40,9 +34,7 @@ private fun MyPageProfileSectionPreview() {
     PickleTheme {
         MyPageProfileSection(
             nickname = "유저 닉네임",
-            badgeName = "배지명",
             onNicknameEditClick = {},
-            onMyBadgeClick = {},
         )
     }
 }

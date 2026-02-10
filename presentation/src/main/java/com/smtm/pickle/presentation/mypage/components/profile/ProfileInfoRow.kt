@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -18,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleBadge
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -26,14 +24,13 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun ProfileInfoRow(
     nickname: String,
-    badge: String,
     onNicknameEditClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PickleProfile(type = ProfileType.Large)
+        PickleProfile(type = ProfileType.NORMAL)
         Spacer(modifier = Modifier.width(16.dp))
 
         Column {
@@ -57,9 +54,6 @@ fun ProfileInfoRow(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
-
-            PickleBadge(badge)
         }
     }
 }
@@ -70,7 +64,6 @@ private fun ProfileInfoRowPreview() {
     PickleTheme {
         ProfileInfoRow(
             nickname = "유저 닉네임",
-            badge = "배지명",
             onNicknameEditClick = {},
         )
     }

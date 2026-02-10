@@ -1,19 +1,25 @@
-package com.smtm.pickle.presentation.ledger.create
+package com.smtm.pickle.presentation.ledger.edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.ledger.CreateLedgerUseCase
+import androidx.navigation.toRoute
+import com.smtm.pickle.domain.model.ledger.LedgerId
+import com.smtm.pickle.domain.usecase.ledger.EditLedgerUseCase
+import com.smtm.pickle.domain.usecase.ledger.GetLedgerUseCase
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toDomain
+import com.smtm.pickle.presentation.common.model.ledger.toUiModel
+import com.smtm.pickle.presentation.navigation.route.LedgerEditRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,17 +27,56 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class LedgerCreateViewModel @Inject constructor(
-    private val createLedgerUseCase: CreateLedgerUseCase
+class LedgerEditViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val getLedgerUseCase: GetLedgerUseCase,
+    private val editLedgerUseCase: EditLedgerUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LedgerCreateUiState())
-    val uiState: StateFlow<LedgerCreateUiState> = _uiState.asStateFlow()
+    private val ledgerId: Long = savedStateHandle.toRoute<LedgerEditRoute>().ledgerId
+    private val _showExitDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showExitDialog: StateFlow<Boolean> = _showExitDialog.asStateFlow()
 
-    private val _effect: Channel<LedgerCreateEffect> = Channel<LedgerCreateEffect>(Channel.BUFFERED)
-    val effect: Flow<LedgerCreateEffect> = _effect.receiveAsFlow()
+    private val _uiState: MutableStateFlow<LedgerUpdateUiState> = MutableStateFlow(LedgerUpdateUiState())
+    val uiState: StateFlow<LedgerUpdateUiState> = _uiState.asStateFlow()
 
-    fun setStep(step: LedgerCreateStep) {
+    private val _effect: MutableSharedFlow<LedgerEditEffect> = MutableSharedFlow(replay = 0)
+    val effect: SharedFlow<LedgerEditEffect> = _effect.asSharedFlow()
+
+    init {
+        loadLedger()
+    }
+
+    private fun loadLedger() {
+        viewModelScope.launch {
+            getLedgerUseCase(LedgerId(ledgerId))
+                .onSuccess { ledger ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            date = ledger.occurredOn,
+                            firstStepState = state.firstStepState.copy(
+                                amount = ledger.amount.value.toString(),
+                                selectedLedgerType = ledger.type.toUiModel(),
+                                selectedCategory = ledger.category.toUiModel(),
+                                description = ledger.description,
+                            ),
+                            secondStepState = state.secondStepState.copy(
+                                selectedPaymentMethod = ledger.paymentMethod.toUiModel(),
+                                memo = ledger.memo ?: "",
+                            )
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "loadLedger() ledger not found: ledgerId=$ledgerId")
+                    _effect.emit(LedgerEditEffect.NavigateBack)
+                }
+
+        }
+    }
+
+    fun setStep(step: LedgerEditStep) {
         _uiState.update { state -> state.copy(step = step) }
     }
 
@@ -83,17 +128,18 @@ class LedgerCreateViewModel @Inject constructor(
         }
     }
 
-    fun createLedger(date: LocalDate, defaultDescription: String?) {
+    fun editLedger(defaultDescription: String?) {
         val firstStepState = _uiState.value.firstStepState
         val amount = firstStepState.amount.toLongOrNull()
         val category = firstStepState.selectedCategory?.toDomain()
         val secondStepState = _uiState.value.secondStepState
         val paymentMethod = secondStepState.selectedPaymentMethod?.toDomain()
+        val date = _uiState.value.date
 
-        if (amount == null || category == null || paymentMethod == null || defaultDescription == null) {
-            Timber.e("createLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod")
+        if (amount == null || amount <= 0 || category == null || paymentMethod == null || defaultDescription == null) {
+            Timber.e("updateLedger() called with invalid state: amount=$amount, category=$category, paymentMethod=$paymentMethod, date=$date")
             viewModelScope.launch {
-                _effect.send(LedgerCreateEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
+                _effect.emit(LedgerEditEffect.ShowSnackBar("입력한 정보를 확인해주세요"))
             }
             return
         }
@@ -103,7 +149,8 @@ class LedgerCreateViewModel @Inject constructor(
         val memo = secondStepState.memo.ifBlank { null }
 
         viewModelScope.launch {
-            createLedgerUseCase(
+            editLedgerUseCase(
+                ledgerId = ledgerId,
                 amount = amount,
                 type = type,
                 category = category,
@@ -112,35 +159,36 @@ class LedgerCreateViewModel @Inject constructor(
                 paymentMethod = paymentMethod,
                 memo = memo,
             ).onSuccess {
-                _effect.send(LedgerCreateEffect.NavigateToHome)
+                _effect.emit(LedgerEditEffect.NavigateBack)
             }.onFailure { e ->
-                Timber.e(e, "createLedger() failed")
-                _effect.send(LedgerCreateEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
+                Timber.e(e, "updateLedger() failed")
+                _effect.emit(LedgerEditEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
             }
         }
     }
 
     fun showExitDialog() {
-        _uiState.update { state -> state.copy(showExitDialog = true) }
+        _showExitDialog.update { true }
     }
 
     fun dismissExitDialog() {
-        _uiState.update { it.copy(showExitDialog = false) }
+        _showExitDialog.update { false }
     }
 
     fun confirmExit() {
-        _uiState.update { it.copy(showExitDialog = false) }
+        _showExitDialog.update { false }
         viewModelScope.launch {
-            _effect.send(LedgerCreateEffect.NavigateBack)
+            _effect.emit(LedgerEditEffect.NavigateBack)
         }
     }
 }
 
-data class LedgerCreateUiState(
-    val step: LedgerCreateStep = LedgerCreateStep.First,
+data class LedgerUpdateUiState(
+    val isLoading: Boolean = true,
+    val step: LedgerEditStep = LedgerEditStep.First,
+    val date: LocalDate = LocalDate.now(),
     val firstStepState: FirstStepState = FirstStepState(),
     val secondStepState: SecondStepState = SecondStepState(),
-    val showExitDialog: Boolean = false,
 ) {
     data class FirstStepState(
         val amount: String = "",
@@ -162,10 +210,9 @@ data class LedgerCreateUiState(
     }
 }
 
-sealed interface LedgerCreateEffect {
-    data object NavigateToHome : LedgerCreateEffect
-    data object NavigateBack : LedgerCreateEffect
-    data class ShowSnackBar(val msg: String) : LedgerCreateEffect
+sealed interface LedgerEditEffect {
+    data object NavigateBack : LedgerEditEffect
+    data class ShowSnackBar(val msg: String) : LedgerEditEffect
 }
 
-enum class LedgerCreateStep { First, Second }
+enum class LedgerEditStep { First, Second }

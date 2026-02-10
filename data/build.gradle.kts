@@ -37,18 +37,13 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = false // 난독화 on/off
             val url = localProperties.requireNotBlank("BASE_URL_DEBUG")
             buildConfigField("String", "BASE_URL", "\"$url\"")
         }
 
         release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
             val url = localProperties.requireNotBlank("BASE_URL_RELEASE")
             buildConfigField("String", "BASE_URL", "\"$url\"")
-
         }
 
         create("qa") {

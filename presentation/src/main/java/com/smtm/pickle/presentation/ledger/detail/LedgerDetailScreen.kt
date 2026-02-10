@@ -35,6 +35,7 @@ private val GradBottom = Color(0xFFC4EEEB)
 fun LedgerDetailScreen(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
+    onNavigateToEdit: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,6 +48,10 @@ fun LedgerDetailScreen(
                 when (effect) {
                     is LedgerDetailEffect.NavigateToHome -> {
                         onNavigateToHome()
+                    }
+
+                    is LedgerDetailEffect.NavigateToEdit -> {
+                        onNavigateToEdit()
                     }
 
                     is LedgerDetailEffect.ShowSnackBar -> {
@@ -73,6 +78,7 @@ fun LedgerDetailScreen(
     LedgerDetailContent(
         uiState = uiState,
         onNavigateToHome = viewModel::navigateToHome,
+        onEditClick = viewModel::navigateToUpdate,
         onDeleteButtonClick = viewModel::showDeleteDialog,
     )
 }
@@ -81,6 +87,7 @@ fun LedgerDetailScreen(
 private fun LedgerDetailContent(
     uiState: LedgerDetailUiState,
     onNavigateToHome: () -> Unit,
+    onEditClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
 ) {
     Column(
@@ -94,7 +101,7 @@ private fun LedgerDetailContent(
     ) {
         LedgerDetailAppBar(
             onBackClick = onNavigateToHome,
-            onEditClick = {},
+            onEditClick = onEditClick,
             onDeleteClick = onDeleteButtonClick
         )
 

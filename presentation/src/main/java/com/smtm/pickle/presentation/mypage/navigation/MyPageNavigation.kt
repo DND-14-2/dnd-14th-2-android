@@ -9,6 +9,7 @@ import com.smtm.pickle.presentation.mypage.profile.ProfileScreen
 import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSettingScreen
 import com.smtm.pickle.presentation.mypage.setting.SettingScreen
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
+import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
@@ -20,6 +21,9 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         MyLedgerScreen(
             onNavigateToLedgerDetail = { ledgerId ->
                 navController.navigate(LedgerDetailRoute(ledgerId.value))
+            },
+            onNavigateToLedgerCreate = { date ->
+                navController.navigate(LedgerCreateRoute.from(date))
             },
             onNavigateBack = {
                 navController.popBackStack()

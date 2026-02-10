@@ -21,7 +21,7 @@ class GoogleAuthDataSource @Inject constructor(
 ) {
     private val credentialManager = CredentialManager.create(context)
 
-    suspend fun getIdToken(): Result<String> = try {
+    suspend fun getIdToken(): String = try {
         val googleLoginOption = GetSignInWithGoogleOption.Builder(
             serverClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
         )
@@ -42,18 +42,17 @@ class GoogleAuthDataSource @Inject constructor(
         val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(response.credential.data)
 
         // 서버 전송용 구글 고유 식별자(사용자 검증용)
-        val idToken = googleIdTokenCredential.idToken
+        googleIdTokenCredential.idToken
 
-        Result.success(idToken)
     } catch (e: GetCredentialCancellationException) { // TODO: 추후 도메인 오류들로 변경
         Timber.e(e, "구글 로그인 - 사용자 취소")
-        Result.failure(e)
+        throw e
     } catch (e: GetCredentialException) {
         Timber.e(e, "구글 로그인 - 인증 실패")
-        Result.failure(e)
+        throw e
     } catch (e: Exception) {
         Timber.e(e, "구글 로그인 중 알 수 없는 오류 발생")
-        Result.failure(e)
+        throw e
     }
 
     /** 보안 강화용 Nonce 생성 - 재사용 공격 방지 */

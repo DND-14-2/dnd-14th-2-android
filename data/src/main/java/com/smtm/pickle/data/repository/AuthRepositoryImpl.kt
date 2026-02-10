@@ -22,7 +22,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun socialLogin(
         token: String,
         type: SocialLoginType
-    ): Result<AuthToken> = runCatching {
+    ): AuthToken {
 
         val response = authService.socialLogin(
             request = LoginRequest(
@@ -35,19 +35,20 @@ class AuthRepositoryImpl @Inject constructor(
 
         tokenProvider.saveToken(authToken)
 
-        authToken
+        return authToken
     }
 
     /** Google 토큰 획득 -> 로그인 */
-    override suspend fun loginWithGoogle(): Result<AuthToken> =
-        googleAuthDataSource.getIdToken().mapCatching { idToken ->
-            socialLogin(
-                token = idToken,
-                type = SocialLoginType.GOOGLE
-            ).getOrThrow()
-        }
+    override suspend fun loginWithGoogle(): AuthToken {
+        val idToken = googleAuthDataSource.getIdToken()
 
-    override suspend fun withdrawAccount(): Result<Unit> = runCatching {
+        return socialLogin(
+            token = idToken,
+            type = SocialLoginType.GOOGLE
+        )
+    }
+
+    override suspend fun withdrawAccount() {
         authService.withdrawAccount()
         tokenProvider.clearToken()
     }

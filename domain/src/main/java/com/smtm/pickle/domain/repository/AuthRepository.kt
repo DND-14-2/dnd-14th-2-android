@@ -8,9 +8,9 @@ interface AuthRepository {
     suspend fun socialLogin(
         token: String,
         type: SocialLoginType,
-    ): Result<AuthToken>
+    ): AuthToken
 
-    suspend fun loginWithGoogle(): Result<AuthToken>
+    suspend fun loginWithGoogle(): AuthToken
 
-    suspend fun withdrawAccount(): Result<Unit>
+    suspend fun withdrawAccount()
 }

@@ -9,6 +9,7 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.smtm.pickle.data.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.security.MessageDigest
 import java.util.UUID
@@ -49,6 +50,8 @@ class GoogleAuthDataSource @Inject constructor(
         throw e
     } catch (e: GetCredentialException) {
         Timber.e(e, "구글 로그인 - 인증 실패")
+        throw e
+    } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {
         Timber.e(e, "구글 로그인 중 알 수 없는 오류 발생")

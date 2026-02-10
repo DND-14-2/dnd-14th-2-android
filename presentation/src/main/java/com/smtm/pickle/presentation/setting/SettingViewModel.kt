@@ -1,8 +1,5 @@
 package com.smtm.pickle.presentation.setting
 
-import android.content.Context
-import android.content.Intent
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.auth.LogoutUseCase
@@ -106,24 +103,6 @@ class SettingViewModel @Inject constructor(
     fun onVersionClick() {
         viewModelScope.launch {
             _effect.emit(SettingEffect.OpenGooglePlay)
-        }
-    }
-
-    fun openGooglePlay(context: Context) {
-        val packageName = context.packageName
-
-        // Google Play Store Uri
-        val storeUri = "market://details?id=$packageName".toUri()
-        val storeIntent = Intent(Intent.ACTION_VIEW, storeUri)
-
-        // 웹 브라우저 Uri
-        val webUri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
-        val webIntent = Intent(Intent.ACTION_VIEW, webUri)
-
-        try {
-            context.startActivity(storeIntent)
-        } catch (_: Exception) {
-            context.startActivity(webIntent)
         }
     }
 }

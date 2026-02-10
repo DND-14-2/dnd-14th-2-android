@@ -1,5 +1,7 @@
 package com.smtm.pickle.presentation.setting
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -64,7 +67,7 @@ fun SettingScreen(
                     }
 
                     SettingEffect.OpenGooglePlay -> {
-                        viewModel.openGooglePlay(context)
+                        openGooglePlay(context)
                     }
 
                     is SettingEffect.ShowSnackBar -> {
@@ -202,6 +205,25 @@ private fun DialogContent(
         color = PickleTheme.colors.gray600,
         textAlign = TextAlign.Center
     )
+}
+
+fun openGooglePlay(context: Context) {
+    val packageName = context.packageName
+
+    // Google Play Store Uri
+    val storeUri = "market://details?id=$packageName".toUri()
+    val storeIntent = Intent(Intent.ACTION_VIEW, storeUri)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+    // 웹 브라우저 Uri
+    val webUri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+    val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+
+    try {
+        context.startActivity(storeIntent)
+    } catch (_: Exception) {
+        context.startActivity(webIntent)
+    }
 }
 
 @Preview

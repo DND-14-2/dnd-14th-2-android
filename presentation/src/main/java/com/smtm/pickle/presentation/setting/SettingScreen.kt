@@ -51,7 +51,7 @@ fun SettingScreen(
     val snackbarState = remember { SnackbarState() }
 
     LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
                     SettingEffect.NavigateToPrivacyPolicy -> {

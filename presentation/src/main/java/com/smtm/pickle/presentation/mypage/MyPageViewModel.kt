@@ -2,33 +2,79 @@ package com.smtm.pickle.presentation.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.model.ledger.Ledger
+import com.smtm.pickle.domain.model.ledger.LedgerType
+import com.smtm.pickle.domain.model.ledger.summarize
+import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByMonthUseCase
 import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
-import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    getNicknameUseCase: ObserveNicknameUseCase
+    private val getNicknameUseCase: ObserveNicknameUseCase,
+    private val observeLedgersByMonthUseCase: ObserveLedgersByMonthUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(createMockUiState())
+    private val _uiState = MutableStateFlow(MyPageUiState())
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
     init {
+        observeNickname()
+        observeStatistics()
+    }
+
+    private fun observeNickname() {
         viewModelScope.launch {
             getNicknameUseCase().collect { nickname ->
                 _uiState.update { state ->
                     state.copy(
                         profile = state.profile.copy(nickname = nickname)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeStatistics() {
+        viewModelScope.launch {
+            val now = YearMonth.now()
+            observeLedgersByMonthUseCase(
+                yearMonth = now,
+                backwardMonths = 1,
+                forwardMonths = 0,
+            ).collect { ledgers ->
+                val byMonth = ledgers.groupBy { YearMonth.from(it.occurredOn) }
+                val thisMonth = byMonth[now].orEmpty()
+                val lastMonth = byMonth[now.minusMonths(1)].orEmpty()
+
+                val thisMonthSummary = thisMonth.summarize()
+                val lastMonthSummary = lastMonth.summarize()
+
+                _uiState.update { state ->
+                    state.copy(
+                        statistics = MyPageUiState.StatisticsState(
+                            selectedTabIndex = state.statistics.selectedTabIndex,
+                            expenditure = MyPageUiState.StatisticsDetailState(
+                                totalAmount = thisMonthSummary.totalExpense,
+                                comparedToPreviousMonth = thisMonthSummary.totalExpense - lastMonthSummary.totalExpense,
+                                month = now.monthValue,
+                                chartItems = thisMonth.toChartItems(LedgerType.Expense),
+                            ),
+                            income = MyPageUiState.StatisticsDetailState(
+                                totalAmount = thisMonthSummary.totalIncome,
+                                comparedToPreviousMonth = thisMonthSummary.totalIncome - lastMonthSummary.totalIncome,
+                                month = now.monthValue,
+                                chartItems = thisMonth.toChartItems(LedgerType.Income),
+                            ),
+                        )
                     )
                 }
             }
@@ -43,72 +89,16 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private fun createMockUiState(): MyPageUiState {
-        return MyPageUiState(
-            profile = MyPageUiState.ProfileState(
-                nickname = "유저 닉네임",
-                badgeName = "배지명",
-                invitationCode = "PICKLE2026"
-            ),
-            statistics = MyPageUiState.StatisticsState(
-                selectedTabIndex = 0,
-                expenditure = MyPageUiState.StatisticsDetailState(
-                    totalAmount = 1_250_000L,
-                    comparedToPreviousMonth = 35_000L,
-                    month = 2,
-                    chartItems = listOf(
-                        MyPageUiState.ChartItemState("저축/금융", 28f, 0xFFFF9429),
-                        MyPageUiState.ChartItemState("식비", 30f, 0xFF2BC4C1),
-                        MyPageUiState.ChartItemState("쇼핑", 20f, 0xFFFF70A7),
-                        MyPageUiState.ChartItemState("교통비", 15f, 0xFFFFDD52),
-                        MyPageUiState.ChartItemState("여가/취미", 12f, 0xFFB362FF),
-                        MyPageUiState.ChartItemState("주거비", 10f, 0xFF4493FF),
-                        MyPageUiState.ChartItemState("의료/건강", 8f, 0xFF63C3FF),
-                        MyPageUiState.ChartItemState("기타", 5f, 0xFFAAAAAA),
-                        MyPageUiState.ChartItemState("교육/자기계발", 4f, 0xFF75C375),
-                    )
-                ),
-                income = MyPageUiState.StatisticsDetailState(
-                    totalAmount = 3_200_000L,
-                    comparedToPreviousMonth = 200_000L,
-                    month = 2,
-                    chartItems = emptyList()
+    private fun List<Ledger>.toChartItems(type: LedgerType): List<MyPageUiState.ChartItemState> =
+        filter { it.type == type }
+            .groupBy { it.category }
+            .map { (category, items) ->
+                val uiModel = category.toUiModel()
+                MyPageUiState.ChartItemState(
+                    labelResId = uiModel.stringResId,
+                    value = items.sumOf { it.amount.value }.toFloat(),
+                    colorHex = uiModel.chartColorHex,
                 )
-            ),
-            activity = MyPageUiState.ActivityState(
-                pendingJudgments = listOf(
-                    MyPageUiState.PendingJudgmentState(
-                        id = "1",
-                        title = "식비",
-                        price = 10000L,
-                        iconRes = R.drawable.ic_mypage_coin
-                    ),
-                    MyPageUiState.PendingJudgmentState(
-                        id = "2",
-                        title = "식비",
-                        price = 10000L,
-                        iconRes = R.drawable.ic_mypage_coin
-                    ),
-                    MyPageUiState.PendingJudgmentState(
-                        id = "3",
-                        title = "식비",
-                        price = 10000L,
-                        iconRes = R.drawable.ic_mypage_coin
-                    ),
-                    MyPageUiState.PendingJudgmentState(
-                        id = "4",
-                        title = "식비",
-                        price = 10000L,
-                        iconRes = R.drawable.ic_mypage_coin
-                    ),
-                    MyPageUiState.PendingJudgmentState(
-                        id = "5",
-                        title = "식비",
-                        price = 10000L,
-                        iconRes = R.drawable.ic_mypage_coin
-                    )
-                )
-            ),
-        )
-    }
+            }
+            .sortedByDescending { it.value }
 }

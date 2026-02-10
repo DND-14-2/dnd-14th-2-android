@@ -2,6 +2,8 @@ package com.smtm.pickle.presentation.designsystem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +21,11 @@ fun PickleBrandLogo(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        PickleLogo()
+        PickleLogo(
+            modifier = Modifier
+                .size(width = 280.dp, height = 130.dp)
+                .padding(horizontal = 19.dp, vertical = 17.dp)
+        )
 
         Text(
             text = stringResource(R.string.common_typo),

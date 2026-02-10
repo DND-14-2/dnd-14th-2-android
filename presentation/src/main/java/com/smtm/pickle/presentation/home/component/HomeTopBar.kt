@@ -34,7 +34,11 @@ fun HomeTopBar(
             .padding(start = 16.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PickleLogo(width = 58.dp, height = 28.dp)
+        PickleLogo(
+            modifier = Modifier
+                .size(width = 58.dp, height = 28.dp)
+                .padding(4.dp)
+        )
 
         Spacer(modifier = Modifier.weight(1f))
         IconButton(

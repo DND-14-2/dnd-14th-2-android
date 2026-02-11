@@ -34,7 +34,7 @@ private val GradBottom = Color(0xFFC4EEEB)
 @Composable
 fun LedgerDetailScreen(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
-    onNavigateToHome: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToEdit: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -46,8 +46,8 @@ fun LedgerDetailScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
-                    is LedgerDetailEffect.NavigateToHome -> {
-                        onNavigateToHome()
+                    is LedgerDetailEffect.NavigateBack -> {
+                        onNavigateBack()
                     }
 
                     is LedgerDetailEffect.NavigateToEdit -> {
@@ -77,7 +77,7 @@ fun LedgerDetailScreen(
 
     LedgerDetailContent(
         uiState = uiState,
-        onNavigateToHome = viewModel::navigateToHome,
+        onNavigateBack = viewModel::navigateBack,
         onEditClick = viewModel::navigateToUpdate,
         onDeleteButtonClick = viewModel::showDeleteDialog,
     )
@@ -86,7 +86,7 @@ fun LedgerDetailScreen(
 @Composable
 private fun LedgerDetailContent(
     uiState: LedgerDetailUiState,
-    onNavigateToHome: () -> Unit,
+    onNavigateBack: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
 ) {
@@ -100,7 +100,7 @@ private fun LedgerDetailContent(
             ),
     ) {
         LedgerDetailAppBar(
-            onBackClick = onNavigateToHome,
+            onBackClick = onNavigateBack,
             onEditClick = onEditClick,
             onDeleteClick = onDeleteButtonClick
         )

@@ -1,5 +1,7 @@
 package com.smtm.pickle.presentation.mypage
 
+import androidx.annotation.StringRes
+
 data class MyPageUiState(
     val profile: ProfileState = ProfileState(),
     val statistics: StatisticsState = StatisticsState(),
@@ -25,7 +27,7 @@ data class MyPageUiState(
     )
 
     data class ChartItemState(
-        val label: String,
+        @StringRes val labelResId: Int,
         val value: Float,
         val colorHex: Long,
     )

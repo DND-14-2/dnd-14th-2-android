@@ -37,7 +37,6 @@ import java.time.LocalDate
 fun LedgerCreateScreen(
     date: LocalDate,
     onNavigateBack: () -> Unit,
-    onNavigateToHome: () -> Unit,
     viewModel: LedgerCreateViewModel = hiltViewModel(),
 ) {
 
@@ -60,10 +59,6 @@ fun LedgerCreateScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
-                    LedgerCreateEffect.NavigateToHome -> {
-                        onNavigateToHome()
-                    }
-
                     LedgerCreateEffect.NavigateBack -> {
                         onNavigateBack()
                     }

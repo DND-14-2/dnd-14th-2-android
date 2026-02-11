@@ -112,7 +112,7 @@ class LedgerCreateViewModel @Inject constructor(
                 paymentMethod = paymentMethod,
                 memo = memo,
             ).onSuccess {
-                _effect.send(LedgerCreateEffect.NavigateToHome)
+                _effect.send(LedgerCreateEffect.NavigateBack)
             }.onFailure { e ->
                 Timber.e(e, "createLedger() failed")
                 _effect.send(LedgerCreateEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
@@ -163,7 +163,6 @@ data class LedgerCreateUiState(
 }
 
 sealed interface LedgerCreateEffect {
-    data object NavigateToHome : LedgerCreateEffect
     data object NavigateBack : LedgerCreateEffect
     data class ShowSnackBar(val msg: String) : LedgerCreateEffect
 }

@@ -38,7 +38,9 @@
     <string name="common_income">수입</string>
     <string name="common_expense">지출</string>
     <string name="common_minus_str">-%s</string>
+    <string name="common_minus_str_won">-%s원</string>
     <string name="common_plus_str">+%s</string>
+    <string name="common_plus_str_won">+%s원</string>
     <string name="common_yyyy_mm_dd_dot">%d.%02d.%02d</string>
     <string name="common_yyyy_mm_dd">%d년 %d월 %d일</string>
     <string name="common_yyyy_mm">%d년 %d월</string>
@@ -112,6 +114,10 @@
     <string name="ledger_edit_exit_dialog_negative">나가기</string>
     <string name="ledger_edit_exit_dialog_positive">작성하기</string>
     <string name="ledger_edit_success">입력완료</string>
+
+    <!-- My Ledger -->
+    <string name="my_ledger_title">내 장부</string>
+    <string name="my_ledger_month">%d월</string>
 
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>

@@ -95,7 +95,7 @@ class HomeViewModel @Inject constructor(
                     YearMonth.from(it.occurredOn) == yearMonth
                 }
                 val summary = currentMonthLedgers.summarize()
-                val ledgerCalendarDays = currentMonthLedgers.toLedgerCalendarDays()
+                val ledgerCalendarDays = ledgers.toLedgerCalendarDays()
 
                 _uiState.update { state ->
                     state.copy(

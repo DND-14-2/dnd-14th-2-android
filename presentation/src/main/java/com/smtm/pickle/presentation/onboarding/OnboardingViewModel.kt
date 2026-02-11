@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,11 +22,13 @@ class OnboardingViewModel @Inject constructor(
 
     fun completeOnboarding() {
         viewModelScope.launch {
-            runCatching {
-                setOnboardingCompleteUseCase()
-            }.onSuccess {
-                _effect.emit(OnboardingEffect.NavigateToLogin)
-            }
+            setOnboardingCompleteUseCase()
+                .onSuccess {
+                    _effect.emit(OnboardingEffect.NavigateToLogin)
+                }
+                .onFailure {
+                    Timber.e(it, "온보딩 완료 실패")
+                }
         }
     }
 

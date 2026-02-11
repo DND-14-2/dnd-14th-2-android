@@ -122,4 +122,72 @@
     <!-- Home -->
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 
+    <!-- Setting -->
+    <string name="setting_account_title">계정 설정</string>
+    <string name="setting_account_logout">로그아웃</string>
+    <string name="setting_account_secession">계정탈퇴</string>
+    <string name="setting_service_title">서비스 설정</string>
+    <string name="setting_service_privacy_policy">개인정보 처리방침</string>
+    <string name="setting_service_notification">알림 설정</string>
+    <string name="setting_service_version">앱 버전 정보</string>
+    <string name="setting_dialog_dismiss">돌아가기</string>
+    <string name="setting_dialog_logout_title">로그아웃하시겠어요?</string>
+    <string name="setting_dialog_logout_description">언제든 다시 로그인하고\n서비스를 이용할 수 있어요</string>
+    <string name="setting_dialog_logout_confirm">로그아웃</string>
+    <string name="setting_dialog_withdraw_title">정말 떠나실건가요?..</string>
+    <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
+    <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
+
+    <!-- Privacy Policy -->
+    <string name="privacy_policy_title">개인정보 처리방침</string>
+    <string name="privacy_policy_subtitle">피클 - 개인정보처리방침</string>
+    <string name="privacy_policy_description">본 개인정보처리방침은 소비심판(이하 “서비스”)가 제공하는 로그인 기능과 관련하여, 이용자의 개인정보를 어떻게 수집·이용·보관하는지 설명합니다.</string>
+    <string name="privacy_policy_contents">"수집하는 개인정보 항목
+1. 본 서비스는 Google 로그인을 통해서만 사용자 인증을 수행하며, 다음 정보만을 수집합니다.
+  - Google 계정 고유 식별자
+  - 이메일 주소
+  - 프로필 정보(이름, 프로필 이미지 등 Google 계정에 설정된 기본 정보)
+※ 비밀번호는 수집하거나 저장하지 않습니다.
+
+2. 개인정보 수집 및 이용 목적
+수집한 개인정보는 다음 목적에 한해 이용됩니다.
+  - 사용자 식별 및 로그인 인증
+  - 서비스 이용을 위한 사용자 계정 관리
+본 서비스는 **로그인 기능 외의 목적(마케팅, 광고 등)**으로 개인정보를 이용하지 않습니다.
+
+3. 개인정보 보관 및 이용 기간
+  - 사용자가 서비스 이용을 종료하거나 로그아웃하는 경우
+  - 또는 개인정보 수집·이용 목적이 달성된 경우
+지체 없이 해당 개인정보를 파기합니다.
+단, 관련 법령에 따라 일정 기간 보관이 필요한 경우에는 해당 법령을 따릅니다.
+ 4. 개인정보의 제3자 제공
+본 서비스는 이용자의 개인정보를 제3자에게 제공하지 않습니다.
+다만, 로그인 인증을 위해 Google OAuth 서비스를 이용하며, 이 과정에서 Google의 개인정보처리방침이 적용됩니다.
+
+Google 개인정보처리방침: https://policies.google.com/privacy
+
+5. 개인정보 처리 위탁
+본 서비스는 로그인 기능 제공을 위해 Google의 인증 서비스를 이용하며, 그 외 개인정보 처리 업무를 외부에 위탁하지 않습니다.
+
+6. 이용자의 권리
+이용자는 언제든지 다음 권리를 행사할 수 있습니다.
+  - 개인정보 열람 요청
+  - 개인정보 삭제 요청
+  - 서비스 이용 중단 요청
+관련 요청은 아래 문의처를 통해 접수하실 수 있습니다.
+
+7. 개인정보 보호를 위한 조치
+본 서비스는 개인정보 보호를 위해 다음과 같은 조치를 취하고 있습니다.
+  - OAuth 2.0 기반의 Google 로그인 사용
+  - 서버 통신 시 암호화 적용
+  - 접근 권한 최소화
+
+8. 개인정보 보호책임자 및 문의처
+  - 책임자: 이주혁
+  - 이메일: zero5.two4@gmail.com
+
+9. 개인정보처리방침 변경
+본 개인정보처리방침의 내용이 변경될 경우, 변경 사항을 사전에 공지합니다.
+
+시행일자: 2026년 1월 12일"</string>
 </resources>

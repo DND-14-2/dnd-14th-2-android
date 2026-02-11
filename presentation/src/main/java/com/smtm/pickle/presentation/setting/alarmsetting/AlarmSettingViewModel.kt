@@ -1,11 +1,11 @@
-package com.smtm.pickle.presentation.mypage.setting
+package com.smtm.pickle.presentation.setting.alarmsetting
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingViewModel @Inject constructor(
+class AlarmSettingViewModel @Inject constructor(
 
 ) : ViewModel() {
 }

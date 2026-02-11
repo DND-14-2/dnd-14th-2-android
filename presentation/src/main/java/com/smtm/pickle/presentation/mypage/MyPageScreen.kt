@@ -93,7 +93,7 @@ private fun MyPageContent(
                             iconSize = 48.dp,
                         )
                     },
-                    isInScaffold = false
+                    isInMainRoute = true
                 )
             }
 

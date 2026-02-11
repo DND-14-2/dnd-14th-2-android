@@ -41,12 +41,16 @@ class NicknameSettingViewModel @Inject constructor(
 
     private fun initializeNickname() {
         viewModelScope.launch {
-            val nickname = getNicknameUseCase()
-            savedNickname = nickname
+            getNicknameUseCase()
+                .onSuccess { nickname ->
+                    savedNickname = nickname
 
-            _uiState.update {
-                it.copy(editingNickname = nickname)
-            }
+                    _uiState.update {
+                        it.copy(editingNickname = nickname)
+                    }
+                }.onFailure { e ->
+                    Timber.e(e, "닉네임 초기화 실패")
+                }
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarDuration
@@ -21,6 +22,7 @@ fun BackPressFinishHandler(
 ) {
     val context = LocalContext.current
     var backPressedTime by remember { mutableLongStateOf(0L) }
+    val message = stringResource(R.string.back_pressed_message)
 
     BackHandler {
         val currentTime = System.currentTimeMillis()
@@ -31,7 +33,7 @@ fun BackPressFinishHandler(
             backPressedTime = currentTime
             snackBarState.show(
                 PickleSnackbar.custom(
-                    message = context.getString(R.string.back_pressed_message),
+                    message = message,
                     duration = SnackbarDuration.TOAST_SHORT.duration,
                     position = SnackbarPosition.AboveBottomContents
                 )

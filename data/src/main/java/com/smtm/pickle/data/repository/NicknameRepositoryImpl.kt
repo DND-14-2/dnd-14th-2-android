@@ -14,11 +14,7 @@ class NicknameRepositoryImpl @Inject constructor(
     private val userApi: UserApi
 ) : NicknameRepository {
 
-    private val _nicknameFlow = MutableStateFlow("")
-
-    // TODO: 중복 체크 API 삭제 예정
-    override suspend fun isNicknameAvailable(nickname: String): Boolean = true
-
+    private val _nicknameFlow = MutableStateFlow("닉네임")
 
     override suspend fun saveNickname(nickname: String) {
         userApi.changeNickname(NicknameRequest(nickname))

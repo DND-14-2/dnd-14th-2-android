@@ -11,13 +11,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.login.nickname.components.CheckDuplicateButton
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
 import com.smtm.pickle.presentation.mypage.profile.components.NicknameSettingBaseContent
 
@@ -27,11 +29,14 @@ fun NicknameSettingScreen(
     viewModel: NicknameSettingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                NicknameSettingEffect.NavigateToBack -> onBackClick()
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    NicknameSettingEffect.NavigateToBack -> onBackClick()
+                }
             }
         }
     }
@@ -39,7 +44,6 @@ fun NicknameSettingScreen(
     NicknameSettingContent(
         uiState = uiState,
         onNicknameChange = viewModel::onNicknameChanged,
-        onCheckDuplicate = viewModel::checkDuplicate,
         onSaveClick = viewModel::saveNickname,
         onBackClick = viewModel::onBackClick,
     )
@@ -49,7 +53,6 @@ fun NicknameSettingScreen(
 fun NicknameSettingContent(
     uiState: NicknameSettingUiState,
     onNicknameChange: (String) -> Unit,
-    onCheckDuplicate: () -> Unit,
     onSaveClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -68,7 +71,7 @@ fun NicknameSettingContent(
                     .padding(horizontal = 16.dp),
                 text = stringResource(R.string.nickname_edit_button),
                 onClick = onSaveClick,
-                enabled = uiState.canSubmit,
+                enabled = uiState.inputState is InputState.Success,
                 textColor = PickleTheme.colors.base0
             )
         }
@@ -81,21 +84,16 @@ fun NicknameSettingContent(
             defaultSupportingText = stringResource(R.string.nickname_helper),
             trailingIcon = {
                 if (uiState.isNicknameModified) {
-                    when {
-                        uiState.isAvailable == true -> {
+                    when (uiState.inputState) {
+                        is InputState.Success -> {
                             TrailingIcon(R.drawable.ic_textfield_success)
                         }
 
-                        uiState.inputState is InputState.Error -> {
+                        is InputState.Error -> {
                             TrailingIcon(R.drawable.ic_snackbar_fail)
                         }
 
-                        uiState.inputState is InputState.Success -> {
-                            CheckDuplicateButton(
-                                onClick = onCheckDuplicate,
-                                enabled = !uiState.isCheckingDuplicate && uiState.isAvailable == null
-                            )
-                        }
+                        else -> Unit
                     }
                 }
             },
@@ -110,7 +108,6 @@ private fun NicknameSettingPreview() {
         NicknameSettingContent(
             uiState = NicknameSettingUiState(),
             onNicknameChange = {},
-            onCheckDuplicate = {},
             onSaveClick = {},
             onBackClick = {}
         )

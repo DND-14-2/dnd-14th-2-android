@@ -6,8 +6,6 @@ import androidx.navigation.compose.composable
 import com.smtm.pickle.presentation.mypage.myledger.MyLedgerScreen
 import com.smtm.pickle.presentation.mypage.profile.ProfileScreen
 import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSettingScreen
-import com.smtm.pickle.presentation.mypage.setting.SettingScreen
-import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSettingScreen
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute

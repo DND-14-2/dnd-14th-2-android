@@ -18,6 +18,7 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.model.Snack
 @Composable
 fun BackPressFinishHandler(
     snackBarState: SnackbarState,
+    position: SnackbarPosition = SnackbarPosition.AboveBottomContents,
     backPressedMillis: Long = 2000L,
 ) {
     val context = LocalContext.current
@@ -35,7 +36,7 @@ fun BackPressFinishHandler(
                 PickleSnackbar.custom(
                     message = message,
                     duration = SnackbarDuration.TOAST_SHORT.duration,
-                    position = SnackbarPosition.AboveBottomContents
+                    position = position
                 )
             )
         }

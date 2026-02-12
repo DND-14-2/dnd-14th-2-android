@@ -69,6 +69,8 @@ fun MainScreen(
             rootNavController = rootNavController,
             tabNavController = tabNavController,
             currentDestination = currentDestination,
+            isFabExpanded = isFabExpanded,
+            onFabClose = { isFabExpanded = false },
             onBottomBarHeightChange = { height ->
                 with(density) {
                     bottomBarHeight = height.toDp()
@@ -111,6 +113,8 @@ private fun MainContent(
     rootNavController: NavHostController,
     tabNavController: NavHostController,
     currentDestination: NavDestination?,
+    isFabExpanded: Boolean,
+    onFabClose: () -> Unit,
     onBottomBarHeightChange: (Int) -> Unit,
     onSelectedDateChange: (LocalDate) -> Unit,
 ) {
@@ -141,9 +145,11 @@ private fun MainContent(
                 composable<HomeTabRoute> {
                     HomeScreen(
                         onSelectedDateChange = onSelectedDateChange,
+                        isFabExpanded = isFabExpanded,
                         onNavigateToLedgerDetail = { ledgerId ->
                             rootNavController.navigate(LedgerDetailRoute(ledgerId.value))
-                        }
+                        },
+                        onFabClose = onFabClose,
                     )
                 }
 

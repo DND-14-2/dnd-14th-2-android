@@ -9,6 +9,7 @@ object Dimensions {
     /** 수입/지출 버튼 */
     val buttonHeightLarge = 60.dp
     val buttonHeight = 52.dp
+    val buttonCompactWidth = 96.dp
     /** 소셜 로그인, 다이얼로그 내 버튼 */
     val buttonHeightSmall = 48.dp
 

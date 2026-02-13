@@ -1,26 +1,20 @@
 package com.smtm.pickle.presentation.designsystem.components.button
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonPairDistribution
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonStyle
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.components.button.model.toColors
+import com.smtm.pickle.presentation.designsystem.components.button.model.toSpec
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
-import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions.buttonCompactWidth
 
 @Composable
 fun PickleButtonV2(
@@ -28,12 +22,14 @@ fun PickleButtonV2(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: PickleButtonStyle = PickleButtonStyle.Primary,
+    type: PickleButtonType = PickleButtonType.Primary,
+    size: PickleButtonSize = PickleButtonSize.Large,
 ) {
-    val buttonColors = style.toColors()
+    val buttonColors = type.toColors()
+    val buttonSize = size.toSpec()
 
     Button(
-        modifier = modifier.height(Dimensions.buttonHeight),
+        modifier = modifier.height(buttonSize.height),
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
@@ -42,90 +38,12 @@ fun PickleButtonV2(
             disabledContainerColor = buttonColors.disabledContainerColor,
             disabledContentColor = buttonColors.disabledContentColor,
         ),
-        shape = RoundedCornerShape(Dimensions.radius)
+        shape = RoundedCornerShape(Dimensions.radius),
+        contentPadding = PaddingValues(horizontal = buttonSize.horizontalPadding)
     ) {
         Text(
             text = text,
-            style = PickleTheme.typography.body1Bold,
-        )
-    }
-}
-
-@Composable
-fun PickleButtonPairRow(
-    positiveText: String,
-    negativeText: String,
-    onPositiveClick: () -> Unit,
-    onNegativeClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    distribution: PickleButtonPairDistribution = PickleButtonPairDistribution.Equal,
-    positiveButtonStyle: PickleButtonStyle = PickleButtonStyle.Primary,
-    negativeButtonStyle: PickleButtonStyle = PickleButtonStyle.Secondary,
-    positiveEnabled: Boolean = true,
-    negativeEnabled: Boolean = true,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val negativeModifier = when (distribution) {
-            PickleButtonPairDistribution.Equal -> Modifier.weight(1f)
-            PickleButtonPairDistribution.Compact -> Modifier.width(buttonCompactWidth)
-        }
-
-        PickleButtonV2(
-            modifier = negativeModifier,
-            text = negativeText,
-            onClick = onNegativeClick,
-            style = negativeButtonStyle,
-            enabled = negativeEnabled,
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        PickleButtonV2(
-            modifier = Modifier.weight(1f),
-            text = positiveText,
-            onClick = onPositiveClick,
-            style = positiveButtonStyle,
-            enabled = positiveEnabled,
-        )
-    }
-}
-
-@Composable
-fun PickleButtonPairColumn(
-    positiveText: String,
-    negativeText: String,
-    onPositiveClick: () -> Unit,
-    onNegativeClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    positiveButtonStyle: PickleButtonStyle = PickleButtonStyle.Primary,
-    negativeButtonStyle: PickleButtonStyle = PickleButtonStyle.Ghost,
-    positiveEnabled: Boolean = true,
-    negativeEnabled: Boolean = true,
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        PickleButtonV2(
-            modifier = Modifier.fillMaxWidth(),
-            text = positiveText,
-            onClick = onPositiveClick,
-            style = positiveButtonStyle,
-            enabled = positiveEnabled,
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        PickleButtonV2(
-            modifier = Modifier.fillMaxWidth(),
-            text = negativeText,
-            onClick = onNegativeClick,
-            style = negativeButtonStyle,
-            enabled = negativeEnabled,
+            style = buttonSize.textStyle,
         )
     }
 }
@@ -140,7 +58,7 @@ private fun PickleButtonV2PrimaryPreview() {
         PickleButtonV2(
             text = "Buttons",
             onClick = {},
-            style = PickleButtonStyle.Primary
+            type = PickleButtonType.Primary
         )
     }
 }
@@ -155,7 +73,7 @@ private fun PickleButtonV2SecondaryPreview() {
         PickleButtonV2(
             text = "Buttons",
             onClick = {},
-            style = PickleButtonStyle.Secondary
+            type = PickleButtonType.Secondary
         )
     }
 }
@@ -170,7 +88,7 @@ private fun PickleButtonV2TertiaryPreview() {
         PickleButtonV2(
             text = "Buttons",
             onClick = {},
-            style = PickleButtonStyle.Tertiary
+            type = PickleButtonType.Tertiary
         )
     }
 }
@@ -185,57 +103,55 @@ private fun PickleButtonV2GhostPreview() {
         PickleButtonV2(
             text = "Buttons",
             onClick = {},
-            style = PickleButtonStyle.Ghost
+            type = PickleButtonType.Ghost
         )
     }
 }
 
 @Preview(
-    name = "PickleButtonPairRowPreview - Equal",
+    name = "PickleButtonV2Preview - Primary Small",
     showBackground = true,
 )
 @Composable
-private fun PickleButtonPairRowEqualPreview() {
+private fun PickleButtonV2PrimarySmallPreview() {
     PickleTheme {
-        PickleButtonPairRow(
-            positiveText = "확인",
-            negativeText = "취소",
-            onPositiveClick = {},
-            onNegativeClick = {},
-            distribution = PickleButtonPairDistribution.Equal
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            type = PickleButtonType.Primary,
+            size = PickleButtonSize.Small
         )
     }
 }
 
 @Preview(
-    name = "PickleButtonPairRowPreview - Compact",
+    name = "PickleButtonV2Preview - Primary Medium",
     showBackground = true,
 )
 @Composable
-private fun PickleButtonPairRowCompactPreview() {
+private fun PickleButtonV2PrimaryMediumPreview() {
     PickleTheme {
-        PickleButtonPairRow(
-            positiveText = "확인",
-            negativeText = "취소",
-            onPositiveClick = {},
-            onNegativeClick = {},
-            distribution = PickleButtonPairDistribution.Compact
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            type = PickleButtonType.Primary,
+            size = PickleButtonSize.Medium
         )
     }
 }
 
 @Preview(
-    name = "PickleButtonPairColumnPreview",
+    name = "PickleButtonV2Preview - Primary Large",
     showBackground = true,
 )
 @Composable
-private fun PickleButtonPairColumnPreview() {
+private fun PickleButtonV2PrimaryLargePreview() {
     PickleTheme {
-        PickleButtonPairColumn(
-            positiveText = "확인",
-            negativeText = "취소",
-            onPositiveClick = {},
-            onNegativeClick = {},
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            type = PickleButtonType.Primary,
+            size = PickleButtonSize.Large
         )
     }
 }

@@ -57,6 +57,11 @@ class SnackbarState {
         }
     }
 
+    fun showImmediately(snackbarData: SnackbarData) {
+        currentSnackbar = null
+        currentSnackbar = snackbarData
+    }
+
     fun dismiss() {
         currentSnackbar = snackbarQueue.removeFirstOrNull()
     }

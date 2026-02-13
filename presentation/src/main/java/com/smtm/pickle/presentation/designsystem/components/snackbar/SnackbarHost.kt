@@ -1,11 +1,13 @@
 package com.smtm.pickle.presentation.designsystem.components.snackbar
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -87,14 +89,24 @@ fun SnackbarHost(
                 targetOffsetY = { fullHeight ->
                     if (alignment == Alignment.TopCenter) -fullHeight else fullHeight
                 }
-            ) + fadeOut(animationSpec = tween(300))
+            ) + fadeOut(animationSpec = tween(300)),
+            label = snackbar?.id ?: ""
         ) {
-            lastValidData?.let {
-                PickleSnackbar(
-                    snackbarData = it,
-                    modifier = Modifier.applyPositionPadding(it.position),
-                    onDismiss = snackbarState::dismiss
-                )
+            lastValidData?.let { data ->
+                AnimatedContent(
+                    targetState = data,
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(200)) togetherWith
+                                fadeOut(animationSpec = tween(200))
+                    },
+                    label = "snackbar_content"
+                ) { currentData ->
+                    PickleSnackbar(
+                        snackbarData = currentData,
+                        modifier = Modifier.applyPositionPadding(currentData.position),
+                        onDismiss = snackbarState::dismiss
+                    )
+                }
             }
         }
     }

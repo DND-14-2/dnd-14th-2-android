@@ -1,6 +1,5 @@
 package com.smtm.pickle.presentation.home
 
-import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
@@ -11,13 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -25,10 +20,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.domain.model.ledger.LedgerId
-import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
-import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarDuration
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -47,34 +41,19 @@ fun HomeScreen(
     onSelectedDateChange: (LocalDate) -> Unit,
     onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var backPressedTime by remember { mutableLongStateOf(0L) }
     val snackbarState = remember { SnackbarState() }
 
-    val message = stringResource(R.string.back_pressed_message)
+    BackHandler(enabled = isFabExpanded) {
+        onFabClose()
+    }
 
-    BackHandler {
-        val currentTime = System.currentTimeMillis()
-
-        if (isFabExpanded) {
-            onFabClose()
-            return@BackHandler
-        }
-
-        if (currentTime - backPressedTime < 2000L) {
-            (context as? Activity)?.finish()
-        } else {
-            backPressedTime = currentTime
-            snackbarState.show(
-                PickleSnackbar.custom(
-                    message = message,
-                    duration = SnackbarDuration.TOAST_SHORT.duration,
-                    position = SnackbarPosition.BelowStatusBar
-                )
-            )
-        }
+    if (!isFabExpanded) {
+        BackPressFinishHandler(
+            snackBarState = snackbarState,
+            position = SnackbarPosition.BelowStatusBar
+        )
     }
 
     LaunchedEffect(lifecycleOwner) {

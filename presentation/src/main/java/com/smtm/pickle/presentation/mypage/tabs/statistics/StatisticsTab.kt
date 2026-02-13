@@ -15,6 +15,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -45,11 +46,11 @@ fun StatisticsTab(
 
     val chartItems = currentDetail.chartItems.map { item ->
         DonutChartItem(
-            label = item.label,
+            label = stringResource(item.labelResId),
             value = item.value,
             color = Color(item.colorHex)
         )
-    }.sortedByDescending { it.value }
+    }
 
     Column(
         modifier = modifier

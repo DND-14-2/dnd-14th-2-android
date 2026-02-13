@@ -18,6 +18,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val appVersionCode = (project.property("VERSION_CODE") as String).toInt()
+        val appVersionName = project.property("VERSION_NAME") as String
+
+        buildConfigField("String", "VERSION_NAME", "\"$appVersionName\"")
+        buildConfigField("int", "VERSION_CODE", "$appVersionCode")
     }
 
     buildTypes {

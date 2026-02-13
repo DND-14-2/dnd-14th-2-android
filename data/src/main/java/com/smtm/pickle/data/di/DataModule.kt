@@ -15,4 +15,5 @@ abstract class DataModule {
     abstract fun bindTokenProvider(
         tokenProviderImpl: TokenProviderImpl
     ): TokenProvider
+
 }

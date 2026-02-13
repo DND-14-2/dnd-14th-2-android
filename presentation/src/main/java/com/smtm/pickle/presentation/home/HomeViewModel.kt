@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -84,12 +85,16 @@ class HomeViewModel @Inject constructor(
             .flatMapLatest { yearMonth ->
                 ensureLedgersSynced(yearMonth)
                 observeLedgersByMonthUseCase(yearMonth)
+                    .map { ledgers -> yearMonth to ledgers}
                     .catch { e ->
                         Timber.e(e, "observeLedgersByMonthUseCase() failed")
                         _effect.emit(HomeEffect.ShowSnackBar("데이터를 불러오는데 실패했습니다."))
                     }
-            }.onEach { ledgers ->
-                val summary = ledgers.summarize()
+            }.onEach { (yearMonth, ledgers) ->
+                val currentMonthLedgers = ledgers.filter {
+                    YearMonth.from(it.occurredOn) == yearMonth
+                }
+                val summary = currentMonthLedgers.summarize()
                 val ledgerCalendarDays = ledgers.toLedgerCalendarDays()
 
                 _uiState.update { state ->

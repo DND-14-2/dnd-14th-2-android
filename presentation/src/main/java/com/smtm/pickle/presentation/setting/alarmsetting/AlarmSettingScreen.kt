@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.mypage.setting
+package com.smtm.pickle.presentation.setting.alarmsetting
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,21 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
-fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
+fun AlarmSettingScreen(
+    viewModel: AlarmSettingViewModel = hiltViewModel()
 ) {
 
-    SettingContent()
+    AlarmSettingContent()
 }
 
 @Composable
-private fun SettingContent() {
+private fun AlarmSettingContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Setting Screen")
+            Text(text = "Alarm Setting Screen")
         }
     }
 }

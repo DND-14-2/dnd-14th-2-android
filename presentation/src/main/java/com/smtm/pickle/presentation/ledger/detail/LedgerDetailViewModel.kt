@@ -95,7 +95,7 @@ class LedgerDetailViewModel @Inject constructor(
             dismissDeleteDialog()
             deleteLedgerUseCase(ledgerId)
                 .onSuccess {
-                    _effect.emit(LedgerDetailEffect.NavigateToHome)
+                    _effect.emit(LedgerDetailEffect.NavigateBack)
                 }
                 .onFailure { e ->
                     Timber.e(e, "Failed to delete ledger: id=${ledgerId.value}")
@@ -104,9 +104,9 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
-    fun navigateToHome() {
+    fun navigateBack() {
         viewModelScope.launch {
-            _effect.emit(LedgerDetailEffect.NavigateToHome)
+            _effect.emit(LedgerDetailEffect.NavigateBack)
         }
     }
 
@@ -127,7 +127,7 @@ sealed interface LedgerDetailUiState {
 }
 
 sealed interface LedgerDetailEffect {
-    data object NavigateToHome : LedgerDetailEffect
+    data object NavigateBack : LedgerDetailEffect
     data object NavigateToEdit : LedgerDetailEffect
     data class ShowSnackBar(val msg: String) : LedgerDetailEffect
 }

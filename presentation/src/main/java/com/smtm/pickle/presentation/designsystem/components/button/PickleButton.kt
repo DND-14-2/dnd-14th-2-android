@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.components.button.model.CancelWidth
@@ -26,11 +26,12 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 @Composable
 fun PickleButton(
     text: String,
-    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = PickleTheme.colors.primary400,
     textColor: Color = PickleTheme.colors.base0,
-    modifier: Modifier = Modifier,
+    textStyle: TextStyle = PickleTheme.typography.body1Bold,
+    onClick: () -> Unit,
 ) {
     Button(
         modifier = modifier
@@ -46,7 +47,7 @@ fun PickleButton(
     ) {
         Text(
             text = text,
-            style = PickleTheme.typography.body2Medium,
+            style = textStyle,
             color = if (enabled) textColor else PickleTheme.colors.gray600
         )
     }
@@ -61,6 +62,7 @@ fun PickleButtonWithCancel(
     modifier: Modifier = Modifier,
     cancelWidth: CancelWidth? = null,
     color: Color = PickleTheme.colors.primary400,
+    textStyle: TextStyle = PickleTheme.typography.body1Bold
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -89,7 +91,7 @@ fun PickleButtonWithCancel(
         ) {
             Text(
                 text = cancelText,
-                style = PickleTheme.typography.body1Bold,
+                style = textStyle,
                 color = PickleTheme.colors.gray600
             )
         }
@@ -109,7 +111,7 @@ fun PickleButtonWithCancel(
         ) {
             Text(
                 text = confirmText,
-                style = PickleTheme.typography.body2Medium,
+                style = textStyle,
                 color = PickleTheme.colors.base0
             )
         }
@@ -141,9 +143,7 @@ private fun DefaultButtonPreview() {
 @Composable
 private fun ButtonWithCancelPreview() {
     PickleTheme {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
+        Column {
             PickleButtonWithCancel(
                 confirmText = "확인",
                 cancelText = "취소",

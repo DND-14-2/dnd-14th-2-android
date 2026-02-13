@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.usecase.auth.GoogleLoginUseCase
 import com.smtm.pickle.domain.usecase.auth.KakaoLoginUseCase
 import com.smtm.pickle.domain.usecase.user.GetFirstLoginUseCase
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,13 +35,13 @@ class LoginViewModel @Inject constructor(
 
     fun loginWithGoogle() {
         handleLogin {
-            googleLoginUseCase().getOrThrow()
+            googleLoginUseCase()
         }
     }
 
     fun loginWithKakao(token: String) {
         handleLogin {
-            kakaoLoginUseCase(token = token).getOrThrow()
+            kakaoLoginUseCase(token = token)
         }
     }
 
@@ -52,31 +52,31 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun handleLogin(loginAction: suspend () -> Unit) {
+    private fun handleLogin(loginAction: suspend () -> Result<AuthToken>) {
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
 
-            runCatching {
-                loginAction()
-            }.onSuccess {
-                _uiState.value = LoginUiState.Idle
-                Timber.d("로그인 성공")
+            loginAction()
+                .onSuccess {
+                    _uiState.value = LoginUiState.Idle
+                    Timber.d("로그인 성공")
 
-                getFirstLoginUseCase()
-                    .take(1)
-                    .collect { isFirstLogin ->
-                        if (isFirstLogin) setFirstLoginUseCase(false)
+                    val isFirstLogin = getFirstLoginUseCase().getOrDefault(false)
 
-                        val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
-                        else LoginEffect.NavigateToMain
-
-                        _effect.emit(destination)
+                    if (isFirstLogin) {
+                        setFirstLoginUseCase(false)
+                            .onFailure { Timber.e(it, "setFirstLoginUseCase 실패") }
                     }
-            }.onFailure { error ->
-                _uiState.value = LoginUiState.Idle
-                _effect.emit(LoginEffect.ShowSnackbar("로그인에 실패했습니다. 잠시 후 다시 시도해주세요."))
-                Timber.e(error)
-            }
+
+                    val destination = if (isFirstLogin) LoginEffect.NavigateToNickname
+                    else LoginEffect.NavigateToMain
+
+                    _effect.emit(destination)
+                }.onFailure { error ->
+                    _uiState.value = LoginUiState.Idle
+                    _effect.emit(LoginEffect.ShowSnackbar("로그인에 실패했습니다. 잠시 후 다시 시도해주세요."))
+                    Timber.e(error, "로그인 실패")
+                }
         }
     }
 

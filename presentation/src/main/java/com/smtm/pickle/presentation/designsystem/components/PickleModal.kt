@@ -20,10 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonWithCancel
+import com.smtm.pickle.presentation.designsystem.components.button.model.CancelWidth
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
@@ -52,6 +55,73 @@ fun PickleDialog(
                 modifier = Modifier.padding(contentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = content,
+            )
+        }
+    }
+}
+
+object PickleDialog {
+    @Composable
+    fun WithRowButton(
+        modifier: Modifier = Modifier,
+        contentPadding: PaddingValues = PaddingValues(top = 40.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+        buttonSpace: Dp = 30.dp,
+        confirmText: String,
+        cancelText: String,
+        onConfirmClick: () -> Unit,
+        onCancelClick: () -> Unit,
+        content: @Composable ColumnScope.() -> Unit,
+    ) {
+        PickleDialog(
+            modifier = modifier,
+            contentPadding = contentPadding,
+            onDismiss = onCancelClick,
+        ) {
+            content()
+
+            Spacer(modifier = Modifier.height(buttonSpace))
+
+            PickleButtonWithCancel(
+                confirmText = confirmText,
+                cancelText = cancelText,
+                onConfirmClick = onConfirmClick,
+                onCancelClick = onCancelClick,
+                cancelWidth = CancelWidth.Half
+            )
+        }
+    }
+
+    @Composable
+    fun WithColumnButton(
+        modifier: Modifier = Modifier,
+        contentPadding: PaddingValues = PaddingValues(top = 40.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+        buttonSpace: Dp = 30.dp,
+        confirmText: String,
+        cancelText: String,
+        onConfirmClick: () -> Unit,
+        onCancelClick: () -> Unit,
+        content: @Composable ColumnScope.() -> Unit,
+    ) {
+        PickleDialog(
+            modifier = modifier,
+            contentPadding = contentPadding,
+            onDismiss = onCancelClick,
+        ) {
+            content()
+
+            Spacer(modifier = Modifier.height(buttonSpace))
+
+            PickleButton(
+                text = confirmText,
+                onClick = onConfirmClick,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            PickleButton(
+                text = cancelText,
+                onClick = onCancelClick,
+                color = PickleTheme.colors.base0,
+                textColor = PickleTheme.colors.gray500
             )
         }
     }
@@ -91,7 +161,9 @@ fun PickleBottomSheet(
         },
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 14.dp),
             content = content
         )
     }

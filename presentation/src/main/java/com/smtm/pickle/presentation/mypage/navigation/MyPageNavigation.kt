@@ -40,8 +40,10 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         val context = LocalContext.current
         SettingScreen(
             onNavigateToPrivacyPolicy = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyUrl))
-                context.startActivity(intent)
+                runCatching {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyUrl))
+                    context.startActivity(intent)
+                }
             },
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {

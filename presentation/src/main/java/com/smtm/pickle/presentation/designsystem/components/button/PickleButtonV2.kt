@@ -109,6 +109,70 @@ private fun PickleButtonV2GhostPreview() {
 }
 
 @Preview(
+    name = "PickleButtonV2Preview - Primary Disabled",
+    showBackground = true,
+)
+@Composable
+private fun PickleButtonV2PrimaryDisabledPreview() {
+    PickleTheme {
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            enabled = false,
+            type = PickleButtonType.Primary
+        )
+    }
+}
+
+@Preview(
+    name = "PickleButtonV2Preview - Secondary Disabled",
+    showBackground = true,
+)
+@Composable
+private fun PickleButtonV2SecondaryDiabledPreview() {
+    PickleTheme {
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            enabled = false,
+            type = PickleButtonType.Secondary
+        )
+    }
+}
+
+@Preview(
+    name = "PickleButtonV2Preview - Tertiary Disabled",
+    showBackground = true,
+)
+@Composable
+private fun PickleButtonV2TertiaryDiabledPreview() {
+    PickleTheme {
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            enabled = false,
+            type = PickleButtonType.Tertiary
+        )
+    }
+}
+
+@Preview(
+    name = "PickleButtonV2Preview - Ghost Disabled",
+    showBackground = true,
+)
+@Composable
+private fun PickleButtonV2GhostDiabledPreview() {
+    PickleTheme {
+        PickleButtonV2(
+            text = "Buttons",
+            onClick = {},
+            enabled = false,
+            type = PickleButtonType.Ghost
+        )
+    }
+}
+
+@Preview(
     name = "PickleButtonV2Preview - Primary Small",
     showBackground = true,
 )

@@ -1,5 +1,8 @@
 package com.smtm.pickle.presentation.mypage.navigation
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -19,6 +22,8 @@ import com.smtm.pickle.presentation.setting.SettingScreen
 import com.smtm.pickle.presentation.setting.alarmsetting.AlarmSettingScreen
 import com.smtm.pickle.presentation.setting.privacypolicy.PrivacyPolicyScreen
 
+private const val PrivacyPolicyUrl = "https://www.notion.so/303e42cd9924802abd39eabb3685ca3b"
+
 fun NavGraphBuilder.myPageDestinations(navController: NavController) {
     composable<MyLedgerRoute> {
         MyLedgerScreen(
@@ -34,9 +39,11 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         )
     }
     composable<SettingRoute> {
+        val context = LocalContext.current
         SettingScreen(
             onNavigateToPrivacyPolicy = {
-                navController.navigate(PrivacyPolicyRoute)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyUrl))
+                context.startActivity(intent)
             },
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {

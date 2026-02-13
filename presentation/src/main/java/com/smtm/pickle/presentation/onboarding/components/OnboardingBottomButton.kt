@@ -40,23 +40,23 @@ fun OnboardingBottomButton(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 PickleButtonV2(
+                    modifier = Modifier.width(96.dp),
                     text = stringResource(R.string.common_previous),
                     onClick = onPrev,
-                    modifier = Modifier.width(96.dp),
                     type = PickleButtonType.Secondary,
                 )
 
                 PickleButtonV2(
+                    modifier = Modifier.weight(1f),
                     text = if (isLast) stringResource(R.string.onboarding_start) else stringResource(R.string.common_next),
                     onClick = { if (isLast) onFinish() else onNext() },
-                    modifier = Modifier.weight(1f),
                 )
             }
         } else {
             PickleButtonV2(
+                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.onboarding_skip),
                 onClick = onFinish,
-                modifier = Modifier.fillMaxWidth()
             )
         }
     }

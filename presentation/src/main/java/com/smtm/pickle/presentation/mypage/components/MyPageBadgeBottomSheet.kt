@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -52,9 +52,10 @@ fun MyPageBadgeBottomSheetContent(
         }
         Spacer(modifier = Modifier.height(32.dp))
 
-        PickleButton(
+        PickleButtonV2(
+            modifier = Modifier.fillMaxWidth(),
             text = "배지 변경하기",
-            onClick = onBadgeChangeClick
+            onClick = onBadgeChangeClick,
         )
     }
 }

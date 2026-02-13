@@ -40,7 +40,7 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
             },
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {
-                    popUpTo(navController.graph.startDestinationId) {
+                    popUpTo(0) {
                         inclusive = true
                     }
                     launchSingleTop = true

@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.mypage.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.smtm.pickle.presentation.mypage.myledger.MyLedgerScreen
@@ -40,7 +41,7 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
             },
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {
-                    popUpTo(navController.graph.startDestinationId) {
+                    popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                     launchSingleTop = true

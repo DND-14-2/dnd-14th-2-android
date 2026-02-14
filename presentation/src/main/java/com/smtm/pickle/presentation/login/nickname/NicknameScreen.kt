@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -24,7 +25,7 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -82,8 +83,9 @@ fun NicknameContent(
             )
         },
         bottomBar = {
-            PickleButton(
+            PickleButtonV2(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .navigationBarsPadding()
                     .imePadding()
                     .padding(bottom = 14.dp)
@@ -91,7 +93,6 @@ fun NicknameContent(
                 text = stringResource(R.string.common_next),
                 onClick = onSaveNickname,
                 enabled = uiState.canSubmit,
-                textColor = PickleTheme.colors.base0
             )
         }
     ) { innerPadding ->

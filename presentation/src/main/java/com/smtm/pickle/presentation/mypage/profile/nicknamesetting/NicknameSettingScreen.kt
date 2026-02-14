@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -60,8 +61,9 @@ fun NicknameSettingContent(
         onBackClick = onBackClick,
         modifier = modifier,
         bottomBar = {
-            PickleButton(
+            PickleButtonV2(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .navigationBarsPadding()
                     .imePadding()
                     .padding(bottom = 12.dp)
@@ -69,7 +71,6 @@ fun NicknameSettingContent(
                 text = stringResource(R.string.nickname_edit_button),
                 onClick = onSaveClick,
                 enabled = uiState.canSubmit,
-                textColor = PickleTheme.colors.base0
             )
         }
     ) {

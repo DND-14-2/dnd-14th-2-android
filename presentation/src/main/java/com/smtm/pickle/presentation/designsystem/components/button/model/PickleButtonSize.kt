@@ -40,3 +40,17 @@ fun PickleButtonSize.toSpec(): PickleButtonSizeSpec {
         )
     }
 }
+
+internal val PickleButtonSize.leadingFixedWidth: Dp
+    get() = when (this) {
+        PickleButtonSize.Small -> Dimensions.buttonLeadingWidthSmall
+        PickleButtonSize.Medium -> Dimensions.buttonLeadingWidthMedium
+        PickleButtonSize.Large -> Dimensions.buttonLeadingWidthLarge
+    }
+
+internal val PickleButtonSize.groupSpacing: Dp
+    get() = when (this) {
+        PickleButtonSize.Small -> Dimensions.buttonSpacingSmall
+        PickleButtonSize.Medium -> Dimensions.buttonSpacingMedium
+        PickleButtonSize.Large -> Dimensions.buttonSpacingLarge
+    }

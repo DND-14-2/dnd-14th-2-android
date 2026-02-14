@@ -8,6 +8,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
@@ -29,7 +30,9 @@ fun PickleButtonV2(
     val buttonSize = size.toSpec()
 
     Button(
-        modifier = modifier.height(buttonSize.height),
+        modifier = Modifier
+            .height(buttonSize.height)
+            .then(modifier),
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
@@ -44,6 +47,8 @@ fun PickleButtonV2(
         Text(
             text = text,
             style = buttonSize.textStyle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

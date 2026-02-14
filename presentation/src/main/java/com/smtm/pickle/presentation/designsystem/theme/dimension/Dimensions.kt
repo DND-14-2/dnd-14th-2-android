@@ -13,6 +13,12 @@ object Dimensions {
     val buttonPaddingSmall = 6.dp
     val buttonPaddingMedium = 8.dp
     val buttonPaddingLarge = 14.dp
+    val buttonLeadingWidthSmall = 80.dp
+    val buttonLeadingWidthMedium = 90.dp
+    val buttonLeadingWidthLarge = 100.dp
+    val buttonSpacingSmall = 4.dp
+    val buttonSpacingMedium = 6.dp
+    val buttonSpacingLarge = 10.dp
 
     // 입력 필드
     val inputHeight = 48.dp

@@ -15,8 +15,8 @@ class NicknameRepositoryImpl @Inject constructor(
 ) : NicknameRepository {
 
     override suspend fun saveNickname(nickname: String) {
-        userApi.changeNickname(NicknameRequest(nickname))
-        profileDataStore.changeNickname(nickname)
+        val changedNickname = userApi.changeNickname(NicknameRequest(nickname)).nickname
+        profileDataStore.changeNickname(changedNickname)
     }
 
     override suspend fun getNickname(): String {

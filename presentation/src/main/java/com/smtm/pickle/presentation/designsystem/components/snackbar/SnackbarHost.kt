@@ -90,7 +90,6 @@ fun SnackbarHost(
                     if (alignment == Alignment.TopCenter) -fullHeight else fullHeight
                 }
             ) + fadeOut(animationSpec = tween(300)),
-            label = snackbar?.id ?: ""
         ) {
             lastValidData?.let { data ->
                 AnimatedContent(

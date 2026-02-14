@@ -1,7 +1,7 @@
 package com.smtm.pickle.presentation.designsystem.components.button
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,9 +30,7 @@ fun PickleButtonV2(
     val buttonSize = size.toSpec()
 
     Button(
-        modifier = Modifier
-            .height(buttonSize.height)
-            .then(modifier),
+        modifier = modifier.requiredHeight(buttonSize.height),
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(

@@ -43,7 +43,7 @@ class NicknameViewModel @Inject constructor(
 
     fun saveNickname() {
         viewModelScope.launch {
-            saveNicknameUseCase(uiState.value.nickname)
+            saveNicknameUseCase(_uiState.value.nickname)
                 .onSuccess {
                     _effect.emit(NicknameEffect.NavigateToMain)
                 }
@@ -58,8 +58,8 @@ class NicknameViewModel @Inject constructor(
             _effect.emit(NicknameEffect.NavigateToMain)
         }
     }
+}
 
-    sealed interface NicknameEffect {
-        data object NavigateToMain : NicknameEffect
-    }
+sealed interface NicknameEffect {
+    data object NavigateToMain : NicknameEffect
 }

@@ -93,7 +93,7 @@ fun NicknameSettingContent(
                             TrailingIcon(R.drawable.ic_snackbar_fail)
                         }
 
-                        else -> Unit
+                        is InputState.Idle -> Unit
                     }
                 }
             },

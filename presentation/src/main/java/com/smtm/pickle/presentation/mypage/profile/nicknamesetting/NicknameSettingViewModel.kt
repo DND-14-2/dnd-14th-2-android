@@ -65,7 +65,7 @@ class NicknameSettingViewModel @Inject constructor(
 
     fun saveNickname() {
         viewModelScope.launch {
-            saveNicknameUseCase(uiState.value.editingNickname)
+            saveNicknameUseCase(_uiState.value.editingNickname)
                 .onSuccess {
                     _effect.emit(NicknameSettingEffect.NavigateToBack)
                 }

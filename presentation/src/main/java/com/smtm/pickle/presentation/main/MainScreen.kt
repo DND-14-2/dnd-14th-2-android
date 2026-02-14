@@ -146,6 +146,15 @@ private fun MainContent(
                     HomeScreen(
                         onSelectedDateChange = onSelectedDateChange,
                         isFabExpanded = isFabExpanded,
+                        onNavigateToMyPage = {
+                            tabNavController.navigate(MyPageTabRoute) {
+                                popUpTo(tabNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         onNavigateToLedgerDetail = { ledgerId ->
                             rootNavController.navigate(LedgerDetailRoute(ledgerId.value))
                         },

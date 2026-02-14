@@ -25,5 +25,5 @@ class NicknameRepositoryImpl @Inject constructor(
         return nickname
     }
 
-    override fun observeNickname(): Flow<String> = profileDataStore.observeNickname()
+    override fun observeNickname(): Flow<String?> = profileDataStore.observeNickname()
 }

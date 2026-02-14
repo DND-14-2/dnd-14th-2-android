@@ -8,5 +8,5 @@ interface NicknameRepository {
 
     suspend fun getNickname(): String
 
-    fun observeNickname(): Flow<String>
+    fun observeNickname(): Flow<String?>
 }

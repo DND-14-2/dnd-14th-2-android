@@ -24,9 +24,9 @@ class ProfileDataStore @Inject constructor(
         }
     }
 
-    fun observeNickname(): Flow<String> {
+    fun observeNickname(): Flow<String?> {
         return dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.NICKNAME] ?: "유저 닉네임"
+            preferences[PreferencesKeys.NICKNAME]
         }
     }
 }

@@ -152,7 +152,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { state ->
                     state.copy(
                         profile = state.profile.copy(
-                            nickname = nickname
+                            nickname = nickname ?: "유저 닉네임"
                         )
                     )
                 }

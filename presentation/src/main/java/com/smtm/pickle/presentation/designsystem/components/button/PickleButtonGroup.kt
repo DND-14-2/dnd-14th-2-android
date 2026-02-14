@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.components.button.model.groupSpacing
@@ -18,13 +18,13 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun PickleButtonGroup(
     modifier: Modifier = Modifier,
-    layout: PickleButtonLayout,
+    layout: PickleButtonGroupLayout,
     buttonSize: PickleButtonSize = PickleButtonSize.Large,
     leadingButton: @Composable (Modifier, PickleButtonSize) -> Unit,
     trailingButton: @Composable (Modifier, PickleButtonSize) -> Unit,
 ) {
     when (layout) {
-        is PickleButtonLayout.RowFixedLeading -> {
+        is PickleButtonGroupLayout.RowFixedLeading -> {
             Row(
                 modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),
@@ -40,7 +40,7 @@ fun PickleButtonGroup(
             }
         }
 
-        is PickleButtonLayout.RowEqual -> {
+        is PickleButtonGroupLayout.RowEqual -> {
             Row(
                 modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),
@@ -56,7 +56,7 @@ fun PickleButtonGroup(
             }
         }
 
-        is PickleButtonLayout.Column -> {
+        is PickleButtonGroupLayout.Column -> {
             Column(
                 modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),
@@ -83,7 +83,7 @@ private fun PickleButtonGroupRowFixedLeadingLargePreview() {
     PickleTheme {
         PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            layout = PickleButtonLayout.RowFixedLeading,
+            layout = PickleButtonGroupLayout.RowFixedLeading,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
                 PickleButtonV2(
@@ -116,7 +116,7 @@ private fun PickleButtonGroupRowFixedLeadingSmallPreview() {
     PickleTheme {
         PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            layout = PickleButtonLayout.RowFixedLeading,
+            layout = PickleButtonGroupLayout.RowFixedLeading,
             buttonSize = PickleButtonSize.Small,
             leadingButton = { modifier, buttonSize ->
                 PickleButtonV2(
@@ -149,7 +149,7 @@ private fun PickleButtonGroupRowEqualPreview() {
     PickleTheme {
         PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            layout = PickleButtonLayout.RowEqual,
+            layout = PickleButtonGroupLayout.RowEqual,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
                 PickleButtonV2(
@@ -181,7 +181,7 @@ private fun PickleButtonGroupRowEqualPreview() {
 private fun PickleButtonGroupColumnPreview() {
     PickleTheme {
         PickleButtonGroup(
-            layout = PickleButtonLayout.Column,
+            layout = PickleButtonGroupLayout.Column,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
                 PickleButtonV2(

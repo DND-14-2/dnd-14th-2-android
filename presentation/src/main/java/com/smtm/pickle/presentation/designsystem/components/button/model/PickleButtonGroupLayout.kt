@@ -6,11 +6,11 @@ package com.smtm.pickle.presentation.designsystem.components.button.model
  * @property RowEqual Row: 1:1 동일 너비
  * @property Column Column: 세로 배치
  */
-sealed interface PickleButtonLayout {
+sealed interface PickleButtonGroupLayout {
 
-    data object RowFixedLeading : PickleButtonLayout
+    data object RowFixedLeading : PickleButtonGroupLayout
 
-    data object RowEqual : PickleButtonLayout
+    data object RowEqual : PickleButtonGroupLayout
 
-    data object Column : PickleButtonLayout
+    data object Column : PickleButtonGroupLayout
 }

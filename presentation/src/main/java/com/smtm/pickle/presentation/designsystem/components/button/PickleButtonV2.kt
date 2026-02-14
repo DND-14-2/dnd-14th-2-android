@@ -132,7 +132,7 @@ private fun PickleButtonV2PrimaryDisabledPreview() {
     showBackground = true,
 )
 @Composable
-private fun PickleButtonV2SecondaryDiabledPreview() {
+private fun PickleButtonV2SecondaryDisabledPreview() {
     PickleTheme {
         PickleButtonV2(
             text = "Buttons",
@@ -148,7 +148,7 @@ private fun PickleButtonV2SecondaryDiabledPreview() {
     showBackground = true,
 )
 @Composable
-private fun PickleButtonV2TertiaryDiabledPreview() {
+private fun PickleButtonV2TertiaryDisabledPreview() {
     PickleTheme {
         PickleButtonV2(
             text = "Buttons",
@@ -164,7 +164,7 @@ private fun PickleButtonV2TertiaryDiabledPreview() {
     showBackground = true,
 )
 @Composable
-private fun PickleButtonV2GhostDiabledPreview() {
+private fun PickleButtonV2GhostDisabledPreview() {
     PickleTheme {
         PickleButtonV2(
             text = "Buttons",

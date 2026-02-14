@@ -1,8 +1,6 @@
 package com.smtm.pickle.presentation.ledger.create.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,7 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleDialog
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
@@ -45,24 +46,29 @@ fun LedgerCreateExitDialog(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(
+        PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            PickleButtonV2(
-                modifier = Modifier.weight(1f),
-                onClick = onExitButtonClick,
-                text = stringResource(R.string.ledger_create_exit_dialog_negative),
-                type = PickleButtonType.Secondary
-            )
-
-            PickleButtonV2(
-                modifier = Modifier.weight(1f),
-                onClick = onDismiss,
-                text = stringResource(R.string.ledger_create_exit_dialog_positive),
-                type = PickleButtonType.Primary
-            )
-        }
+            layout = PickleButtonLayout.RowEqual,
+            buttonSize = PickleButtonSize.Large,
+            leadingButton = { modifier, buttonSize ->
+                PickleButtonV2(
+                    modifier = modifier,
+                    onClick = onExitButtonClick,
+                    text = stringResource(R.string.ledger_create_exit_dialog_negative),
+                    type = PickleButtonType.Secondary,
+                    size = buttonSize,
+                )
+            },
+            trailingButton = { modifier, buttonSize ->
+                PickleButtonV2(
+                    modifier = modifier,
+                    onClick = onDismiss,
+                    text = stringResource(R.string.ledger_create_exit_dialog_positive),
+                    type = PickleButtonType.Primary,
+                    size = buttonSize,
+                )
+            }
+        )
     }
 }
 

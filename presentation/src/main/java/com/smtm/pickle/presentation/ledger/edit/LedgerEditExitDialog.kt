@@ -1,15 +1,10 @@
 package com.smtm.pickle.presentation.ledger.edit
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,8 +12,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleDialog
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun LedgerEditExitDialog(
@@ -47,44 +46,29 @@ fun LedgerEditExitDialog(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(
+        PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            TextButton(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(Dimensions.buttonHeight),
-                shape = RoundedCornerShape(Dimensions.radius),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PickleTheme.colors.gray100,
-                    contentColor = PickleTheme.colors.gray600
-                ),
-                onClick = onConfirmExit
-            ) {
-                Text(
+            layout = PickleButtonLayout.RowEqual,
+            buttonSize = PickleButtonSize.Large,
+            leadingButton = { modifier, buttonSize ->
+                PickleButtonV2(
+                    modifier = modifier,
                     text = stringResource(R.string.ledger_edit_exit_dialog_negative),
-                    style = PickleTheme.typography.body1Bold,
+                    onClick = onConfirmExit,
+                    type = PickleButtonType.Secondary,
+                    size = buttonSize,
                 )
-            }
-
-            TextButton(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(Dimensions.buttonHeight),
-                shape = RoundedCornerShape(Dimensions.radius),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PickleTheme.colors.primary400,
-                    contentColor = PickleTheme.colors.base0
-                ),
-                onClick = onContinueEdit,
-            ) {
-                Text(
+            },
+            trailingButton = { modifier, buttonSize ->
+                PickleButtonV2(
+                    modifier = modifier,
                     text = stringResource(R.string.ledger_edit_exit_dialog_positive),
-                    style = PickleTheme.typography.body1Bold,
+                    onClick = onContinueEdit,
+                    type = PickleButtonType.Primary,
+                    size = buttonSize,
                 )
-            }
-        }
+            },
+        )
     }
 }
 

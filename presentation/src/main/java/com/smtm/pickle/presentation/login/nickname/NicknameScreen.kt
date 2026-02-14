@@ -46,7 +46,7 @@ fun NicknameScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { event ->
                 when (event) {
-                    NicknameViewModel.NicknameEffect.NavigateToMain -> {
+                    NicknameEffect.NavigateToMain -> {
                         navigator.navigateToMain()
                     }
                 }

@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -24,7 +24,7 @@ fun LedgerCreateSecondBottomButtons(
     PickleButtonGroup(
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
-        layout = PickleButtonLayout.RowFixedLeading,
+        layout = PickleButtonGroupLayout.RowFixedLeading,
         buttonSize = PickleButtonSize.Large,
         leadingButton = { modifier, buttonSize ->
             PickleButtonV2(

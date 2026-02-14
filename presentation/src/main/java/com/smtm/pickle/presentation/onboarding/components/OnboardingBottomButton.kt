@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 
@@ -35,7 +35,7 @@ fun OnboardingBottomButton(
         if (currentPage > 0) {
             PickleButtonGroup(
                 modifier = Modifier.fillMaxWidth(),
-                layout = PickleButtonLayout.RowFixedLeading,
+                layout = PickleButtonGroupLayout.RowFixedLeading,
                 buttonSize = PickleButtonSize.Large,
                 leadingButton = { modifier, buttonSize ->
                     PickleButtonV2(

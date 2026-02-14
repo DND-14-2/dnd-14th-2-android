@@ -14,7 +14,7 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
-import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -48,7 +48,7 @@ fun LedgerEditExitDialog(
 
         PickleButtonGroup(
             modifier = Modifier.fillMaxWidth(),
-            layout = PickleButtonLayout.RowEqual,
+            layout = PickleButtonGroupLayout.RowEqual,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
                 PickleButtonV2(

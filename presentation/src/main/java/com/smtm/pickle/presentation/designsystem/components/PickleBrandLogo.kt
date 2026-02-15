@@ -19,12 +19,11 @@ fun PickleBrandLogo(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(7.dp),
     ) {
         PickleLogo(
             modifier = Modifier
-                .size(width = 280.dp, height = 130.dp)
-                .padding(horizontal = 19.dp, vertical = 17.dp)
+                .size(width = 296.dp, height = 113.dp)
         )
 
         Text(

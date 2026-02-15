@@ -39,6 +39,7 @@ fun HomeScreen(
     isFabExpanded: Boolean,
     onFabClose: () -> Unit,
     onSelectedDateChange: (LocalDate) -> Unit,
+    onNavigateToMyPage: () -> Unit,
     onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -81,7 +82,7 @@ fun HomeScreen(
             viewModel.onSelectDate(date)
             onSelectedDateChange(date)
         },
-        onNavigateToMyPage = {},
+        onNavigateToMyPage = onNavigateToMyPage,
         onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
 

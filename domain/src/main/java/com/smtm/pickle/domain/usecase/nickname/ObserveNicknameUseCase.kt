@@ -7,5 +7,5 @@ import javax.inject.Inject
 class ObserveNicknameUseCase @Inject constructor(
     private val nicknameRepository: NicknameRepository
 ) {
-    operator fun invoke(): Flow<String> = nicknameRepository.observeNickname()
+    operator fun invoke(): Flow<String?> = nicknameRepository.observeNickname()
 }

@@ -16,6 +16,3 @@ data object MyProfileRoute
 
 @Serializable
 data object NicknameSettingRoute
-
-@Serializable
-data object PrivacyPolicyRoute

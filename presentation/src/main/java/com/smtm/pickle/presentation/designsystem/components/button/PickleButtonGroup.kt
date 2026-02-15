@@ -24,7 +24,7 @@ fun PickleButtonGroup(
     trailingButton: @Composable (Modifier, PickleButtonSize) -> Unit,
 ) {
     when (layout) {
-        is PickleButtonGroupLayout.RowFixedLeading -> {
+        PickleButtonGroupLayout.RowFixedLeading -> {
             Row(
                 modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),
@@ -40,7 +40,7 @@ fun PickleButtonGroup(
             }
         }
 
-        is PickleButtonGroupLayout.RowEqual -> {
+        PickleButtonGroupLayout.RowEqual -> {
             Row(
                 modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),
@@ -56,7 +56,7 @@ fun PickleButtonGroup(
             }
         }
 
-        is PickleButtonGroupLayout.Column -> {
+        PickleButtonGroupLayout.Column -> {
             Column(
                 modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(buttonSize.groupSpacing),

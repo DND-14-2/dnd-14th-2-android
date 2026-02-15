@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
@@ -58,8 +58,8 @@ fun OnboardingBottomButton(
         } else {
             PickleButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.onboarding_skip),
-                onClick = onFinish,
+                text = stringResource(R.string.common_next),
+                onClick = onNext,
             )
         }
     }

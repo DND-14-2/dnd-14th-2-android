@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
@@ -87,7 +87,7 @@ object PickleDialog {
                 layout = PickleButtonGroupLayout.RowEqual,
                 buttonSize = PickleButtonSize.Large,
                 leadingButton = { modifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         modifier = modifier,
                         text = cancelText,
                         onClick = onCancelClick,
@@ -96,7 +96,7 @@ object PickleDialog {
                     )
                 },
                 trailingButton = { modifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         modifier = modifier,
                         text = confirmText,
                         onClick = onConfirmClick,
@@ -133,7 +133,7 @@ object PickleDialog {
                 layout = PickleButtonGroupLayout.Column,
                 buttonSize = PickleButtonSize.Large,
                 leadingButton = { modifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         modifier = modifier,
                         text = confirmText,
                         onClick = onConfirmClick,
@@ -142,7 +142,7 @@ object PickleDialog {
                     )
                 },
                 trailingButton = { modifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         modifier = modifier,
                         text = cancelText,
                         onClick = onCancelClick,
@@ -210,7 +210,7 @@ private fun PickleDialogSingleButtonPreview() {
                 style = PickleTheme.typography.body1Bold,
             )
             Spacer(modifier = Modifier.height(30.dp))
-            PickleButtonV2(
+            PickleButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = "확인",
                 onClick = {},
@@ -270,7 +270,7 @@ private fun PickleBottomSheetPreview() {
         ) {
             Text("즐겨찾는 내역")
             Spacer(modifier = Modifier.height(12.dp))
-            PickleButtonV2(
+            PickleButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = "삭제하기",
                 onClick = {},

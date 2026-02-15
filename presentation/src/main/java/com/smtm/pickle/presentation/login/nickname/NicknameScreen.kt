@@ -28,7 +28,7 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -86,7 +86,7 @@ fun NicknameContent(
             )
         },
         bottomBar = {
-            PickleButtonV2(
+            PickleButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()

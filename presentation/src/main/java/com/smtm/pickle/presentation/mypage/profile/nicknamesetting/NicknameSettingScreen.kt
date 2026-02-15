@@ -17,7 +17,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -64,7 +64,7 @@ fun NicknameSettingContent(
         onBackClick = onBackClick,
         modifier = modifier,
         bottomBar = {
-            PickleButtonV2(
+            PickleButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.mypage.tabs.statistics.model.ComparisonResult
@@ -73,7 +73,7 @@ fun StatsSummaryCard(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        PickleButtonV2(
+        PickleButton(
             modifier = Modifier.fillMaxWidth(),
             text = "내 장부 보기",
             onClick = onMyLedgerClick,

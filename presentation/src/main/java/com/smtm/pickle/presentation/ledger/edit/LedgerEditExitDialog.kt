@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
@@ -51,7 +51,7 @@ fun LedgerEditExitDialog(
             layout = PickleButtonGroupLayout.RowEqual,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     modifier = modifier,
                     text = stringResource(R.string.ledger_edit_exit_dialog_negative),
                     onClick = onConfirmExit,
@@ -60,7 +60,7 @@ fun LedgerEditExitDialog(
                 )
             },
             trailingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     modifier = modifier,
                     text = stringResource(R.string.ledger_edit_exit_dialog_positive),
                     onClick = onContinueEdit,

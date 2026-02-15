@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.navigation.route.HomeTabRoute
 import com.smtm.pickle.presentation.navigation.route.MyPageTabRoute
+import com.smtm.pickle.presentation.navigation.route.VerdictTabRoute
 import kotlin.reflect.KClass
 
 /**
@@ -27,6 +28,13 @@ enum class BottomNavItem(
         labelResId = R.string.nav_home,
         activatedIconResId = R.drawable.ic_nav_home_activated,
         inactivatedIconResId = R.drawable.ic_nav_home_inactivated,
+    ),
+    VERDICT(
+        tabRoute = VerdictTabRoute,
+        tabRouteClass = VerdictTabRoute::class,
+        labelResId = R.string.nav_verdict,
+        activatedIconResId = R.drawable.ic_nav_verdict_activated,
+        inactivatedIconResId = R.drawable.ic_nav_verdict_inactivated,
     ),
     MY_PAGE(
         tabRoute = MyPageTabRoute,

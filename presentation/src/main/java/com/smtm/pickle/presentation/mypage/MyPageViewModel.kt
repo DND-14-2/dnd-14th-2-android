@@ -45,7 +45,7 @@ class MyPageViewModel @Inject constructor(
             getNicknameUseCase().collect { nickname ->
                 _uiState.update { state ->
                     state.copy(
-                        profile = state.profile.copy(nickname = nickname)
+                        profile = state.profile.copy(nickname = nickname ?: "유저 닉네임")
                     )
                 }
             }

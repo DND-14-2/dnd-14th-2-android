@@ -19,7 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
@@ -28,7 +31,6 @@ import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.login.nickname.components.CheckDuplicateButton
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
 
@@ -38,12 +40,15 @@ fun NicknameScreen(
     viewModel: NicknameViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { event ->
-            when (event) {
-                NicknameViewModel.NicknameEffect.NavigateToMain -> {
-                    navigator.navigateToMain()
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { event ->
+                when (event) {
+                    NicknameEffect.NavigateToMain -> {
+                        navigator.navigateToMain()
+                    }
                 }
             }
         }
@@ -56,7 +61,6 @@ fun NicknameScreen(
     NicknameContent(
         uiState = uiState,
         onNicknameChanged = viewModel::onNicknameChanged,
-        onCheckDuplicate = viewModel::checkDuplicate,
         onSaveNickname = viewModel::saveNickname,
         onBackClick = viewModel::onBackClick,
     )
@@ -67,7 +71,6 @@ fun NicknameContent(
     uiState: NicknameUiState,
     modifier: Modifier = Modifier,
     onNicknameChanged: (String) -> Unit = {},
-    onCheckDuplicate: () -> Unit = {},
     onSaveNickname: () -> Unit = {},
     onBackClick: () -> Unit,
 ) {
@@ -90,7 +93,7 @@ fun NicknameContent(
                     .padding(horizontal = 16.dp),
                 text = stringResource(R.string.common_next),
                 onClick = onSaveNickname,
-                enabled = uiState.canSubmit,
+                enabled = uiState.inputState is InputState.Success,
                 textColor = PickleTheme.colors.base0
             )
         }
@@ -118,21 +121,16 @@ fun NicknameContent(
                 hint = stringResource(R.string.nickname_hint),
                 defaultSupportingText = stringResource(R.string.nickname_helper),
                 trailingIcon = {
-                    when {
-                        uiState.isAvailable == true -> {
+                    when (uiState.inputState) {
+                        is InputState.Success -> {
                             TrailingIcon(R.drawable.ic_textfield_success)
                         }
 
-                        uiState.inputState is InputState.Error -> {
+                        is InputState.Error -> {
                             TrailingIcon(R.drawable.ic_snackbar_fail)
                         }
 
-                        uiState.inputState is InputState.Success -> {
-                            CheckDuplicateButton(
-                                onClick = onCheckDuplicate,
-                                enabled = !uiState.isCheckingDuplicate && uiState.isAvailable == null
-                            )
-                        }
+                        else -> Unit
                     }
                 },
             )
@@ -151,7 +149,6 @@ private fun NicknamePreview() {
                 inputState = InputState.Success("사용 가능한 닉네임이에요!"),
             ),
             onNicknameChanged = {},
-            onCheckDuplicate = {},
             onSaveNickname = {},
             onBackClick = {}
         )

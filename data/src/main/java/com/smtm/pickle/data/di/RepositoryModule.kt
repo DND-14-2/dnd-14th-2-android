@@ -1,8 +1,8 @@
 package com.smtm.pickle.data.di
 
 import com.smtm.pickle.data.repository.AuthRepositoryImpl
-import com.smtm.pickle.data.repository.FakeNicknameRepository
 import com.smtm.pickle.data.repository.LedgerRepositoryImpl
+import com.smtm.pickle.data.repository.NicknameRepositoryImpl
 import com.smtm.pickle.data.repository.UserRepositoryImpl
 import com.smtm.pickle.domain.repository.AuthRepository
 import com.smtm.pickle.domain.repository.LedgerRepository
@@ -26,7 +26,8 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 
     @Binds
-    abstract fun bindNicknameRepository(impl: FakeNicknameRepository): NicknameRepository
+    @Singleton
+    abstract fun bindNicknameRepository(impl: NicknameRepositoryImpl): NicknameRepository
 
     @Binds
     @Singleton

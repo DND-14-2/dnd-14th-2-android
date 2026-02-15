@@ -1,6 +1,10 @@
 package com.smtm.pickle.presentation.mypage.navigation
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.smtm.pickle.presentation.mypage.myledger.MyLedgerScreen
@@ -13,11 +17,11 @@ import com.smtm.pickle.presentation.navigation.route.LoginRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.NicknameSettingRoute
-import com.smtm.pickle.presentation.navigation.route.PrivacyPolicyRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
 import com.smtm.pickle.presentation.setting.SettingScreen
 import com.smtm.pickle.presentation.setting.alarmsetting.AlarmSettingScreen
-import com.smtm.pickle.presentation.setting.privacypolicy.PrivacyPolicyScreen
+
+private const val PrivacyPolicyUrl = "https://www.notion.so/303e42cd9924802abd39eabb3685ca3b"
 
 fun NavGraphBuilder.myPageDestinations(navController: NavController) {
     composable<MyLedgerRoute> {
@@ -34,13 +38,17 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         )
     }
     composable<SettingRoute> {
+        val context = LocalContext.current
         SettingScreen(
             onNavigateToPrivacyPolicy = {
-                navController.navigate(PrivacyPolicyRoute)
+                runCatching {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyUrl))
+                    context.startActivity(intent)
+                }
             },
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {
-                    popUpTo(navController.graph.startDestinationId) {
+                    popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                     launchSingleTop = true
@@ -67,13 +75,6 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
     composable<NicknameSettingRoute> {
         NicknameSettingScreen(
             onBackClick = {
-                navController.popBackStack()
-            }
-        )
-    }
-    composable<PrivacyPolicyRoute> {
-        PrivacyPolicyScreen(
-            onNavigateBack = {
                 navController.popBackStack()
             }
         )

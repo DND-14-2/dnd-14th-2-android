@@ -23,12 +23,18 @@ annotation class Token
 @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 annotation class Preference
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
+annotation class Profile
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
     private const val PICKLE_PREFERENCES = "pickle_preferences"
     private const val PICKLE_AUTH = "pickle_auth"
+    private const val PICKLE_PROFILE = "pickle_profile"
 
     @Singleton
     @Provides
@@ -44,6 +50,14 @@ object DataStoreModule {
     fun provideTokenDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             produceFile = { context.preferencesDataStoreFile(PICKLE_AUTH) }
+        )
+
+    @Singleton
+    @Provides
+    @Profile
+    fun provideProfileDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile(PICKLE_PROFILE) }
         )
 
 }

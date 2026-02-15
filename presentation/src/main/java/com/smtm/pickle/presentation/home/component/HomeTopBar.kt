@@ -36,8 +36,7 @@ fun HomeTopBar(
     ) {
         PickleLogo(
             modifier = Modifier
-                .size(width = 58.dp, height = 28.dp)
-                .padding(4.dp)
+                .size(width = 73.dp, height = 28.dp)
         )
 
         Spacer(modifier = Modifier.weight(1f))

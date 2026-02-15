@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.auth.KakaoLoginManagerEntryPoint
+import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
 import com.smtm.pickle.presentation.designsystem.components.PickleBrandLogo
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
@@ -76,6 +77,11 @@ fun LoginScreen(
             }
         }
     }
+
+    BackPressFinishHandler(
+        snackBarState = snackbarState,
+        position = SnackbarPosition.BelowStatusBar
+    )
 
     LoginContent(
         uiState = uiState,

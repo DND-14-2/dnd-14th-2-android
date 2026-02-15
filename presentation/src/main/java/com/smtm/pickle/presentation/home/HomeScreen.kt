@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,10 +19,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.smtm.pickle.domain.model.ledger.LedgerId
+import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
-import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
 import com.smtm.pickle.presentation.home.component.HomeTopBar
@@ -33,12 +36,26 @@ import java.time.YearMonth
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    isFabExpanded: Boolean,
+    onFabClose: () -> Unit,
     onSelectedDateChange: (LocalDate) -> Unit,
+    onNavigateToMyPage: () -> Unit,
     onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarState = remember { SnackbarState() }
+
+    BackHandler(enabled = isFabExpanded) {
+        onFabClose()
+    }
+
+    if (!isFabExpanded) {
+        BackPressFinishHandler(
+            snackBarState = snackbarState,
+            position = SnackbarPosition.BelowStatusBar
+        )
+    }
 
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -65,7 +82,7 @@ fun HomeScreen(
             viewModel.onSelectDate(date)
             onSelectedDateChange(date)
         },
-        onNavigateToMyPage = {},
+        onNavigateToMyPage = onNavigateToMyPage,
         onNavigateToLedgerDetail = onNavigateToLedgerDetail,
     )
 

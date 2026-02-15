@@ -5,6 +5,7 @@ import com.smtm.pickle.data.BuildConfig
 import com.smtm.pickle.data.source.remote.api.AuthService
 import com.smtm.pickle.data.source.remote.api.LedgerApi
 import com.smtm.pickle.data.source.remote.api.RefreshTokenApi
+import com.smtm.pickle.data.source.remote.api.UserApi
 import com.smtm.pickle.data.source.remote.auth.TokenAuthenticator
 import com.smtm.pickle.domain.provider.TokenProvider
 import dagger.Module
@@ -145,5 +146,11 @@ object NetworkModule {
     @Singleton
     fun provideLedgerApi(retrofit: Retrofit): LedgerApi {
         return retrofit.create(LedgerApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi {
+        return retrofit.create(UserApi::class.java)
     }
 }

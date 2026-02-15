@@ -1,20 +1,15 @@
 package com.smtm.pickle.presentation.ledger.create.component.firststep
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun LedgerCreateFirstBottomButton(
@@ -22,26 +17,14 @@ fun LedgerCreateFirstBottomButton(
     enableNext: Boolean,
     onNextClick: () -> Unit
 ) {
-    Button(
+    PickleButtonV2(
         modifier = modifier
-            .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 14.dp)
-            .height(Dimensions.buttonHeight),
+            .fillMaxWidth(),
+        text = stringResource(R.string.common_next),
         onClick = onNextClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = PickleTheme.colors.primary400,
-            disabledContainerColor = PickleTheme.colors.gray100,
-            contentColor = PickleTheme.colors.base0,
-            disabledContentColor = PickleTheme.colors.gray600,
-        ),
-        shape = RoundedCornerShape(Dimensions.radius),
         enabled = enableNext,
-    ) {
-        Text(
-            text = stringResource(R.string.common_next),
-            style = PickleTheme.typography.body1Bold,
-        )
-    }
+    )
 }
 
 @Preview(

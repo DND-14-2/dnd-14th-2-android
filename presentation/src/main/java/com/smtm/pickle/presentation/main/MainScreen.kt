@@ -69,6 +69,8 @@ fun MainScreen(
             rootNavController = rootNavController,
             tabNavController = tabNavController,
             currentDestination = currentDestination,
+            isFabExpanded = isFabExpanded,
+            onFabClose = { isFabExpanded = false },
             onBottomBarHeightChange = { height ->
                 with(density) {
                     bottomBarHeight = height.toDp()
@@ -111,9 +113,21 @@ private fun MainContent(
     rootNavController: NavHostController,
     tabNavController: NavHostController,
     currentDestination: NavDestination?,
+    isFabExpanded: Boolean,
+    onFabClose: () -> Unit,
     onBottomBarHeightChange: (Int) -> Unit,
     onSelectedDateChange: (LocalDate) -> Unit,
 ) {
+    val navigateToTab: (Any) -> Unit = { route ->
+        tabNavController.navigate(route) {
+            popUpTo(tabNavController.graph.startDestinationId) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         bottomBar = {
             PickleBottomNavigationBar(
@@ -121,15 +135,7 @@ private fun MainContent(
                     onBottomBarHeightChange(coordinates.size.height)
                 },
                 currentDestination = currentDestination,
-                onNavigate = { route ->
-                    tabNavController.navigate(route) {
-                        popUpTo(tabNavController.graph.startDestinationId) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
+                onNavigate = navigateToTab
             )
         }
     ) { innerPadding ->
@@ -141,9 +147,12 @@ private fun MainContent(
                 composable<HomeTabRoute> {
                     HomeScreen(
                         onSelectedDateChange = onSelectedDateChange,
+                        isFabExpanded = isFabExpanded,
+                        onNavigateToMyPage = { navigateToTab(MyPageTabRoute) },
                         onNavigateToLedgerDetail = { ledgerId ->
                             rootNavController.navigate(LedgerDetailRoute(ledgerId.value))
-                        }
+                        },
+                        onFabClose = onFabClose,
                     )
                 }
 

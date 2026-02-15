@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bottom Navigation -->
+    <string name="nav_home">홈</string>
+    <string name="nav_verdict">판결</string>
+    <string name="nav_mypage">마이페이지</string>
+
+    <!-- Login -->
+    <string name="login_kakao_start">카카오톡으로 시작하기</string>
+    <string name="login_google_start">구글 계정으로 시작하기</string>
+    <string name="login_tooltip_fast">3초만에 로그인하기!</string>
+
+    <!-- Nickname -->
+    <string name="profile_title">내 프로필</string>
+    <string name="nickname_label">닉네임</string>
+    <string name="nickname_title">닉네임 입력</string>
+    <string name="nickname_edit_title">닉네임 수정</string>
+    <string name="nickname_edit_button">변경하기</string>
+    <string name="nickname_instruction">닉네임을 설정해주세요</string>
+    <string name="nickname_change_instruction">변경할 닉네임을 입력해주세요.</string>
+    <string name="nickname_hint">최대 5자까지 입력 가능해요</string>
+    <string name="nickname_helper">특수 문자 및 영어 대문자는 사용할 수 없어요.</string>
+    <string name="nickname_check_duplicate">중복 확인</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">건너뛰기</string>
+    <string name="onboarding_start">시작하기</string>
+    <string name="onboarding_step1_title">가계부 작성</string>
+    <string name="onboarding_step1_description">아주 간단하게\n가계부를 기록할 수 있어요</string>
+    <string name="onboarding_step2_title">소비 심판</string>
+    <string name="onboarding_step2_description">이 지출, 꼭 필요한가요?\n객관적으로 심판 받을 수 있어요</string>
+    <string name="onboarding_step3_title">지인 연동</string>
+    <string name="onboarding_step3_description">친구와 함께라면\n작심삼일 탈출!</string>
+
+    <!-- Common -->
+    <string name="common_previous">이전</string>
+    <string name="common_next">다음</string>
+    <string name="common_income">수입</string>
+    <string name="common_expense">지출</string>
+    <string name="common_minus_str">-%s</string>
+    <string name="common_minus_str_won">-%s원</string>
+    <string name="common_plus_str">+%s</string>
+    <string name="common_plus_str_won">+%s원</string>
+    <string name="common_yyyy_mm_dd_dot">%d.%02d.%02d</string>
+    <string name="common_yyyy_mm_dd">%d년 %d월 %d일</string>
+    <string name="common_yyyy_mm">%d년 %d월</string>
+    <string name="common_mm_dd">%d월 %d일</string>
+    <string name="common_currency_won">₩</string>
+    <string name="common_amount">금액</string>
+    <string name="common_negative">아니요</string>
+    <string name="common_positive">네</string>
+    <string name="common_typo">함께하는 똑똑한 소비, 피클</string>
+
+    <!-- Error -->
+    <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="login_error_cancelled">로그인이 취소되었습니다.</string>
+    <string name="error_unknown">알 수 없는 오류가 발생했습니다.</string>
+
+    <!-- Other -->
+    <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
+
+    <!-- Ledger -->
+    <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>
+
+    <!-- Ledger Category -->
+    <string name="ledger_category_food">식비</string>
+    <string name="ledger_category_transport">교통비</string>
+    <string name="ledger_category_housing">주거비</string>
+    <string name="ledger_category_shopping">쇼핑</string>
+    <string name="ledger_category_health_medical">의료/건강</string>
+    <string name="ledger_category_education_self_development">교육/자기계발</string>
+    <string name="ledger_category_leisure_hobby">여가/취미</string>
+    <string name="ledger_category_saving_finance">저축/금융</string>
+    <string name="ledger_category_salary">월급</string>
+    <string name="ledger_category_side_income">부수입</string>
+    <string name="ledger_category_bonus">상여</string>
+    <string name="ledger_category_allowance">용돈</string>
+    <string name="ledger_category_part_time_income">아르바이트</string>
+    <string name="ledger_category_financial_income">금융수입</string>
+    <string name="ledger_category_split_bill">더치페이</string>
+    <string name="ledger_category_transfer">이체</string>
+    <string name="ledger_category_other">기타</string>
+
+    <!-- Ledger Create -->
+    <string name="ledger_create_category_header">카테고리를 선택해주세요.*</string>
+    <string name="ledger_create_category_header_highlight">*</string>
+    <string name="ledger_create_description_header">가계부 내용을 입력해주세요.</string>
+    <string name="ledger_create_description_hint">공백 포함 15자 이내로 입력해주세요.</string>
+    <string name="ledger_create_payment_method_header">결제 유형을 선택해주세요.*</string>
+    <string name="ledger_create_payment_method_header_highlight">*</string>
+    <string name="ledger_create_memo_header">메모할 내용이 있나요?</string>
+    <string name="ledger_create_memo_hint">최대 100자까지 입력할 수 있어요.</string>
+    <string name="ledger_create_success">선택완료</string>
+    <string name="ledger_create_exit_dialog_title">작성을 취소하시겠어요?</string>
+    <string name="ledger_create_exit_dialog_description">지금까지 내용들은 저장되지 않아요</string>
+    <string name="ledger_create_exit_dialog_negative">나가기</string>
+    <string name="ledger_create_exit_dialog_positive">작성하기</string>
+
+    <!-- Ledger Payment Method -->
+    <string name="ledger_payment_method_bank_transfer">계좌이체</string>
+    <string name="ledger_payment_method_credit_card">신용카드</string>
+    <string name="ledger_payment_method_debit_card">체크카드</string>
+    <string name="ledger_payment_method_cash">현금</string>
+
+    <!-- Ledger Detail -->
+    <string name="ledger_detail_title">가계부 내역</string>
+    <string name="ledger_detail_receipt_payment_method_title">유형</string>
+    <string name="ledger_detail_delete_dialog_title">가계부 내역을 삭제하시겠어요?</string>
+    <string name="ledger_detail_delete_dialog_description">삭제하면 되돌릴 수 없어요.</string>
+
+    <!-- Ledger Edit -->
+    <string name="ledger_edit_exit_dialog_title">수정을 취소하시겠어요?</string>
+    <string name="ledger_edit_exit_dialog_description">지금까지 내용들은 저장되지 않아요</string>
+    <string name="ledger_edit_exit_dialog_negative">나가기</string>
+    <string name="ledger_edit_exit_dialog_positive">작성하기</string>
+    <string name="ledger_edit_success">입력완료</string>
+
+    <!-- My Ledger -->
+    <string name="my_ledger_title">내 장부</string>
+    <string name="my_ledger_month">%d월</string>
+
+    <!-- Home -->
+    <string name="home_fab_create_ledger">가계부 작성하기</string>
+
+    <!-- Setting -->
+    <string name="setting_account_title">계정 설정</string>
+    <string name="setting_account_logout">로그아웃</string>
+    <string name="setting_account_secession">계정탈퇴</string>
+    <string name="setting_service_title">서비스 설정</string>
+    <string name="setting_service_privacy_policy">개인정보 처리방침</string>
+    <string name="setting_service_notification">알림 설정</string>
+    <string name="setting_service_version">앱 버전 정보</string>
+    <string name="setting_dialog_dismiss">돌아가기</string>
+    <string name="setting_dialog_logout_title">로그아웃하시겠어요?</string>
+    <string name="setting_dialog_logout_description">언제든 다시 로그인하고\n서비스를 이용할 수 있어요</string>
+    <string name="setting_dialog_logout_confirm">로그아웃</string>
+    <string name="setting_dialog_withdraw_title">정말 떠나실건가요?..</string>
+    <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
+    <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
+
+    <!-- Privacy Policy -->
+    <string name="privacy_policy_title">개인정보 처리방침</string>
+    <string name="privacy_policy_subtitle">피클 - 개인정보처리방침</string>
+    <string name="privacy_policy_description">본 개인정보처리방침은 소비심판(이하 “서비스”)가 제공하는 로그인 기능과 관련하여, 이용자의 개인정보를 어떻게 수집·이용·보관하는지 설명합니다.</string>
+    <string name="privacy_policy_contents">"수집하는 개인정보 항목
+1. 본 서비스는 Google 로그인을 통해서만 사용자 인증을 수행하며, 다음 정보만을 수집합니다.
+  - Google 계정 고유 식별자
+  - 이메일 주소
+  - 프로필 정보(이름, 프로필 이미지 등 Google 계정에 설정된 기본 정보)
+※ 비밀번호는 수집하거나 저장하지 않습니다.
+
+2. 개인정보 수집 및 이용 목적
+수집한 개인정보는 다음 목적에 한해 이용됩니다.
+  - 사용자 식별 및 로그인 인증
+  - 서비스 이용을 위한 사용자 계정 관리
+본 서비스는 **로그인 기능 외의 목적(마케팅, 광고 등)**으로 개인정보를 이용하지 않습니다.
+
+3. 개인정보 보관 및 이용 기간
+  - 사용자가 서비스 이용을 종료하거나 로그아웃하는 경우
+  - 또는 개인정보 수집·이용 목적이 달성된 경우
+지체 없이 해당 개인정보를 파기합니다.
+단, 관련 법령에 따라 일정 기간 보관이 필요한 경우에는 해당 법령을 따릅니다.
+ 4. 개인정보의 제3자 제공
+본 서비스는 이용자의 개인정보를 제3자에게 제공하지 않습니다.
+다만, 로그인 인증을 위해 Google OAuth 서비스를 이용하며, 이 과정에서 Google의 개인정보처리방침이 적용됩니다.
+
+Google 개인정보처리방침: https://policies.google.com/privacy
+
+5. 개인정보 처리 위탁
+본 서비스는 로그인 기능 제공을 위해 Google의 인증 서비스를 이용하며, 그 외 개인정보 처리 업무를 외부에 위탁하지 않습니다.
+
+6. 이용자의 권리
+이용자는 언제든지 다음 권리를 행사할 수 있습니다.
+  - 개인정보 열람 요청
+  - 개인정보 삭제 요청
+  - 서비스 이용 중단 요청
+관련 요청은 아래 문의처를 통해 접수하실 수 있습니다.
+
+7. 개인정보 보호를 위한 조치
+본 서비스는 개인정보 보호를 위해 다음과 같은 조치를 취하고 있습니다.
+  - OAuth 2.0 기반의 Google 로그인 사용
+  - 서버 통신 시 암호화 적용
+  - 접근 권한 최소화
+
+8. 개인정보 보호책임자 및 문의처
+  - 책임자: 이주혁
+  - 이메일: zero5.two4@gmail.com
+
+9. 개인정보처리방침 변경
+본 개인정보처리방침의 내용이 변경될 경우, 변경 사항을 사전에 공지합니다.
+
+시행일자: 2026년 1월 12일"</string>
+</resources>

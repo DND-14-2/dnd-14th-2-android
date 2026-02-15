@@ -2,46 +2,61 @@ package com.smtm.pickle
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.smtm.pickle.ui.theme.PickleTheme
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.navigation.compose.rememberNavController
+import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.navigation.GlobalNavEvent
+import com.smtm.pickle.presentation.navigation.PickleNavHost
+import com.smtm.pickle.presentation.navigation.route.LoginRoute
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                scrim = Color.Transparent.toArgb(),
+                darkScrim = Color.Transparent.toArgb()
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                scrim = Color.Transparent.toArgb(),
+                darkScrim = Color.Transparent.toArgb()
+            )
+        )
+
         setContent {
             PickleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                val handleGlobalNavEvent: (GlobalNavEvent) -> Unit = remember(navController) {
+                    { event ->
+                        when (event) {
+                            is GlobalNavEvent.Logout -> {
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(navController.graph.id) { inclusive = true }
+                                }
+                            }
+
+                            is GlobalNavEvent.SessionExpired -> {
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(navController.graph.id) { inclusive = true }
+                                }
+                            }
+                        }
+                    }
                 }
+
+                PickleNavHost(
+                    navController = navController,
+                    onGlobalNavEvent = handleGlobalNavEvent,
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PickleTheme {
-        Greeting("Android")
     }
 }

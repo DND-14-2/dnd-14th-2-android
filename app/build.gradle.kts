@@ -1,8 +1,23 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+fun Properties.require(key: String): String =
+    getProperty(key) ?: throw GradleException("local.properties에 '$key'가 설정되지 않았습니다.")
 
 android {
     namespace = "com.smtm.pickle"
@@ -10,48 +25,92 @@ android {
         version = release(36)
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(localProperties.require("DEBUG_KEYSTORE_PATH"))
+            storePassword = localProperties.require("DEBUG_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.require("DEBUG_KEY_ALIAS")
+            keyPassword = localProperties.require("DEBUG_KEY_PASSWORD")
+        }
+
+        create("release") {
+            storeFile = file(localProperties.require("RELEASE_KEYSTORE_PATH"))
+            storePassword = localProperties.require("RELEASE_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.require("RELEASE_KEY_ALIAS")
+            keyPassword = localProperties.require("RELEASE_KEY_PASSWORD")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.smtm.pickle"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+
+        val appVersionCode = (project.property("VERSION_CODE") as String).toInt()
+        val appVersionName = project.property("VERSION_NAME") as String
+
+        versionCode = appVersionCode
+        versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // 키값이 없음을 빠르게 확인용
+        val kakaoKey = localProperties.require("KAKAO_NATIVE_APP_KEY")
+
+        // Manifest에 주입
+        manifestPlaceholders["NATIVE_APP_KEY"] = kakaoKey
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+        create("qa") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+    implementation(project(":domain"))
+    implementation(project(":presentation"))
+    implementation(project(":data"))
+
+    implementation(libs.bundles.androidx)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.bundles.compose)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // Logging
+    implementation(libs.timber)
+
+    // Social SDK
+    implementation(libs.kakao.user)
+
+    // Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.bundles.android.test)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

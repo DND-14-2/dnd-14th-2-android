@@ -6,11 +6,19 @@ import androidx.compose.ui.unit.dp
 @Immutable
 object Dimensions {
     // 버튼
-    /** 수입/지출 버튼 */
-    val buttonHeightLarge = 60.dp
     val buttonHeight = 52.dp
-    /** 소셜 로그인, 다이얼로그 내 버튼 */
-    val buttonHeightSmall = 48.dp
+    val buttonHeightSmall = 32.dp
+    val buttonHeightMedium = 40.dp
+    val buttonHeightLarge = 52.dp
+    val buttonPaddingSmall = 6.dp
+    val buttonPaddingMedium = 8.dp
+    val buttonPaddingLarge = 14.dp
+    val buttonLeadingWidthSmall = 80.dp
+    val buttonLeadingWidthMedium = 90.dp
+    val buttonLeadingWidthLarge = 100.dp
+    val buttonSpacingSmall = 4.dp
+    val buttonSpacingMedium = 6.dp
+    val buttonSpacingLarge = 10.dp
 
     // 입력 필드
     val inputHeight = 48.dp

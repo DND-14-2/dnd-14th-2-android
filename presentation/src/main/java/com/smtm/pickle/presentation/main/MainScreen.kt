@@ -118,6 +118,16 @@ private fun MainContent(
     onBottomBarHeightChange: (Int) -> Unit,
     onSelectedDateChange: (LocalDate) -> Unit,
 ) {
+    val navigateToTab: (Any) -> Unit = { route ->
+        tabNavController.navigate(route) {
+            popUpTo(tabNavController.graph.startDestinationId) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         bottomBar = {
             PickleBottomNavigationBar(
@@ -125,15 +135,7 @@ private fun MainContent(
                     onBottomBarHeightChange(coordinates.size.height)
                 },
                 currentDestination = currentDestination,
-                onNavigate = { route ->
-                    tabNavController.navigate(route) {
-                        popUpTo(tabNavController.graph.startDestinationId) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
+                onNavigate = navigateToTab
             )
         }
     ) { innerPadding ->
@@ -146,6 +148,7 @@ private fun MainContent(
                     HomeScreen(
                         onSelectedDateChange = onSelectedDateChange,
                         isFabExpanded = isFabExpanded,
+                        onNavigateToMyPage = { navigateToTab(MyPageTabRoute) },
                         onNavigateToLedgerDetail = { ledgerId ->
                             rootNavController.navigate(LedgerDetailRoute(ledgerId.value))
                         },

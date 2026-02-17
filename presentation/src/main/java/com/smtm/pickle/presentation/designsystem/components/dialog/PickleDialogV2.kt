@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.designsystem.components.dialog
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -98,6 +100,7 @@ fun PickleDialogV2(
                     buttonLayout = buttonLayout,
                     modifier = Modifier.fillMaxWidth(),
                 )
+
             }
         }
     }
@@ -169,6 +172,20 @@ private fun DialogButtons(
                     )
                 },
             )
+
+            if (buttonLayout.actionText != null) {
+                Text(
+                    text = buttonLayout.actionText,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { buttonLayout.onActionClick?.invoke() }
+                        .padding(vertical = Dimensions.dialogButtonActionTextSpacing),
+                    style = PickleTheme.typography.body4Medium,
+                    color = PickleTheme.colors.primary500,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline,
+                )
+            }
         }
     }
 }
@@ -265,6 +282,26 @@ private fun PickleDialogV2WithInputFieldPreview() {
                     shape = RoundedCornerShape(Dimensions.radius),
                 ) {}
             },
+        )
+    }
+}
+
+@Preview(name = "Type 6 - Vertical Buttons with HyperText")
+@Composable
+private fun PickleDialogV2VerticalWithHyperTextPreview() {
+    PickleTheme {
+        PickleDialogV2(
+            title = "타이틀",
+            subtitle = "서브타이틀 텍스트가 들어갑니다",
+            buttonLayout = PickleDialogButtonLayout.Vertical(
+                primaryText = "시작하기",
+                ghostText = "다음에 하기",
+                onPrimaryClick = {},
+                onGhostClick = {},
+                actionText = "하이퍼 텍스트",
+                onActionClick = {},
+            ),
+            onDismiss = {},
         )
     }
 }

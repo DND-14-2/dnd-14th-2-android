@@ -25,6 +25,7 @@ import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.mypage.tabs.statistics.model.ComparisonResult
 import kotlin.math.abs
@@ -73,10 +74,10 @@ fun StatsSummaryCard(
         Spacer(modifier = Modifier.height(20.dp))
 
         PickleButton(
+            modifier = Modifier.fillMaxWidth(),
             text = "내 장부 보기",
             onClick = onMyLedgerClick,
-            color = PickleTheme.colors.primary50,
-            textColor = PickleTheme.colors.primary500
+            type = PickleButtonType.Tertiary
         )
         Spacer(modifier = Modifier.height(10.dp))
 

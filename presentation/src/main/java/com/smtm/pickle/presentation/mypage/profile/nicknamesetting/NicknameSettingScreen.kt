@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -65,6 +66,7 @@ fun NicknameSettingContent(
         bottomBar = {
             PickleButton(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .navigationBarsPadding()
                     .imePadding()
                     .padding(bottom = 12.dp)
@@ -72,7 +74,6 @@ fun NicknameSettingContent(
                 text = stringResource(R.string.nickname_edit_button),
                 onClick = onSaveClick,
                 enabled = uiState.inputState is InputState.Success,
-                textColor = PickleTheme.colors.base0
             )
         }
     ) {

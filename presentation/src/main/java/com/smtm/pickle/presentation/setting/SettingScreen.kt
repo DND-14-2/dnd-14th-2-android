@@ -26,9 +26,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialogV2
+import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
@@ -82,31 +83,31 @@ fun SettingScreen(
 
     when (uiState.dialogState) {
         SettingDialogState.Logout -> {
-            PickleDialog.WithRowButton(
-                confirmText = stringResource(R.string.setting_dialog_logout_confirm),
-                cancelText = stringResource(R.string.setting_dialog_dismiss),
-                onConfirmClick = viewModel::confirmLogout,
-                onCancelClick = viewModel::dismissDialog,
-            ) {
-                DialogContent(
-                    title = stringResource(R.string.setting_dialog_logout_title),
-                    description = stringResource(R.string.setting_dialog_logout_description)
-                )
-            }
+            PickleDialogV2(
+                title = stringResource(R.string.setting_dialog_logout_title),
+                subtitle = stringResource(R.string.setting_dialog_logout_description),
+                buttonLayout = PickleDialogButtonLayout.Horizontal(
+                    confirmText = stringResource(R.string.setting_dialog_logout_confirm),
+                    cancelText = stringResource(R.string.setting_dialog_dismiss),
+                    onConfirmClick = viewModel::confirmLogout,
+                    onCancelClick = viewModel::dismissDialog,
+                ),
+                onDismiss = viewModel::dismissDialog,
+            )
         }
 
         SettingDialogState.Withdraw -> {
-            PickleDialog.WithRowButton(
-                confirmText = stringResource(R.string.setting_dialog_withdraw_confirm),
-                cancelText = stringResource(R.string.setting_dialog_dismiss),
-                onConfirmClick = viewModel::confirmWithdraw,
-                onCancelClick = viewModel::dismissDialog,
-            ) {
-                DialogContent(
-                    title = stringResource(R.string.setting_dialog_withdraw_title),
-                    description = stringResource(R.string.setting_dialog_withdraw_description)
-                )
-            }
+            PickleDialogV2(
+                title = stringResource(R.string.setting_dialog_withdraw_title),
+                subtitle = stringResource(R.string.setting_dialog_withdraw_description),
+                buttonLayout = PickleDialogButtonLayout.Horizontal(
+                    confirmText = stringResource(R.string.setting_dialog_withdraw_confirm),
+                    cancelText = stringResource(R.string.setting_dialog_dismiss),
+                    onConfirmClick = viewModel::confirmWithdraw,
+                    onCancelClick = viewModel::dismissDialog,
+                ),
+                onDismiss = viewModel::dismissDialog,
+            )
         }
 
         SettingDialogState.None -> Unit

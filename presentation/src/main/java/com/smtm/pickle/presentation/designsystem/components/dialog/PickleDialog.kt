@@ -173,12 +173,12 @@ private fun DialogButtons(
                 },
             )
 
-            if (buttonLayout.actionText != null) {
+            if (buttonLayout.action != null) {
                 Text(
-                    text = buttonLayout.actionText,
+                    text = buttonLayout.action.text,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { buttonLayout.onActionClick?.invoke() }
+                        .clickable { buttonLayout.action.onClick() }
                         .padding(vertical = Dimensions.dialogButtonActionTextSpacing),
                     style = PickleTheme.typography.body4Medium,
                     color = PickleTheme.colors.primary500,
@@ -298,8 +298,10 @@ private fun PickleDialogVerticalWithHyperTextPreview() {
                 ghostText = "다음에 하기",
                 onPrimaryClick = {},
                 onGhostClick = {},
-                actionText = "하이퍼 텍스트",
-                onActionClick = {},
+                action = PickleDialogButtonLayout.Action(
+                    text = "하이퍼 텍스트",
+                    onClick = {},
+                ),
             ),
             onDismiss = {},
         )

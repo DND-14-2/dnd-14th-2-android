@@ -33,7 +33,7 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
-fun PickleDialogV2(
+fun PickleDialog(
     title: String,
     subtitle: String,
     buttonLayout: PickleDialogButtonLayout,
@@ -192,9 +192,9 @@ private fun DialogButtons(
 
 @Preview(name = "Type 1 - Single Button")
 @Composable
-private fun PickleDialogV2SinglePreview() {
+private fun PickleDialogSinglePreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Single(
@@ -208,9 +208,9 @@ private fun PickleDialogV2SinglePreview() {
 
 @Preview(name = "Type 2 - Horizontal Buttons")
 @Composable
-private fun PickleDialogV2HorizontalPreview() {
+private fun PickleDialogHorizontalPreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Horizontal(
@@ -226,9 +226,9 @@ private fun PickleDialogV2HorizontalPreview() {
 
 @Preview(name = "Type 3 - Vertical Buttons")
 @Composable
-private fun PickleDialogV2VerticalPreview() {
+private fun PickleDialogVerticalPreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Vertical(
@@ -244,9 +244,9 @@ private fun PickleDialogV2VerticalPreview() {
 
 @Preview(name = "Type 4 - With Image")
 @Composable
-private fun PickleDialogV2WithImagePreview() {
+private fun PickleDialogWithImagePreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Single(
@@ -261,9 +261,9 @@ private fun PickleDialogV2WithImagePreview() {
 
 @Preview(name = "Type 5 - With Input Field")
 @Composable
-private fun PickleDialogV2WithInputFieldPreview() {
+private fun PickleDialogWithInputFieldPreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Horizontal(
@@ -288,9 +288,9 @@ private fun PickleDialogV2WithInputFieldPreview() {
 
 @Preview(name = "Type 6 - Vertical Buttons with HyperText")
 @Composable
-private fun PickleDialogV2VerticalWithHyperTextPreview() {
+private fun PickleDialogVerticalWithHyperTextPreview() {
     PickleTheme {
-        PickleDialogV2(
+        PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
             buttonLayout = PickleDialogButtonLayout.Vertical(

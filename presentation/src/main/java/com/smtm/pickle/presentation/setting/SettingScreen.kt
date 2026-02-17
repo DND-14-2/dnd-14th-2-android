@@ -26,7 +26,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
-import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialogV2
+import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
@@ -81,7 +81,7 @@ fun SettingScreen(
 
     when (uiState.dialogState) {
         SettingDialogState.Logout -> {
-            PickleDialogV2(
+            PickleDialog(
                 title = stringResource(R.string.setting_dialog_logout_title),
                 subtitle = stringResource(R.string.setting_dialog_logout_description),
                 buttonLayout = PickleDialogButtonLayout.Horizontal(
@@ -95,7 +95,7 @@ fun SettingScreen(
         }
 
         SettingDialogState.Withdraw -> {
-            PickleDialogV2(
+            PickleDialog(
                 title = stringResource(R.string.setting_dialog_withdraw_title),
                 subtitle = stringResource(R.string.setting_dialog_withdraw_description),
                 buttonLayout = PickleDialogButtonLayout.Horizontal(

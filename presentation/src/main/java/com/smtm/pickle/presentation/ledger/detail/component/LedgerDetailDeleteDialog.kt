@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialogV2
+import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
@@ -15,7 +15,7 @@ fun LedgerDetailDeleteDialog(
     onDismiss: () -> Unit,
     onDeleteButtonClick: () -> Unit,
 ) {
-    PickleDialogV2(
+    PickleDialog(
         title = stringResource(R.string.ledger_detail_delete_dialog_title),
         subtitle = stringResource(R.string.ledger_detail_delete_dialog_description),
         buttonLayout = PickleDialogButtonLayout.Horizontal(

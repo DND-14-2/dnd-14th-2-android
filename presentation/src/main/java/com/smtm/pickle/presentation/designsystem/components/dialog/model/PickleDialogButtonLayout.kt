@@ -5,7 +5,7 @@ package com.smtm.pickle.presentation.designsystem.components.dialog.model
  *
  * @property Single 단일 버튼 (Primary Large, fillMaxWidth)
  * @property Horizontal 가로 버튼 2개 (좌=Secondary, 우=Primary, 동일 너비)
- * @property Vertical 세로 버튼 2개 + 액션 텍스트(상=Primary, 하=Ghost, 액션 텍스트=UnderLine fillMaxWidth)
+ * @property Vertical 세로 버튼 2개 + 액션 텍스트(상=Primary, 하=Ghost, 하단 액션 텍스트(옵셔널), fillMaxWidth)
  */
 sealed interface PickleDialogButtonLayout {
 
@@ -26,7 +26,11 @@ sealed interface PickleDialogButtonLayout {
         val ghostText: String,
         val onPrimaryClick: () -> Unit,
         val onGhostClick: () -> Unit,
-        val actionText: String? = null,
-        val onActionClick: (() -> Unit)? = null,
+        val action: Action? = null,
     ) : PickleDialogButtonLayout
+
+    data class Action(
+        val text: String,
+        val onClick: () -> Unit,
+    )
 }

@@ -67,4 +67,14 @@ object Dimensions {
     val radiusFull = 999.dp
 
     val bottomContentHeight = 72.dp
+
+    // 다이얼로그
+    val dialogPaddingTop = 40.dp
+    val dialogPaddingContent = 20.dp
+    val dialogTitleSubtitleSpacing = 6.dp
+    val dialogContentButtonSpacing = 24.dp
+    val dialogImageSize = 140.dp
+    val dialogImageTitleSpacing = 24.dp
+    val dialogSubtitleInputSpacing = 20.dp
+    val dialogButtonActionTextSpacing = 10.dp
 }

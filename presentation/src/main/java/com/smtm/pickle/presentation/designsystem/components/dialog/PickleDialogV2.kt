@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
 import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
@@ -113,7 +113,7 @@ private fun DialogButtons(
 ) {
     when (buttonLayout) {
         is PickleDialogButtonLayout.Single -> {
-            PickleButtonV2(
+            PickleButton(
                 text = buttonLayout.text,
                 onClick = buttonLayout.onClick,
                 modifier = modifier,
@@ -128,7 +128,7 @@ private fun DialogButtons(
                 layout = PickleButtonGroupLayout.RowEqual,
                 buttonSize = PickleButtonSize.Large,
                 leadingButton = { buttonModifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         text = buttonLayout.cancelText,
                         onClick = buttonLayout.onCancelClick,
                         modifier = buttonModifier,
@@ -137,7 +137,7 @@ private fun DialogButtons(
                     )
                 },
                 trailingButton = { buttonModifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         text = buttonLayout.confirmText,
                         onClick = buttonLayout.onConfirmClick,
                         modifier = buttonModifier,
@@ -154,7 +154,7 @@ private fun DialogButtons(
                 layout = PickleButtonGroupLayout.Column,
                 buttonSize = PickleButtonSize.Large,
                 leadingButton = { buttonModifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         text = buttonLayout.primaryText,
                         onClick = buttonLayout.onPrimaryClick,
                         modifier = buttonModifier,
@@ -163,7 +163,7 @@ private fun DialogButtons(
                     )
                 },
                 trailingButton = { buttonModifier, buttonSize ->
-                    PickleButtonV2(
+                    PickleButton(
                         text = buttonLayout.ghostText,
                         onClick = buttonLayout.onGhostClick,
                         modifier = buttonModifier,

@@ -14,6 +14,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,7 +23,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import com.smtm.pickle.domain.model.verdict.JurorInfo
+import com.smtm.pickle.domain.model.verdict.VerdictResult
+import com.smtm.pickle.domain.model.verdict.VerdictStatus
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
+import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -30,6 +41,10 @@ import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictNewInfoBanner
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
+import com.smtm.pickle.presentation.verdict.model.VerdictCounts
+import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 private val defaultPadding: Dp = 16.dp
 
@@ -43,9 +58,28 @@ fun VerdictScreen(
     onNavigateJurorDetail: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    VerdictEffect.NavigateToCreate -> onNavigateVerdictCreate()
+                    VerdictEffect.NavigateToResult -> onNavigateVerdictResult()
+                    VerdictEffect.NavigateToRequest -> onNavigateVerdictRequest()
+                }
+            }
+        }
+    }
 
     VerdictContent(
-        uiState = uiState,
+        selectedTabIndex = uiState.selectedTabIndex,
+        myJudgementFilterIndex = uiState.myJudgementFilterIndex,
+        myVerdictFilterIndex = uiState.myVerdictFilterIndex,
+        myJudgementCounts = uiState.myJudgementCounts,
+        myVerdictCounts = uiState.myVerdictCounts,
+        myJudgementItems = uiState.myJudgementItems,
+        myVerdictItems = uiState.myVerdictItems,
         onNavigateVerdictCreate = onNavigateVerdictCreate,
         onNavigateJurorList = onNavigateJurorList,
         onTabSelected = viewModel::onTabSelected,
@@ -56,7 +90,13 @@ fun VerdictScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VerdictContent(
-    uiState: VerdictUiState,
+    selectedTabIndex: Int,
+    myJudgementFilterIndex: Int,
+    myVerdictFilterIndex: Int,
+    myJudgementCounts: VerdictCounts,
+    myVerdictCounts: VerdictCounts,
+    myJudgementItems: List<VerdictUiModel>,
+    myVerdictItems: List<VerdictUiModel>,
     onNavigateVerdictCreate: () -> Unit,
     onNavigateJurorList: () -> Unit,
     onTabSelected: (Int) -> Unit,
@@ -89,10 +129,12 @@ private fun VerdictContent(
                 .padding(top = innerPadding.calculateTopPadding())
                 .fillMaxSize(),
         ) {
+            // TODO: 새로운 소식 여부에 따라 보이도록 처리
             item("verdict_info") {
                 VerdictNewInfoBanner()
             }
 
+            // TODO: 새로운 소식 여부에 따라 보이도록 처리
             item("divider") {
                 HorizontalDivider(
                     thickness = 8.dp,
@@ -104,7 +146,11 @@ private fun VerdictContent(
 
             item("tabs") {
                 VerdictTabs(
-                    uiState = uiState,
+                    selectedTabIndex = selectedTabIndex,
+                    myJudgementFilterIndex = myJudgementFilterIndex,
+                    myVerdictFilterIndex = myVerdictFilterIndex,
+                    myJudgementCounts = myJudgementCounts,
+                    myVerdictCounts = myVerdictCounts,
                     onTabSelected = onTabSelected,
                     onFilterSelected = onFilterSelected,
                     modifier = Modifier.padding(horizontal = defaultPadding)
@@ -113,15 +159,23 @@ private fun VerdictContent(
 
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            val items = if (uiState.selectedTabIndex == 0) uiState.myJudgementItems else uiState.myVerdictItems
+            val items = if (selectedTabIndex == 0) myJudgementItems else myVerdictItems
             if (items.isEmpty()) {
                 item {
-                    EmptyVerdictContent(selectedTabIndex = uiState.selectedTabIndex)
+                    EmptyVerdictContent(selectedTabIndex = selectedTabIndex)
                 }
             } else {
-                items(items) { item ->
+                items(
+                    items = items,
+                    key = { it.id }
+                ) { item ->
                     VerdictListItem(
-                        item = item,
+                        jurorNickname = item.juror.nickname,
+                        amount = item.ledger.amount,
+                        description = item.ledger.description,
+                        categoryIconResId = item.ledger.category.iconResId,
+                        paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
+                        status = item.status,
                         modifier = Modifier.padding(horizontal = defaultPadding)
                     )
                     if (item != items.last())
@@ -138,11 +192,67 @@ private fun VerdictContent(
 @Preview
 @Composable
 private fun VerdictContentPreview() {
+    val mockJudgementItems = listOf(
+        VerdictUiModel(
+            id = 1,
+            ledger = LedgerUiModel(
+                id = 101L,
+                type = LedgerTypeUiModel.Expense,
+                amount = 15000L,
+                category = CategoryUiModel.Food,
+                description = "가계부 15자 입력",
+                occurredOn = LocalDate.now(),
+                paymentMethod = PaymentMethodUiModel.Cash,
+                memo = null
+            ),
+            juror = JurorInfo(201, "홍길동", "BADGE_1", "배지", "JUROR_CODE_1"),
+            status = VerdictStatus.PENDING,
+            createdAt = LocalDateTime.now().minusDays(1)
+        ),
+        VerdictUiModel(
+            id = 2,
+            ledger = LedgerUiModel(
+                id = 102L,
+                type = LedgerTypeUiModel.Expense,
+                amount = 5000L,
+                category = CategoryUiModel.Food,
+                description = "커피 한잔",
+                occurredOn = LocalDate.now(),
+                paymentMethod = PaymentMethodUiModel.CreditCard,
+                memo = null
+            ),
+            juror = JurorInfo(202, "김철수", "BADGE_2", "배지", "JUROR_CODE_2"),
+            status = VerdictStatus.COMPLETED,
+            result = VerdictResult.GUILTY,
+            createdAt = LocalDateTime.now().minusDays(2)
+        ),
+        VerdictUiModel(
+            id = 3,
+            ledger = LedgerUiModel(
+                id = 103L,
+                type = LedgerTypeUiModel.Expense,
+                amount = 25000L,
+                category = CategoryUiModel.Food,
+                description = "야식 치킨",
+                occurredOn = LocalDate.now(),
+                paymentMethod = PaymentMethodUiModel.CreditCard,
+                memo = null
+            ),
+            juror = JurorInfo(203, "이영희", "BADGE_3", "배지", "JUROR_CODE_3"),
+            status = VerdictStatus.COMPLETED,
+            result = VerdictResult.INNOCENT,
+            createdAt = LocalDateTime.now().minusDays(3)
+        )
+    )
     PickleTheme {
         VerdictContent(
-            uiState = VerdictUiState(
-                myJudgementItems = emptyList()
-            ),
+            selectedTabIndex = 0,
+            myJudgementFilterIndex = 0,
+            myVerdictFilterIndex = 0,
+            myJudgementCounts = VerdictCounts(10, 5, 5),
+            myVerdictCounts = VerdictCounts(5, 3, 2),
+            myJudgementItems = mockJudgementItems,
+            myVerdictItems = emptyList(),
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},
@@ -156,10 +266,13 @@ private fun VerdictContentPreview() {
 private fun VerdictContentEmptyJudgementPreview() {
     PickleTheme {
         VerdictContent(
-            uiState = VerdictUiState(
-                selectedTabIndex = 0,
-                myJudgementItems = emptyList()
-            ),
+            selectedTabIndex = 0,
+            myJudgementFilterIndex = 0,
+            myVerdictFilterIndex = 0,
+            myJudgementCounts = VerdictCounts(0, 0, 0),
+            myVerdictCounts = VerdictCounts(0, 0, 0),
+            myJudgementItems = emptyList(),
+            myVerdictItems = emptyList(),
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},
@@ -173,10 +286,13 @@ private fun VerdictContentEmptyJudgementPreview() {
 private fun VerdictContentEmptyVerdictPreview() {
     PickleTheme {
         VerdictContent(
-            uiState = VerdictUiState(
-                selectedTabIndex = 1,
-                myVerdictItems = emptyList()
-            ),
+            selectedTabIndex = 1,
+            myJudgementFilterIndex = 0,
+            myVerdictFilterIndex = 0,
+            myJudgementCounts = VerdictCounts(0, 0, 0),
+            myVerdictCounts = VerdictCounts(0, 0, 0),
+            myJudgementItems = emptyList(),
+            myVerdictItems = emptyList(),
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},

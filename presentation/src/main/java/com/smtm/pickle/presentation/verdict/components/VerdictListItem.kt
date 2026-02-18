@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.verdict.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,8 +45,13 @@ import java.time.LocalDateTime
 
 @Composable
 fun VerdictListItem(
-    item: VerdictUiModel,
-    modifier: Modifier = Modifier
+    jurorNickname: String,
+    amount: Long,
+    description: String,
+    @DrawableRes categoryIconResId: Int,
+    @DrawableRes paymentMethodIconResId: Int,
+    status: VerdictStatus,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
@@ -72,7 +79,7 @@ fun VerdictListItem(
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(item.ledger.category.iconResId),
+                    painter = painterResource(categoryIconResId),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -81,7 +88,7 @@ fun VerdictListItem(
 
             Column {
                 Text(
-                    text = item.ledger.description,
+                    text = description,
                     style = PickleTheme.typography.body2Medium,
                     color = PickleTheme.colors.gray700
                 )
@@ -92,7 +99,7 @@ fun VerdictListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${item.ledger.amount.toMoneyFormat()}원",
+                        text = "${amount.toMoneyFormat()}원",
                         style = PickleTheme.typography.caption1Medium,
                         color = PickleTheme.colors.gray600
                     )
@@ -103,7 +110,7 @@ fun VerdictListItem(
                             .background(color = PickleTheme.colors.gray200)
                     )
                     Image(
-                        painter = painterResource(item.ledger.paymentMethod.iconResId),
+                        painter = painterResource(paymentMethodIconResId),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp)
                     )
@@ -120,23 +127,22 @@ fun VerdictListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(
-                modifier = Modifier
-                    .size(width = 40.dp, height = 24.dp)
-                    .background(
-                        color = PickleTheme.colors.background100,
-                        shape = RoundedCornerShape(6.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = when (item.status) {
-                        VerdictStatus.PENDING -> "대기"
-                        VerdictStatus.COMPLETED -> "완료"
-                    },
-                    style = PickleTheme.typography.caption1Medium,
-                    color = PickleTheme.colors.gray700
-                )
+            when (status) {
+                VerdictStatus.PENDING -> {
+                    StatusChip(
+                        state = "대기",
+                        containerColor = PickleTheme.colors.background100,
+                        contentColor = PickleTheme.colors.gray700
+                    )
+                }
+
+                VerdictStatus.COMPLETED -> {
+                    StatusChip(
+                        state = "완료",
+                        containerColor = PickleTheme.colors.primary50,
+                        contentColor = PickleTheme.colors.primary500
+                    )
+                }
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -150,7 +156,7 @@ fun VerdictListItem(
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = item.juror.nickname,
+                    text = jurorNickname,
                     style = PickleTheme.typography.caption1Medium,
                     color = PickleTheme.colors.gray700
                 )
@@ -159,27 +165,56 @@ fun VerdictListItem(
     }
 }
 
+@Composable
+private fun StatusChip(
+    state: String,
+    containerColor: Color,
+    contentColor: Color
+) {
+    Box(
+        modifier = Modifier
+            .size(width = 40.dp, height = 24.dp)
+            .background(
+                color = containerColor,
+                shape = RoundedCornerShape(6.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = state,
+            style = PickleTheme.typography.caption1Medium,
+            color = contentColor
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun VerdictListItemPreview() {
     PickleTheme {
+        val item = VerdictUiModel(
+            id = 1,
+            ledger = LedgerUiModel(
+                id = 1L,
+                type = LedgerTypeUiModel.Expense,
+                amount = 15000,
+                category = CategoryUiModel.Food,
+                description = "가계부 15자 입력",
+                occurredOn = LocalDate.now(),
+                paymentMethod = PaymentMethodUiModel.Cash,
+                memo = null
+            ),
+            juror = JurorInfo(1, "홍길동", "BADGE", "배지", "JUROR_CODE"),
+            status = VerdictStatus.PENDING,
+            createdAt = LocalDateTime.now()
+        )
         VerdictListItem(
-            item = VerdictUiModel(
-                id = 1,
-                ledger = LedgerUiModel(
-                    id = 1,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 15000,
-                    category = CategoryUiModel.Food,
-                    description = "가계부 15자 입력",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.Cash,
-                    memo = null
-                ),
-                juror = JurorInfo(1, "홍길동", "BADGE", "배지"),
-                status = VerdictStatus.PENDING,
-                createdAt = LocalDateTime.now()
-            )
+            jurorNickname = item.juror.nickname,
+            amount = item.ledger.amount,
+            description = item.ledger.description,
+            categoryIconResId = item.ledger.category.iconResId,
+            paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
+            status = item.status,
         )
     }
 }

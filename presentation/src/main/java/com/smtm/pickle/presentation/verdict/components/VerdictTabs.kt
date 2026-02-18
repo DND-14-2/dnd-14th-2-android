@@ -17,10 +17,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,19 +27,23 @@ import androidx.compose.ui.zIndex
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.mypage.tabs.statistics.components.SlidingPillIndicator
-import com.smtm.pickle.presentation.verdict.VerdictUiState
+import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 
 @Composable
 fun VerdictTabs(
     modifier: Modifier = Modifier,
-    uiState: VerdictUiState,
+    selectedTabIndex: Int,
+    myJudgementFilterIndex: Int,
+    myVerdictFilterIndex: Int,
+    myJudgementCounts: VerdictCounts,
+    myVerdictCounts: VerdictCounts,
     onTabSelected: (Int) -> Unit,
     onFilterSelected: (Int) -> Unit,
 ) {
     val tabs = listOf("내 심판", "내 판결")
-    val counts = if (uiState.selectedTabIndex == 0) uiState.myJudgementCounts else uiState.myVerdictCounts
+    val counts = if (selectedTabIndex == 0) myJudgementCounts else myVerdictCounts
 
-    val filters = if (uiState.selectedTabIndex == 0) {
+    val filters = if (selectedTabIndex == 0) {
         listOf(
             "전체 ${counts.total}",
             "대기 ${counts.pending}",
@@ -56,22 +57,18 @@ fun VerdictTabs(
         )
     }
 
-    val currentFilterIndex = if (uiState.selectedTabIndex == 0) {
-        uiState.myJudgementFilterIndex
-    } else {
-        uiState.myVerdictFilterIndex
-    }
+    val currentFilterIndex = if (selectedTabIndex == 0) myJudgementFilterIndex else myVerdictFilterIndex
 
     Column(modifier = modifier) {
         CompositionLocalProvider(LocalRippleConfiguration provides null) {
             TabRow(
-                selectedTabIndex = uiState.selectedTabIndex,
+                selectedTabIndex = selectedTabIndex,
                 containerColor = PickleTheme.colors.background100,
                 contentColor = PickleTheme.colors.gray800,
                 indicator = { tabPosition ->
                     SlidingPillIndicator(
                         positions = tabPosition,
-                        selectedIndex = uiState.selectedTabIndex,
+                        selectedIndex = selectedTabIndex,
                     )
                 },
                 divider = { },
@@ -83,7 +80,7 @@ fun VerdictTabs(
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
-                        selected = index == uiState.selectedTabIndex,
+                        selected = index == selectedTabIndex,
                         modifier = Modifier
                             .zIndex(1f)
                             .clip(RoundedCornerShape(Dimensions.radiusSmall)),
@@ -146,7 +143,14 @@ private fun VerdictChip(
 @Composable
 private fun VerdictTabsPreview() {
     PickleTheme {
-        var uiState by remember { mutableStateOf(VerdictUiState()) }
-        VerdictTabs(uiState = uiState, onTabSelected = {}, onFilterSelected = {})
+        VerdictTabs(
+            selectedTabIndex = 0,
+            myJudgementFilterIndex = 0,
+            myVerdictFilterIndex = 0,
+            myJudgementCounts = VerdictCounts(10, 5, 5),
+            myVerdictCounts = VerdictCounts(5, 3, 2),
+            onTabSelected = {},
+            onFilterSelected = {}
+        )
     }
 }

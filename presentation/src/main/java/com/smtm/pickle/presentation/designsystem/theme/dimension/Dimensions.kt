@@ -6,7 +6,6 @@ import androidx.compose.ui.unit.dp
 @Immutable
 object Dimensions {
     // 버튼
-    val buttonHeight = 52.dp
     val buttonHeightSmall = 32.dp
     val buttonHeightMedium = 40.dp
     val buttonHeightLarge = 52.dp

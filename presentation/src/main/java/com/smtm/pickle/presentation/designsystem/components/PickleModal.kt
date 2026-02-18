@@ -24,13 +24,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonGroup
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonWithCancel
-import com.smtm.pickle.presentation.designsystem.components.button.model.CancelWidth
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonGroupLayout
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonSize
+import com.smtm.pickle.presentation.designsystem.components.button.model.PickleButtonType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
-/** @sample com.smtm.pickle.presentation.designsystem.components.PickleDialogPreview */
 @Composable
 fun PickleDialog(
     modifier: Modifier = Modifier,
@@ -81,12 +82,28 @@ object PickleDialog {
 
             Spacer(modifier = Modifier.height(buttonSpace))
 
-            PickleButtonWithCancel(
-                confirmText = confirmText,
-                cancelText = cancelText,
-                onConfirmClick = onConfirmClick,
-                onCancelClick = onCancelClick,
-                cancelWidth = CancelWidth.Half
+            PickleButtonGroup(
+                modifier = Modifier.fillMaxWidth(),
+                layout = PickleButtonGroupLayout.RowEqual,
+                buttonSize = PickleButtonSize.Large,
+                leadingButton = { modifier, buttonSize ->
+                    PickleButton(
+                        modifier = modifier,
+                        text = cancelText,
+                        onClick = onCancelClick,
+                        type = PickleButtonType.Secondary,
+                        size = buttonSize,
+                    )
+                },
+                trailingButton = { modifier, buttonSize ->
+                    PickleButton(
+                        modifier = modifier,
+                        text = confirmText,
+                        onClick = onConfirmClick,
+                        type = PickleButtonType.Primary,
+                        size = buttonSize,
+                    )
+                },
             )
         }
     }
@@ -111,17 +128,28 @@ object PickleDialog {
 
             Spacer(modifier = Modifier.height(buttonSpace))
 
-            PickleButton(
-                text = confirmText,
-                onClick = onConfirmClick,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            PickleButton(
-                text = cancelText,
-                onClick = onCancelClick,
-                color = PickleTheme.colors.base0,
-                textColor = PickleTheme.colors.gray500
+            PickleButtonGroup(
+                modifier = Modifier.fillMaxWidth(),
+                layout = PickleButtonGroupLayout.Column,
+                buttonSize = PickleButtonSize.Large,
+                leadingButton = { modifier, buttonSize ->
+                    PickleButton(
+                        modifier = modifier,
+                        text = confirmText,
+                        onClick = onConfirmClick,
+                        type = PickleButtonType.Primary,
+                        size = buttonSize,
+                    )
+                },
+                trailingButton = { modifier, buttonSize ->
+                    PickleButton(
+                        modifier = modifier,
+                        text = cancelText,
+                        onClick = onCancelClick,
+                        type = PickleButtonType.Ghost,
+                        size = buttonSize,
+                    )
+                }
             )
         }
     }
@@ -169,23 +197,59 @@ fun PickleBottomSheet(
     }
 }
 
-@Preview
+
+@Preview(name = "PickleDialog - Single Button", showBackground = true)
 @Composable
-private fun PickleDialogPreview() {
+private fun PickleDialogSingleButtonPreview() {
     PickleTheme {
         PickleDialog(
             onDismiss = {}
         ) {
-            PickleButton(
-                text = "확인",
-                onClick = {}
+            Text(
+                text = "단일 버튼 다이얼로그",
+                style = PickleTheme.typography.body1Bold,
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             PickleButton(
-                text = "취소",
+                modifier = Modifier.fillMaxWidth(),
+                text = "확인",
                 onClick = {},
-                color = PickleTheme.colors.base0,
-                textColor = PickleTheme.colors.gray600
+            )
+        }
+    }
+}
+
+@Preview(name = "PickleDialog - WithRowButton", showBackground = true)
+@Composable
+private fun PickleDialogWithRowButtonPreview() {
+    PickleTheme {
+        PickleDialog.WithRowButton(
+            confirmText = "확인",
+            cancelText = "취소",
+            onConfirmClick = {},
+            onCancelClick = {},
+        ) {
+            Text(
+                text = "정말 로그아웃 하시겠어요?",
+                style = PickleTheme.typography.body1Bold,
+            )
+        }
+    }
+}
+
+@Preview(name = "PickleDialog - WithColumnButton", showBackground = true)
+@Composable
+private fun PickleDialogWithColumnButtonPreview() {
+    PickleTheme {
+        PickleDialog.WithColumnButton(
+            confirmText = "시작하기",
+            cancelText = "다음에 하기",
+            onConfirmClick = {},
+            onCancelClick = {},
+        ) {
+            Text(
+                text = "프로필을 설정해볼까요?",
+                style = PickleTheme.typography.body1Bold,
             )
         }
     }
@@ -207,8 +271,9 @@ private fun PickleBottomSheetPreview() {
             Text("즐겨찾는 내역")
             Spacer(modifier = Modifier.height(12.dp))
             PickleButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = "삭제하기",
-                onClick = {}
+                onClick = {},
             )
         }
     }

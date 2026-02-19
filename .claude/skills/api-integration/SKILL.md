@@ -33,15 +33,15 @@ API 명세(endpoint, request, response)를 전달받으면, 아래 규칙에 따
 
 ### Data Layer (`data-layer.md` 참조)
 
-| 항목 | 위치 | 네이밍 | 핵심 규칙 |
-|------|------|--------|-----------|
-| Remote Model | `data/source/remote/model/<feature>/` | `Remote` 접두사 (`RemoteLedger`) | `@Serializable` (kotlinx.serialization) |
-| Request | 동일 | `<Feature><동사>Request` | `@Serializable` |
-| Response | 동일 | `<ModelName>Response` / `<ModelName>sResponse` | 기존 Remote Model 사용 가능하면 그대로 |
-| Remote Enum | 동일 | `<Feature>Enums.kt`에 모음 | `@Serializable` + `@SerialName("UPPER_SNAKE")` |
-| Retrofit API | `data/source/remote/api/` | `<Domain>Api` | 모든 함수 `suspend`, 응답은 Remote Model 타입 |
-| Mapper | `data/mapper/` | `<DomainModel>Mapper.kt` | 확장 함수, `when()` 지향, value object 변환 포함 |
-| RepositoryImpl | `data/repository/` | `<Domain>RepositoryImpl` | `@Inject constructor`, Result 미사용, 직접 API 호출 |
+| 항목 | 위치 | 네이밍 | 핵심 규칙                                               |
+|------|------|--------|-----------------------------------------------------|
+| Remote Model | `data/source/remote/model/<feature>/` | `Remote` 접두사 (`RemoteLedger`) | `@Serializable` (kotlinx.serialization)             |
+| Request | 동일 | `<Feature><동사>Request` | `@Serializable`                                     |
+| Response | 동일 | `<ModelName>Response` / `<ModelName>sResponse` | 기존 Remote Model 사용 가능하면 그대로                         |
+| Remote Enum | 동일 | `<Feature>Enums.kt`에 모음 | `@Serializable` + `@SerialName("UPPER_SNAKE_CASE")` |
+| Retrofit API | `data/source/remote/api/` | `<Domain>Api` | 모든 함수 `suspend`, 응답은 Remote Model 타입                |
+| Mapper | `data/mapper/` | `<DomainModel>Mapper.kt` | 확장 함수, `when()` 지향, value object 변환 포함              |
+| RepositoryImpl | `data/repository/` | `<Domain>RepositoryImpl` | `@Inject constructor`, Result 미사용, 직접 API 호출        |
 
 ### Hilt DI 바인딩 (`hilt-di.md` 참조)
 

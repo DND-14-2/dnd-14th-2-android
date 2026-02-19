@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -101,16 +100,13 @@ private fun HomeContent(
 ) {
     Scaffold(
         topBar = {
-            HomeTopBar(
-                modifier = Modifier.statusBarsPadding(),
-                onStatisticsClick = onNavigateToMyPage
-            )
+            HomeTopBar(onStatisticsClick = onNavigateToMyPage)
         }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = innerPadding.calculateTopPadding())
+                .padding(innerPadding)
                 .background(PickleTheme.colors.background50),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

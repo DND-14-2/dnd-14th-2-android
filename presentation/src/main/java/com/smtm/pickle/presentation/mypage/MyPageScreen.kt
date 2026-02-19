@@ -92,7 +92,7 @@ private fun MyPageContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = innerPadding.calculateTopPadding())
+                .padding(innerPadding)
                 .background(PickleTheme.colors.background50)
         ) {
             item("profile") {

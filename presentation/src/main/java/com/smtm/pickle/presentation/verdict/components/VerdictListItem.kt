@@ -208,7 +208,7 @@ private fun VerdictListItemPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            juror = JurorInfo(1, "홍길동", "BADGE", "배지", "JUROR_CODE"),
+            juror = JurorInfo(1, "홍길동", "BADGE"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now()
         )

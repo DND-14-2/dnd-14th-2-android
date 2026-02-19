@@ -208,7 +208,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            juror = JurorInfo(201, "홍길동", "BADGE_1", "배지", "JUROR_CODE_1"),
+            juror = JurorInfo(201, "홍길동", "BADGE_1"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now().minusDays(1)
         ),
@@ -224,7 +224,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            juror = JurorInfo(202, "김철수", "BADGE_2", "배지", "JUROR_CODE_2"),
+            juror = JurorInfo(202, "김철수", "BADGE_2"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.GUILTY,
             createdAt = LocalDateTime.now().minusDays(2)
@@ -241,7 +241,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            juror = JurorInfo(203, "이영희", "BADGE_3", "배지", "JUROR_CODE_3"),
+            juror = JurorInfo(203, "이영희", "BADGE_3"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.INNOCENT,
             createdAt = LocalDateTime.now().minusDays(3)

@@ -160,7 +160,7 @@ class VerdictViewModel @Inject constructor(
                     occurredOn = LocalDate.now(),
                     paymentMethod = PaymentMethod.BankTransfer
                 ),
-                juror = JurorInfo(201, "홍길동", "BADGE_1", "배지", "JUROR_CODE_1"),
+                juror = JurorInfo(201, "홍길동", "BADGE_1"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
@@ -175,7 +175,7 @@ class VerdictViewModel @Inject constructor(
                     occurredOn = LocalDate.now(),
                     paymentMethod = PaymentMethod.CreditCard
                 ),
-                juror = JurorInfo(202, "김철수", "BADGE_2", "배지", "JUROR_CODE_2"),
+                juror = JurorInfo(202, "김철수", "BADGE_2"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(2)
@@ -191,7 +191,7 @@ class VerdictViewModel @Inject constructor(
                     occurredOn = LocalDate.now(),
                     paymentMethod = PaymentMethod.CreditCard
                 ),
-                juror = JurorInfo(203, "이영희", "BADGE_3", "배지", "JUROR_CODE_3"),
+                juror = JurorInfo(203, "이영희", "BADGE_3"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.INNOCENT,
                 createdAt = LocalDateTime.now().minusDays(3)
@@ -212,7 +212,7 @@ class VerdictViewModel @Inject constructor(
                     occurredOn = LocalDate.now(),
                     paymentMethod = PaymentMethod.CreditCard
                 ),
-                juror = JurorInfo(211, "박민수", "BADGE_4", "배지", "JUROR_CODE_4"),
+                juror = JurorInfo(211, "박민수", "BADGE_4"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
@@ -227,7 +227,7 @@ class VerdictViewModel @Inject constructor(
                     occurredOn = LocalDate.now(),
                     paymentMethod = PaymentMethod.Cash
                 ),
-                juror = JurorInfo(212, "최수진", "BADGE_5", "배지", "JUROR_CODE_5"),
+                juror = JurorInfo(212, "최수진", "BADGE_5"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(5)

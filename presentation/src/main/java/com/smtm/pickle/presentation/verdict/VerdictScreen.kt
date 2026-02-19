@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,14 +30,12 @@ import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
-import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictNewInfoBanner
-import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
@@ -73,16 +71,6 @@ fun VerdictScreen(
                     is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
                 }
             }
-        }
-    }
-
-    if (uiState.selectedVerdict != null) {
-        PickleBottomSheet(
-            sheetState = sheetState,
-            onDismiss = viewModel::onDismissBottomSheet,
-        ) {
-            // TODO: 사용자 정보 전달하기
-            VerdictPendingBottomSheetContent()
         }
     }
 
@@ -128,11 +116,12 @@ private fun VerdictContent(
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
-                .padding(top = innerPadding.calculateTopPadding())
+                .padding(innerPadding)
                 .fillMaxSize(),
         ) {
             // TODO: 새로운 소식 여부에 따라 보이도록 처리
             item("verdict_info") {
+                // TODO: 화면 구현시 onClick 전달
                 VerdictNewInfoBanner()
             }
 

@@ -41,19 +41,18 @@ fun VerdictTabs(
     onFilterSelected: (Int) -> Unit,
 ) {
     val tabs = listOf("내 심판", "내 판결")
-    val counts = if (selectedTabIndex == 0) myJudgementCounts else myVerdictCounts
 
     val filters = if (selectedTabIndex == 0) {
         listOf(
-            "전체 ${counts.total}",
-            "대기 ${counts.pending}",
-            "완료 ${counts.completed}"
+            "전체 ${myJudgementCounts.total}",
+            "대기 ${myJudgementCounts.pending}",
+            "완료 ${myJudgementCounts.completed}"
         )
     } else {
         listOf(
-            "전체 ${counts.total}",
-            "보류 ${counts.pending}",
-            "완료 ${counts.completed}"
+            "전체 ${myVerdictCounts.total}",
+            "보류 ${myVerdictCounts.pending}",
+            "완료 ${myVerdictCounts.completed}"
         )
     }
 

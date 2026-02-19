@@ -13,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,12 +35,14 @@ import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictNewInfoBanner
+import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
@@ -48,42 +51,60 @@ import java.time.LocalDateTime
 
 private val defaultPadding: Dp = 16.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerdictScreen(
     viewModel: VerdictViewModel = hiltViewModel(),
     onNavigateVerdictCreate: () -> Unit,
-    onNavigateVerdictRequest: () -> Unit,
-    onNavigateVerdictResult: () -> Unit,
     onNavigateJurorList: () -> Unit,
-    onNavigateJurorDetail: () -> Unit,
+    onNavigateVerdictRequest: () -> Unit,
+    onNavigateVerdictResult: (Long) -> Unit,
+    onNavigateJurorDetail: (Long) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+        confirmValueChange = { true }
+    )
 
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
                     VerdictEffect.NavigateToCreate -> onNavigateVerdictCreate()
-                    VerdictEffect.NavigateToResult -> onNavigateVerdictResult()
                     VerdictEffect.NavigateToRequest -> onNavigateVerdictRequest()
+                    is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
+                    is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
                 }
             }
         }
     }
 
+    if (uiState.selectedVerdict != null) {
+        PickleBottomSheet(
+            sheetState = sheetState,
+            onDismiss = viewModel::onDismissBottomSheet,
+        ) {
+            // TODO: 사용자 정보 전달하기
+            VerdictPendingBottomSheetContent()
+        }
+    }
+
     VerdictContent(
         selectedTabIndex = uiState.selectedTabIndex,
-        myJudgementFilterIndex = uiState.myJudgementFilterIndex,
-        myVerdictFilterIndex = uiState.myVerdictFilterIndex,
-        myJudgementCounts = uiState.myJudgementCounts,
-        myVerdictCounts = uiState.myVerdictCounts,
-        myJudgementItems = uiState.myJudgementItems,
-        myVerdictItems = uiState.myVerdictItems,
+        myJudgementFilterIndex = uiState.judgements.filterIndex,
+        myVerdictFilterIndex = uiState.verdicts.filterIndex,
+        myJudgementCounts = uiState.judgements.counts,
+        myVerdictCounts = uiState.verdicts.counts,
+        myJudgementItems = uiState.judgements.items,
+        myVerdictItems = uiState.verdicts.items,
         onNavigateVerdictCreate = onNavigateVerdictCreate,
         onNavigateJurorList = onNavigateJurorList,
         onTabSelected = viewModel::onTabSelected,
-        onFilterSelected = viewModel::onFilterSelected
+        onFilterSelected = viewModel::onFilterSelected,
+        onVerdictItemClick = viewModel::onVerdictItemClick,
     )
 }
 
@@ -101,6 +122,7 @@ private fun VerdictContent(
     onNavigateJurorList: () -> Unit,
     onTabSelected: (Int) -> Unit,
     onFilterSelected: (Int) -> Unit,
+    onVerdictItemClick: (VerdictUiModel) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -170,12 +192,14 @@ private fun VerdictContent(
                     key = { it.id }
                 ) { item ->
                     VerdictListItem(
+                        selectedTabIndex = selectedTabIndex,
                         jurorNickname = item.juror.nickname,
                         amount = item.ledger.amount,
                         description = item.ledger.description,
                         categoryIconResId = item.ledger.category.iconResId,
                         paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
                         status = item.status,
+                        onItemClick = { onVerdictItemClick(item) },
                         modifier = Modifier.padding(horizontal = defaultPadding)
                     )
                     if (item != items.last())
@@ -187,7 +211,6 @@ private fun VerdictContent(
         }
     }
 }
-
 
 @Preview
 @Composable
@@ -256,8 +279,8 @@ private fun VerdictContentPreview() {
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},
-            onFilterSelected = {}
-        )
+            onFilterSelected = {},
+        ) {}
     }
 }
 
@@ -276,8 +299,8 @@ private fun VerdictContentEmptyJudgementPreview() {
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},
-            onFilterSelected = {}
-        )
+            onFilterSelected = {},
+        ) {}
     }
 }
 
@@ -296,7 +319,7 @@ private fun VerdictContentEmptyVerdictPreview() {
             onNavigateVerdictCreate = {},
             onNavigateJurorList = {},
             onTabSelected = {},
-            onFilterSelected = {}
-        )
+            onFilterSelected = {},
+        ) {}
     }
 }

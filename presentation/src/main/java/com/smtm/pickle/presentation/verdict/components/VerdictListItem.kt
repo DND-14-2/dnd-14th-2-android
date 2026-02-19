@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,12 +46,14 @@ import java.time.LocalDateTime
 
 @Composable
 fun VerdictListItem(
+    selectedTabIndex: Int,
     jurorNickname: String,
     amount: Long,
     description: String,
     @DrawableRes categoryIconResId: Int,
     @DrawableRes paymentMethodIconResId: Int,
     status: VerdictStatus,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -61,7 +64,8 @@ fun VerdictListItem(
                 shape = RoundedCornerShape(Dimensions.radiusSurface),
                 ambientColor = PickleTheme.colors.gray700,
                 spotColor = PickleTheme.colors.gray700
-            ),
+            )
+            .clickable(onClick = onItemClick),
         shape = RoundedCornerShape(Dimensions.radiusSurface),
         colors = CardDefaults.cardColors(containerColor = PickleTheme.colors.base0),
         border = BorderStroke(width = 1.dp, color = PickleTheme.colors.gray100),
@@ -130,7 +134,7 @@ fun VerdictListItem(
             when (status) {
                 VerdictStatus.PENDING -> {
                     StatusChip(
-                        state = "대기",
+                        state = if (selectedTabIndex == 0) "대기" else "보류",
                         containerColor = PickleTheme.colors.background100,
                         contentColor = PickleTheme.colors.gray700
                     )
@@ -209,12 +213,14 @@ private fun VerdictListItemPreview() {
             createdAt = LocalDateTime.now()
         )
         VerdictListItem(
+            selectedTabIndex = 0,
             jurorNickname = item.juror.nickname,
             amount = item.ledger.amount,
             description = item.ledger.description,
             categoryIconResId = item.ledger.category.iconResId,
             paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
             status = item.status,
+            onItemClick = {}
         )
     }
 }

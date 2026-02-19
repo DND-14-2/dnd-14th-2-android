@@ -86,7 +86,7 @@ private fun PickleButtonGroupRowFixedLeadingLargePreview() {
             layout = PickleButtonGroupLayout.RowFixedLeading,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "취소",
                     onClick = {},
                     modifier = modifier,
@@ -95,7 +95,7 @@ private fun PickleButtonGroupRowFixedLeadingLargePreview() {
                 )
             },
             trailingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "확인",
                     onClick = {},
                     modifier = modifier,
@@ -119,7 +119,7 @@ private fun PickleButtonGroupRowFixedLeadingSmallPreview() {
             layout = PickleButtonGroupLayout.RowFixedLeading,
             buttonSize = PickleButtonSize.Small,
             leadingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "취소",
                     onClick = {},
                     modifier = modifier,
@@ -128,7 +128,7 @@ private fun PickleButtonGroupRowFixedLeadingSmallPreview() {
                 )
             },
             trailingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "확인",
                     onClick = {},
                     modifier = modifier,
@@ -152,7 +152,7 @@ private fun PickleButtonGroupRowEqualPreview() {
             layout = PickleButtonGroupLayout.RowEqual,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "아니오",
                     onClick = {},
                     modifier = modifier,
@@ -161,7 +161,7 @@ private fun PickleButtonGroupRowEqualPreview() {
                 )
             },
             trailingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "네",
                     onClick = {},
                     modifier = modifier,
@@ -184,7 +184,7 @@ private fun PickleButtonGroupColumnPreview() {
             layout = PickleButtonGroupLayout.Column,
             buttonSize = PickleButtonSize.Large,
             leadingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "시작하기",
                     onClick = {},
                     modifier = modifier,
@@ -193,7 +193,7 @@ private fun PickleButtonGroupColumnPreview() {
                 )
             },
             trailingButton = { modifier, buttonSize ->
-                PickleButtonV2(
+                PickleButton(
                     text = "다음에 하기",
                     onClick = {},
                     modifier = modifier,

@@ -96,7 +96,7 @@ fun ActivityPendingJudgment(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(Dimensions.buttonHeight)
+                    .height(Dimensions.buttonHeightLarge)
                     .clickable { isExpanded = !isExpanded }
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.Center,

@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButtonV2
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
@@ -17,7 +17,7 @@ fun LedgerCreateFirstBottomButton(
     enableNext: Boolean,
     onNextClick: () -> Unit
 ) {
-    PickleButtonV2(
+    PickleButton(
         modifier = modifier
             .padding(start = 16.dp, end = 16.dp, bottom = 14.dp)
             .fillMaxWidth(),

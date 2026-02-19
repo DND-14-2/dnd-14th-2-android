@@ -53,8 +53,9 @@ fun MyPageBadgeBottomSheetContent(
         Spacer(modifier = Modifier.height(32.dp))
 
         PickleButton(
+            modifier = Modifier.fillMaxWidth(),
             text = "배지 변경하기",
-            onClick = onBadgeChangeClick
+            onClick = onBadgeChangeClick,
         )
     }
 }

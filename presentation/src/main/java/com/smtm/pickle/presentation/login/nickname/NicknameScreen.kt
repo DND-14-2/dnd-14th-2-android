@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -87,6 +88,7 @@ fun NicknameContent(
         bottomBar = {
             PickleButton(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .navigationBarsPadding()
                     .imePadding()
                     .padding(bottom = 14.dp)
@@ -94,7 +96,6 @@ fun NicknameContent(
                 text = stringResource(R.string.common_next),
                 onClick = onSaveNickname,
                 enabled = uiState.inputState is InputState.Success,
-                textColor = PickleTheme.colors.base0
             )
         }
     ) { innerPadding ->

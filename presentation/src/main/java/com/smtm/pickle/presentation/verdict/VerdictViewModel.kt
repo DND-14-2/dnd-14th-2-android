@@ -85,6 +85,12 @@ class VerdictViewModel @Inject constructor(
         _uiState.update { it.copy(selectedVerdict = null) }
     }
 
+    fun navigateToJurorList() {
+        viewModelScope.launch {
+            _effect.emit(VerdictEffect.NavigateToJurorList)
+        }
+    }
+
     private fun loadDummyData() {
         allMyJudgements = createDummyMyJudgements()
         allMyVerdicts = createDummyMyVerdicts()
@@ -250,8 +256,8 @@ data class VerdictUiState(
 }
 
 sealed interface VerdictEffect {
-    data object NavigateToCreate : VerdictEffect
     data object NavigateToRequest : VerdictEffect
+    data object NavigateToJurorList : VerdictEffect
     data class NavigateToResult(val id: Long) : VerdictEffect
     data class NavigateToJurorDetail(val id: Long) : VerdictEffect
 }

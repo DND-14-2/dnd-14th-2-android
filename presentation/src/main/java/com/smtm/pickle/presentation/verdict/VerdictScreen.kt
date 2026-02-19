@@ -1,16 +1,12 @@
 package com.smtm.pickle.presentation.verdict
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -19,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,7 +50,6 @@ private val defaultPadding: Dp = 16.dp
 @Composable
 fun VerdictScreen(
     viewModel: VerdictViewModel = hiltViewModel(),
-    onNavigateVerdictCreate: () -> Unit,
     onNavigateJurorList: () -> Unit,
     onNavigateVerdictRequest: () -> Unit,
     onNavigateVerdictResult: (Long) -> Unit,
@@ -73,8 +67,8 @@ fun VerdictScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.effect.collect { effect ->
                 when (effect) {
-                    VerdictEffect.NavigateToCreate -> onNavigateVerdictCreate()
                     VerdictEffect.NavigateToRequest -> onNavigateVerdictRequest()
+                    VerdictEffect.NavigateToJurorList -> onNavigateJurorList()
                     is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
                     is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
                 }
@@ -100,8 +94,7 @@ fun VerdictScreen(
         myVerdictCounts = uiState.verdicts.counts,
         myJudgementItems = uiState.judgements.items,
         myVerdictItems = uiState.verdicts.items,
-        onNavigateVerdictCreate = onNavigateVerdictCreate,
-        onNavigateJurorList = onNavigateJurorList,
+        onJurorListClick = viewModel::navigateToJurorList,
         onTabSelected = viewModel::onTabSelected,
         onFilterSelected = viewModel::onFilterSelected,
         onVerdictItemClick = viewModel::onVerdictItemClick,
@@ -118,8 +111,7 @@ private fun VerdictContent(
     myVerdictCounts: VerdictCounts,
     myJudgementItems: List<VerdictUiModel>,
     myVerdictItems: List<VerdictUiModel>,
-    onNavigateVerdictCreate: () -> Unit,
-    onNavigateJurorList: () -> Unit,
+    onJurorListClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
     onFilterSelected: (Int) -> Unit,
     onVerdictItemClick: (VerdictUiModel) -> Unit,
@@ -129,22 +121,10 @@ private fun VerdictContent(
             PickleAppBar(title = "심판") {
                 PickleIconButtonWithTouchCustom(
                     iconRes = R.drawable.ic_verdict_juror,
-                    onClick = onNavigateJurorList
+                    onClick = onJurorListClick
                 )
             }
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateVerdictCreate,
-                shape = CircleShape,
-                modifier = Modifier.size(52.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_fab_add),
-                    contentDescription = "Create Verdict"
-                )
-            }
-        },
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -276,8 +256,7 @@ private fun VerdictContentPreview() {
             myVerdictCounts = VerdictCounts(5, 3, 2),
             myJudgementItems = mockJudgementItems,
             myVerdictItems = emptyList(),
-            onNavigateVerdictCreate = {},
-            onNavigateJurorList = {},
+            onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
         ) {}
@@ -296,8 +275,7 @@ private fun VerdictContentEmptyJudgementPreview() {
             myVerdictCounts = VerdictCounts(0, 0, 0),
             myJudgementItems = emptyList(),
             myVerdictItems = emptyList(),
-            onNavigateVerdictCreate = {},
-            onNavigateJurorList = {},
+            onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
         ) {}
@@ -316,8 +294,7 @@ private fun VerdictContentEmptyVerdictPreview() {
             myVerdictCounts = VerdictCounts(0, 0, 0),
             myJudgementItems = emptyList(),
             myVerdictItems = emptyList(),
-            onNavigateVerdictCreate = {},
-            onNavigateJurorList = {},
+            onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
         ) {}

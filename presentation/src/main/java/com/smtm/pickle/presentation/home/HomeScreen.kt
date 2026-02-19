@@ -110,7 +110,7 @@ private fun HomeContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
                 .background(PickleTheme.colors.background50),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

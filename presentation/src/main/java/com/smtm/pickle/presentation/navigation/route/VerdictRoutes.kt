@@ -16,3 +16,6 @@ data object JurorListRoute
 
 @Serializable
 data object JurorDetailRoute
+
+@Serializable
+data class VerdictCompletedRoute(val defendantNickname: String)

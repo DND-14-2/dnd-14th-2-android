@@ -41,7 +41,7 @@ import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyPageTabRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
-import com.smtm.pickle.presentation.navigation.route.VerdictCreateRoute
+import com.smtm.pickle.presentation.navigation.route.VerdictCompletedRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictResultRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictTabRoute
@@ -175,6 +175,9 @@ private fun MainContent(
                         },
                         onNavigateJurorDetail = {
                             rootNavController.navigate(JurorDetailRoute)
+                        },
+                        onNavigateVerdictCompleted = { nickname ->
+                            rootNavController.navigate(VerdictCompletedRoute(nickname))
                         }
                     )
                 }

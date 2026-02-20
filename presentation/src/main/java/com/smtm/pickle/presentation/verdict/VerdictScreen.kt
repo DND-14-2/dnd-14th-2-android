@@ -1,8 +1,11 @@
 package com.smtm.pickle.presentation.verdict
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,9 +17,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -29,12 +34,14 @@ import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
+import com.smtm.pickle.presentation.verdict.components.JudgementDialog
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
-import com.smtm.pickle.presentation.verdict.components.VerdictNewInfoBanner
+import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
@@ -51,6 +58,7 @@ fun VerdictScreen(
     onNavigateVerdictRequest: () -> Unit,
     onNavigateVerdictResult: (Long) -> Unit,
     onNavigateJurorDetail: (Long) -> Unit,
+    onNavigateVerdictCompleted: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -68,9 +76,51 @@ fun VerdictScreen(
                     VerdictEffect.NavigateToJurorList -> onNavigateJurorList()
                     is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
                     is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
+                    is VerdictEffect.NavigateToCompleted -> onNavigateVerdictCompleted(effect.defendantNickname)
                 }
             }
         }
+    }
+
+    val selectedVerdict = uiState.selectedVerdict
+    if (selectedVerdict != null) {
+        PickleBottomSheet(
+            sheetState = sheetState,
+            onDismiss = viewModel::onDismissBottomSheet,
+        ) {
+            if (uiState.selectedTabIndex == 0) {
+                VerdictPendingBottomSheetContent(
+                    modifier = Modifier,
+                    jurorNickname = selectedVerdict.defendant.nickname,
+                    defendantNickname = "",
+                    title = selectedVerdict.ledger.description,
+                    category = selectedVerdict.ledger.category,
+                    amount = selectedVerdict.ledger.amount,
+                    paymentMethod = selectedVerdict.ledger.paymentMethod,
+                    result = selectedVerdict.result
+                )
+            } else {
+                VerdictPendingBottomSheetContent(
+                    modifier = Modifier,
+                    jurorNickname = "",
+                    defendantNickname = selectedVerdict.defendant.nickname,
+                    title = selectedVerdict.ledger.description,
+                    category = selectedVerdict.ledger.category,
+                    amount = selectedVerdict.ledger.amount,
+                    paymentMethod = selectedVerdict.ledger.paymentMethod,
+                    result = selectedVerdict.result
+                )
+            }
+        }
+    }
+
+    val selectedVerdictForJudgement = uiState.selectedVerdictForJudgement
+    if (selectedVerdictForJudgement != null) {
+        JudgementDialog(
+            onDismiss = viewModel::onJudgementDialogDismiss,
+            onGuiltyClick = { viewModel.onSubmitJudgement(isGuilty = true) },
+            onInnocentClick = { viewModel.onSubmitJudgement(isGuilty = false) }
+        )
     }
 
     VerdictContent(
@@ -145,17 +195,27 @@ private fun VerdictContent(
                     items = items,
                     key = { it.id }
                 ) { item ->
-                    VerdictListItem(
-                        selectedTabIndex = selectedTabIndex,
-                        jurorNickname = item.juror.nickname,
-                        amount = item.ledger.amount,
-                        description = item.ledger.description,
-                        categoryIconResId = item.ledger.category.iconResId,
-                        paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
-                        status = item.status,
-                        onItemClick = { onVerdictItemClick(item) },
-                        modifier = Modifier.padding(horizontal = defaultPadding)
-                    )
+                    Box {
+                        if (item.isNew) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_common_new),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(horizontal = defaultPadding)
+                                    .zIndex(1f)
+                                    .offset(x = 14.dp, y = (-10).dp)
+                            )
+                        }
+                        VerdictListItem(
+                            amount = item.ledger.amount,
+                            description = item.ledger.description,
+                            categoryIconResId = item.ledger.category.iconResId,
+                            paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
+                            status = item.status,
+                            onItemClick = { onVerdictItemClick(item) },
+                            modifier = Modifier.padding(horizontal = defaultPadding)
+                        )
+                    }
                     if (item != items.last())
                         Spacer(modifier = Modifier.height(12.dp))
                     else
@@ -182,9 +242,10 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            juror = JurorInfo(201, "홍길동", "BADGE_1"),
+            defendant = JurorInfo(201, "홍길동", "BADGE_1"),
             status = VerdictStatus.PENDING,
-            createdAt = LocalDateTime.now().minusDays(1)
+            createdAt = LocalDateTime.now().minusDays(1),
+            isNew = true
         ),
         VerdictUiModel(
             id = 2,
@@ -198,7 +259,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            juror = JurorInfo(202, "김철수", "BADGE_2"),
+            defendant = JurorInfo(202, "김철수", "BADGE_2"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.GUILTY,
             createdAt = LocalDateTime.now().minusDays(2)
@@ -215,7 +276,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            juror = JurorInfo(203, "이영희", "BADGE_3"),
+            defendant = JurorInfo(203, "이영희", "BADGE_3"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.INNOCENT,
             createdAt = LocalDateTime.now().minusDays(3)
@@ -233,7 +294,8 @@ private fun VerdictContentPreview() {
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-        ) {}
+            onVerdictItemClick = {},
+        )
     }
 }
 
@@ -252,7 +314,8 @@ private fun VerdictContentEmptyJudgementPreview() {
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-        ) {}
+            onVerdictItemClick = {},
+        )
     }
 }
 
@@ -271,6 +334,7 @@ private fun VerdictContentEmptyVerdictPreview() {
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-        ) {}
+            onVerdictItemClick = {},
+        )
     }
 }

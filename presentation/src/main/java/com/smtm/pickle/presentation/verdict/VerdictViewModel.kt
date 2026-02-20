@@ -70,14 +70,31 @@ class VerdictViewModel @Inject constructor(
     fun onVerdictItemClick(verdict: VerdictUiModel) {
         when (verdict.status) {
             VerdictStatus.PENDING -> {
-                _uiState.update { it.copy(selectedVerdict = verdict) }
+                if (_uiState.value.selectedTabIndex == 0) {
+                    _uiState.update { it.copy(selectedVerdict = verdict) }
+                } else {
+                    _uiState.update { it.copy(selectedVerdictForJudgement = verdict) }
+                }
             }
 
             VerdictStatus.COMPLETED -> {
-                viewModelScope.launch {
-                    _effect.emit(VerdictEffect.NavigateToResult(verdict.id))
-                }
+                _uiState.update { it.copy(selectedVerdict = verdict) }
             }
+        }
+    }
+
+    fun onJudgementDialogDismiss() {
+        _uiState.update { it.copy(selectedVerdictForJudgement = null) }
+    }
+
+    fun onSubmitJudgement(isGuilty: Boolean) {
+        val verdict = _uiState.value.selectedVerdictForJudgement ?: return
+        // TODO: Handle judgement submission logic here
+        
+        // 제출 성공 시 완료 화면 이동
+        viewModelScope.launch {
+            _uiState.update { it.copy(selectedVerdictForJudgement = null) }
+            _effect.emit(VerdictEffect.NavigateToCompleted(verdict.defendant.nickname))
         }
     }
 
@@ -140,7 +157,7 @@ class VerdictViewModel @Inject constructor(
         return VerdictUiModel(
             id = id,
             ledger = ledger.toUiModel(),
-            juror = juror,
+            defendant = juror,
             status = status,
             result = result,
             createdAt = createdAt
@@ -239,6 +256,7 @@ class VerdictViewModel @Inject constructor(
 data class VerdictUiState(
     val selectedTabIndex: Int = 0,
     val selectedVerdict: VerdictUiModel? = null,
+    val selectedVerdictForJudgement: VerdictUiModel? = null,
     val judgements: Judgements = Judgements(),
     val verdicts: Verdict = Verdict(),
 ) {
@@ -260,4 +278,5 @@ sealed interface VerdictEffect {
     data object NavigateToJurorList : VerdictEffect
     data class NavigateToResult(val id: Long) : VerdictEffect
     data class NavigateToJurorDetail(val id: Long) : VerdictEffect
+    data class NavigateToCompleted(val defendantNickname: String) : VerdictEffect
 }

@@ -99,7 +99,7 @@ fun VerdictCompletedContent(
                 )
 
                 Image(
-                    painter = painterResource(R.drawable.illust_mypage_gavel),
+                    painter = painterResource(R.drawable.illust_common_gavel),
                     contentDescription = null,
                     modifier = Modifier.size(200.dp)
                 )

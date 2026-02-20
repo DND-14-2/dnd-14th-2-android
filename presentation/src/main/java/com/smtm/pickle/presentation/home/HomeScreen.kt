@@ -1,13 +1,12 @@
 package com.smtm.pickle.presentation.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -99,51 +98,43 @@ private fun HomeContent(
     onNavigateToMyPage: () -> Unit,
     onNavigateToLedgerDetail: (LedgerId) -> Unit,
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = PickleTheme.colors.background50,
-    ) {
-        CompositionLocalProvider(
-            LocalOverscrollFactory provides null
+    Scaffold(
+        topBar = {
+            HomeTopBar(onStatisticsClick = onNavigateToMyPage)
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(PickleTheme.colors.background50),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(PickleTheme.colors.background50),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                stickyHeader("top_bar") {
-                    HomeTopBar(
-                        onStatisticsClick = onNavigateToMyPage
-                    )
-                }
-
-                item("profile") {
-                    HomeProfile(
-                        nickname = profileState.nickname,
-                        income = profileState.monthlyTotalIncome,
-                        expense = profileState.monthlyTotalExpense,
-                    )
-                }
-
-                item("ledger_calendar") {
-                    LedgerCalendar(
-                        ledgerCalendarDays = calendarState.ledgerCalendarDays,
-                        selectedYearMonth = calendarState.selectedYearMonth,
-                        selectedDate = calendarState.selectedDate,
-                        onDateClick = onDateClick,
-                        onMonthChanged = onMonthChanged,
-                    )
-                }
-
-                dailyLedgerInfoSection(
-                    date = dailyLedgerState.date,
-                    ledgers = dailyLedgerState.ledgers,
-                    totalIncome = dailyLedgerState.totalIncome,
-                    totalExpense = dailyLedgerState.totalExpense,
-                    onLedgerClick = onNavigateToLedgerDetail
+            item("profile") {
+                HomeProfile(
+                    nickname = profileState.nickname,
+                    income = profileState.monthlyTotalIncome,
+                    expense = profileState.monthlyTotalExpense,
                 )
             }
+
+            item("ledger_calendar") {
+                LedgerCalendar(
+                    ledgerCalendarDays = calendarState.ledgerCalendarDays,
+                    selectedYearMonth = calendarState.selectedYearMonth,
+                    selectedDate = calendarState.selectedDate,
+                    onDateClick = onDateClick,
+                    onMonthChanged = onMonthChanged,
+                )
+            }
+
+            dailyLedgerInfoSection(
+                date = dailyLedgerState.date,
+                ledgers = dailyLedgerState.ledgers,
+                totalIncome = dailyLedgerState.totalIncome,
+                totalExpense = dailyLedgerState.totalExpense,
+                onLedgerClick = onNavigateToLedgerDetail
+            )
         }
     }
 }

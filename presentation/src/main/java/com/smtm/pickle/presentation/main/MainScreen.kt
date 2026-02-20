@@ -1,12 +1,11 @@
 package com.smtm.pickle.presentation.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -27,7 +25,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.home.HomeScreen
 import com.smtm.pickle.presentation.main.component.DimOverlay
 import com.smtm.pickle.presentation.main.component.HomeExpandableFab
@@ -60,7 +57,6 @@ fun MainScreen(
     val navBackStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val isHomeScreen = currentDestination?.hasRoute(HomeTabRoute::class) == true
-    val isVerdictScreen = currentDestination?.hasRoute(VerdictTabRoute::class) == true
 
     var isFabExpanded by remember { mutableStateOf(false) }
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
@@ -111,19 +107,6 @@ fun MainScreen(
                     },
                 )
             }
-        } else if (isVerdictScreen) {
-            IconButton(
-                onClick = { rootNavController.navigate(VerdictCreateRoute) },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = bottomBarHeight + 10.dp, end = 16.dp)
-                    .size(52.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_fab_add),
-                    contentDescription = "Create Verdict"
-                )
-            }
         }
     }
 }
@@ -158,10 +141,12 @@ private fun MainContent(
                 onNavigate = navigateToTab
             )
         },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { innerPadding ->
+        contentWindowInsets = WindowInsets.navigationBars
+    ) { outerPadding ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(outerPadding)
+                .consumeWindowInsets(outerPadding),
             navController = tabNavController,
             startDestination = HomeTabRoute,
             builder = {

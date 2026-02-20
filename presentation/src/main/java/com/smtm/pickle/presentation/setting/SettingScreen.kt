@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -26,9 +24,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
+import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
@@ -82,31 +81,31 @@ fun SettingScreen(
 
     when (uiState.dialogState) {
         SettingDialogState.Logout -> {
-            PickleDialog.WithRowButton(
-                confirmText = stringResource(R.string.setting_dialog_logout_confirm),
-                cancelText = stringResource(R.string.setting_dialog_dismiss),
-                onConfirmClick = viewModel::confirmLogout,
-                onCancelClick = viewModel::dismissDialog,
-            ) {
-                DialogContent(
-                    title = stringResource(R.string.setting_dialog_logout_title),
-                    description = stringResource(R.string.setting_dialog_logout_description)
-                )
-            }
+            PickleDialog(
+                title = stringResource(R.string.setting_dialog_logout_title),
+                subtitle = stringResource(R.string.setting_dialog_logout_description),
+                buttonLayout = PickleDialogButtonLayout.Horizontal(
+                    confirmText = stringResource(R.string.setting_dialog_logout_confirm),
+                    cancelText = stringResource(R.string.setting_dialog_dismiss),
+                    onConfirmClick = viewModel::confirmLogout,
+                    onCancelClick = viewModel::dismissDialog,
+                ),
+                onDismiss = viewModel::dismissDialog,
+            )
         }
 
         SettingDialogState.Withdraw -> {
-            PickleDialog.WithRowButton(
-                confirmText = stringResource(R.string.setting_dialog_withdraw_confirm),
-                cancelText = stringResource(R.string.setting_dialog_dismiss),
-                onConfirmClick = viewModel::confirmWithdraw,
-                onCancelClick = viewModel::dismissDialog,
-            ) {
-                DialogContent(
-                    title = stringResource(R.string.setting_dialog_withdraw_title),
-                    description = stringResource(R.string.setting_dialog_withdraw_description)
-                )
-            }
+            PickleDialog(
+                title = stringResource(R.string.setting_dialog_withdraw_title),
+                subtitle = stringResource(R.string.setting_dialog_withdraw_description),
+                buttonLayout = PickleDialogButtonLayout.Horizontal(
+                    confirmText = stringResource(R.string.setting_dialog_withdraw_confirm),
+                    cancelText = stringResource(R.string.setting_dialog_dismiss),
+                    onConfirmClick = viewModel::confirmWithdraw,
+                    onCancelClick = viewModel::dismissDialog,
+                ),
+                onDismiss = viewModel::dismissDialog,
+            )
         }
 
         SettingDialogState.None -> Unit
@@ -184,27 +183,6 @@ private fun SettingContent(
             }
         }
     }
-}
-
-@Composable
-private fun DialogContent(
-    title: String,
-    description: String
-) {
-    Text(
-        text = title,
-        style = PickleTheme.typography.head3Bold,
-        color = PickleTheme.colors.gray800,
-        textAlign = TextAlign.Center
-    )
-    Spacer(modifier = Modifier.height(6.dp))
-
-    Text(
-        text = description,
-        style = PickleTheme.typography.body2Medium,
-        color = PickleTheme.colors.gray600,
-        textAlign = TextAlign.Center
-    )
 }
 
 private fun openGooglePlay(context: Context) {

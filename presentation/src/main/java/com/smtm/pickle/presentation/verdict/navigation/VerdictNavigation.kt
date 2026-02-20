@@ -10,7 +10,7 @@ import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictResultRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictCompletedRoute
 import androidx.navigation.toRoute
-import com.smtm.pickle.presentation.verdict.components.VerdictCompletedContent
+import com.smtm.pickle.presentation.verdict.submit.VerdictCompletedContent
 import com.smtm.pickle.presentation.verdict.create.VerdictCreateScreen
 import com.smtm.pickle.presentation.verdict.jurordetail.JurorDetailScreen
 import com.smtm.pickle.presentation.verdict.jurorlist.JurorListScreen

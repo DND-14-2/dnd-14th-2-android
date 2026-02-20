@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.verdict.components
+package com.smtm.pickle.presentation.verdict.submit
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

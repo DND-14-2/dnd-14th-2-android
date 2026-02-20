@@ -26,7 +26,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import com.smtm.pickle.domain.model.verdict.JurorInfo
 import com.smtm.pickle.domain.model.verdict.VerdictResult
 import com.smtm.pickle.domain.model.verdict.VerdictStatus
 import com.smtm.pickle.presentation.R
@@ -43,6 +42,7 @@ import com.smtm.pickle.presentation.verdict.components.JudgementDialog
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
+import com.smtm.pickle.presentation.verdict.model.JurorUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import java.time.LocalDate
@@ -138,7 +138,6 @@ fun VerdictScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VerdictContent(
     selectedTabIndex: Int,
@@ -242,7 +241,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            defendant = JurorInfo(201, "홍길동", "BADGE_1"),
+            defendant = JurorUiModel(201, "홍길동"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now().minusDays(1),
             isNew = true
@@ -259,7 +258,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            defendant = JurorInfo(202, "김철수", "BADGE_2"),
+            defendant = JurorUiModel(202, "김철수"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.GUILTY,
             createdAt = LocalDateTime.now().minusDays(2)
@@ -276,7 +275,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            defendant = JurorInfo(203, "이영희", "BADGE_3"),
+            defendant = JurorUiModel(203, "이영희"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.INNOCENT,
             createdAt = LocalDateTime.now().minusDays(3)

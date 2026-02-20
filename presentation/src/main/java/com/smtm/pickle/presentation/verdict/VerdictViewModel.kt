@@ -2,18 +2,14 @@ package com.smtm.pickle.presentation.verdict
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.model.ledger.Ledger
-import com.smtm.pickle.domain.model.ledger.LedgerCategory
-import com.smtm.pickle.domain.model.ledger.LedgerId
-import com.smtm.pickle.domain.model.ledger.LedgerType
-import com.smtm.pickle.domain.model.ledger.Money
-import com.smtm.pickle.domain.model.ledger.PaymentMethod
-import com.smtm.pickle.domain.model.verdict.JurorInfo
-import com.smtm.pickle.domain.model.verdict.Verdict
 import com.smtm.pickle.domain.model.verdict.VerdictResult
 import com.smtm.pickle.domain.model.verdict.VerdictStatus
 import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
-import com.smtm.pickle.presentation.common.model.ledger.toUiModel
+import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
+import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
+import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.verdict.model.JurorUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,8 +48,8 @@ class VerdictViewModel @Inject constructor(
     val effect: SharedFlow<VerdictEffect> = _effect.asSharedFlow()
 
     // 원본 데이터 저장용
-    private var allMyJudgements: List<Verdict> = emptyList()
-    private var allMyVerdicts: List<Verdict> = emptyList()
+    private var allMyJudgements: List<VerdictUiModel> = emptyList()
+    private var allMyVerdicts: List<VerdictUiModel> = emptyList()
 
     init {
         loadDummyData()
@@ -99,11 +95,10 @@ class VerdictViewModel @Inject constructor(
         _uiState.update { it.copy(selectedVerdictForJudgement = null) }
     }
 
+    // TODO: 서버에 Guilty 여부 전달
     fun onSubmitJudgement(isGuilty: Boolean) {
         val verdict = _uiState.value.selectedVerdictForJudgement ?: return
-        // TODO: Handle judgement submission logic here
-        
-        // 제출 성공 시 완료 화면 이동
+
         viewModelScope.launch {
             _uiState.update { it.copy(selectedVerdictForJudgement = null) }
             _effect.emit(VerdictEffect.NavigateToCompleted(verdict.defendant.nickname))
@@ -137,18 +132,18 @@ class VerdictViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 judgements = state.judgements.copy(
-                    items = filteredJudgements.map { verdict -> verdict.toUiModel() },
+                    items = filteredJudgements,
                     counts = calculateCounts(currentMyJudgments)
                 ),
                 verdicts = state.verdicts.copy(
-                    items = filteredVerdicts.map { verdict -> verdict.toUiModel() },
+                    items = filteredVerdicts,
                     counts = calculateCounts(currentMyVerdicts)
                 ),
             )
         }
     }
 
-    private fun calculateCounts(verdicts: List<Verdict>): VerdictCounts {
+    private fun calculateCounts(verdicts: List<VerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
             pending = verdicts.count { it.status == VerdictStatus.PENDING },
@@ -156,7 +151,7 @@ class VerdictViewModel @Inject constructor(
         )
     }
 
-    private fun filterVerdicts(verdicts: List<Verdict>, filterIndex: Int): List<Verdict> {
+    private fun filterVerdicts(verdicts: List<VerdictUiModel>, filterIndex: Int): List<VerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
             1 -> verdicts.filter { it.status == VerdictStatus.PENDING }
@@ -165,62 +160,54 @@ class VerdictViewModel @Inject constructor(
         }
     }
 
-    private fun Verdict.toUiModel(): VerdictUiModel {
-        return VerdictUiModel(
-            id = id,
-            ledger = ledger.toUiModel(),
-            defendant = juror,
-            status = status,
-            result = result,
-            createdAt = createdAt
-        )
-    }
-
-    private fun createDummyMyJudgements(): List<Verdict> {
+    private fun createDummyMyJudgements(): List<VerdictUiModel> {
         return listOf(
-            Verdict(
+            VerdictUiModel(
                 id = 1,
-                ledger = Ledger(
-                    id = LedgerId(101),
-                    type = LedgerType.Expense,
-                    amount = Money(15000),
-                    category = LedgerCategory.Food,
+                ledger = LedgerUiModel(
+                    id = 101L,
+                    type = LedgerTypeUiModel.Expense,
+                    amount = 15000,
+                    category = CategoryUiModel.Food,
                     description = "가계부 15자 입력",
                     occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethod.BankTransfer
+                    paymentMethod = PaymentMethodUiModel.BankTransfer,
+                    memo = null,
                 ),
-                juror = JurorInfo(201, "홍길동", "BADGE_1"),
+                defendant = JurorUiModel(201, "홍길동"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
-            Verdict(
+            VerdictUiModel(
                 id = 2,
-                ledger = Ledger(
-                    id = LedgerId(102),
-                    type = LedgerType.Expense,
-                    amount = Money(5000),
-                    category = LedgerCategory.Food,
+                ledger = LedgerUiModel(
+                    id = 102L,
+                    type = LedgerTypeUiModel.Expense,
+                    amount = 5000,
+                    category = CategoryUiModel.Food,
                     description = "커피 한잔",
                     occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethod.CreditCard
+                    paymentMethod = PaymentMethodUiModel.CreditCard,
+                    memo = null
                 ),
-                juror = JurorInfo(202, "김철수", "BADGE_2"),
+                defendant = JurorUiModel(202, "김철수"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(2)
             ),
-            Verdict(
+            VerdictUiModel(
                 id = 3,
-                ledger = Ledger(
-                    id = LedgerId(103),
-                    type = LedgerType.Expense,
-                    amount = Money(25000),
-                    category = LedgerCategory.Food,
+                ledger = LedgerUiModel(
+                    id = 103L,
+                    type = LedgerTypeUiModel.Expense,
+                    amount = 25000,
+                    category = CategoryUiModel.Food,
                     description = "야식 치킨",
                     occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethod.CreditCard
+                    paymentMethod = PaymentMethodUiModel.CreditCard,
+                    memo = null
                 ),
-                juror = JurorInfo(203, "이영희", "BADGE_3"),
+                defendant = JurorUiModel(203, "이영희"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.INNOCENT,
                 createdAt = LocalDateTime.now().minusDays(3)
@@ -228,35 +215,37 @@ class VerdictViewModel @Inject constructor(
         )
     }
 
-    private fun createDummyMyVerdicts(): List<Verdict> {
+    private fun createDummyMyVerdicts(): List<VerdictUiModel> {
         return listOf(
-            Verdict(
+            VerdictUiModel(
                 id = 11,
-                ledger = Ledger(
-                    id = LedgerId(111),
-                    type = LedgerType.Expense,
-                    amount = Money(12000),
-                    category = LedgerCategory.Transport,
+                ledger = LedgerUiModel(
+                    id = 111L,
+                    type = LedgerTypeUiModel.Expense,
+                    amount = 12000,
+                    category = CategoryUiModel.Transport,
                     description = "택시비",
                     occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethod.CreditCard
+                    paymentMethod = PaymentMethodUiModel.CreditCard,
+                    memo = null
                 ),
-                juror = JurorInfo(211, "박민수", "BADGE_4"),
+                defendant = JurorUiModel(211, "박민수"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
-            Verdict(
+            VerdictUiModel(
                 id = 12,
-                ledger = Ledger(
-                    id = LedgerId(112),
-                    type = LedgerType.Expense,
-                    amount = Money(14000),
-                    category = LedgerCategory.LeisureHobby,
+                ledger = LedgerUiModel(
+                    id = 112,
+                    type = LedgerTypeUiModel.Expense,
+                    amount = 14000,
+                    category = CategoryUiModel.LeisureHobby,
                     description = "영화 관람",
                     occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethod.Cash
+                    paymentMethod = PaymentMethodUiModel.Cash,
+                    memo = null
                 ),
-                juror = JurorInfo(212, "최수진", "BADGE_5"),
+                defendant = JurorUiModel(212, "최수진"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(5)

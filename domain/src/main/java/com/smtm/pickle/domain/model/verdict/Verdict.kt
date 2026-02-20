@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class Verdict(
     val id: Long,
     val ledger: Ledger,
-    val juror: JurorInfo,
+    val defendant: Juror,
     val status: VerdictStatus,
     val result: VerdictResult? = null,
     val createdAt: LocalDateTime,

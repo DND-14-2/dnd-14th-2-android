@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.JurorInfo
 import com.smtm.pickle.domain.model.verdict.VerdictStatus
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
@@ -39,6 +38,7 @@ import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
+import com.smtm.pickle.presentation.verdict.model.JurorUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -188,7 +188,7 @@ private fun VerdictListItemPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            defendant = JurorInfo(1, "홍길동", "BADGE"),
+            defendant = JurorUiModel(1, "홍길동"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now()
         )

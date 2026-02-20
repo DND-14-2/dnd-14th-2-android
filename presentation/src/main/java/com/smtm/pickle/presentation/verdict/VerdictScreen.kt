@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -119,20 +118,6 @@ private fun VerdictContent(
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            // TODO: 새로운 소식 여부에 따라 보이도록 처리
-            item("verdict_info") {
-                // TODO: 화면 구현시 onClick 전달
-                VerdictNewInfoBanner()
-            }
-
-            // TODO: 새로운 소식 여부에 따라 보이도록 처리
-            item("divider") {
-                HorizontalDivider(
-                    thickness = 8.dp,
-                    color = PickleTheme.colors.background50
-                )
-            }
-
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
             item("tabs") {

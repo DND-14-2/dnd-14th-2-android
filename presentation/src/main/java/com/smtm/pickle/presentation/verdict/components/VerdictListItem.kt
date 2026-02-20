@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,8 +45,6 @@ import java.time.LocalDateTime
 
 @Composable
 fun VerdictListItem(
-    selectedTabIndex: Int,
-    jurorNickname: String,
     amount: Long,
     description: String,
     @DrawableRes categoryIconResId: Int,
@@ -60,7 +57,7 @@ fun VerdictListItem(
         modifier = modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 8.dp,
+                elevation = 6.dp,
                 shape = RoundedCornerShape(Dimensions.radiusSurface),
                 ambientColor = PickleTheme.colors.gray700,
                 spotColor = PickleTheme.colors.gray700
@@ -134,7 +131,7 @@ fun VerdictListItem(
             when (status) {
                 VerdictStatus.PENDING -> {
                     StatusChip(
-                        state = if (selectedTabIndex == 0) "대기" else "보류",
+                        state = "미완료",
                         containerColor = PickleTheme.colors.background100,
                         contentColor = PickleTheme.colors.gray700
                     )
@@ -147,23 +144,6 @@ fun VerdictListItem(
                         contentColor = PickleTheme.colors.primary500
                     )
                 }
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, PickleTheme.colors.gray200, CircleShape)
-                        .background(color = PickleTheme.colors.gray100)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-
-                Text(
-                    text = jurorNickname,
-                    style = PickleTheme.typography.caption1Medium,
-                    color = PickleTheme.colors.gray700
-                )
             }
         }
     }
@@ -208,13 +188,11 @@ private fun VerdictListItemPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            juror = JurorInfo(1, "홍길동", "BADGE"),
+            defendant = JurorInfo(1, "홍길동", "BADGE"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now()
         )
         VerdictListItem(
-            selectedTabIndex = 0,
-            jurorNickname = item.juror.nickname,
             amount = item.ledger.amount,
             description = item.ledger.description,
             categoryIconResId = item.ledger.category.iconResId,

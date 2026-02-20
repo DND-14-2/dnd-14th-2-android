@@ -9,8 +9,9 @@ import java.time.LocalDateTime
 data class VerdictUiModel(
     val id: Long,
     val ledger: LedgerUiModel,
-    val juror: JurorInfo,
+    val defendant: JurorInfo,
     val status: VerdictStatus,
     val result: VerdictResult? = null,
     val createdAt: LocalDateTime,
+    val isNew: Boolean = false,
 )

@@ -12,6 +12,7 @@ import com.smtm.pickle.domain.model.verdict.JurorInfo
 import com.smtm.pickle.domain.model.verdict.Verdict
 import com.smtm.pickle.domain.model.verdict.VerdictResult
 import com.smtm.pickle.domain.model.verdict.VerdictStatus
+import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
@@ -19,9 +20,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -30,11 +33,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VerdictViewModel @Inject constructor(
-
+    observeNicknameUseCase: ObserveNicknameUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(VerdictUiState())
-    val uiState: StateFlow<VerdictUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<VerdictUiState> = combine(
+        _uiState,
+        observeNicknameUseCase(),
+    ) { state, nickname ->
+        state.copy(userNickname = nickname ?: "유저 닉네임")
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = VerdictUiState()
+    )
 
     private val _effect = MutableSharedFlow<VerdictEffect>(replay = 0)
     val effect: SharedFlow<VerdictEffect> = _effect.asSharedFlow()
@@ -255,6 +267,7 @@ class VerdictViewModel @Inject constructor(
 
 data class VerdictUiState(
     val selectedTabIndex: Int = 0,
+    val userNickname: String = "유저 닉네임",
     val selectedVerdict: VerdictUiModel? = null,
     val selectedVerdictForJudgement: VerdictUiModel? = null,
     val judgements: Judgements = Judgements(),

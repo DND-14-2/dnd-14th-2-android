@@ -92,7 +92,7 @@ fun VerdictScreen(
                 VerdictPendingBottomSheetContent(
                     modifier = Modifier,
                     jurorNickname = selectedVerdict.defendant.nickname,
-                    defendantNickname = "",
+                    defendantNickname = uiState.userNickname,
                     title = selectedVerdict.ledger.description,
                     category = selectedVerdict.ledger.category,
                     amount = selectedVerdict.ledger.amount,
@@ -102,7 +102,7 @@ fun VerdictScreen(
             } else {
                 VerdictPendingBottomSheetContent(
                     modifier = Modifier,
-                    jurorNickname = "",
+                    jurorNickname = uiState.userNickname,
                     defendantNickname = selectedVerdict.defendant.nickname,
                     title = selectedVerdict.ledger.description,
                     category = selectedVerdict.ledger.category,

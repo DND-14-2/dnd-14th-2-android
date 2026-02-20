@@ -1,11 +1,11 @@
 package com.smtm.pickle.presentation.mypage
 
-import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -74,29 +74,27 @@ private fun MyPageContent(
     onNavigateMyProfile: () -> Unit,
     onStatisticsTabSelected: (Int) -> Unit
 ) {
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
+    Scaffold(
+        topBar = {
+            PickleAppBar(
+                title = "마이페이지",
+                actions = {
+                    PickleIconButtonWithTouchCustom(
+                        iconRes = R.drawable.ic_appbar_setting,
+                        contentDescription = "설정",
+                        onClick = onNavigateSetting,
+                        iconSize = 48.dp,
+                    )
+                },
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .background(PickleTheme.colors.background50)
         ) {
-            stickyHeader("top_bar") {
-                PickleAppBar(
-                    title = "마이페이지",
-                    actions = {
-                        PickleIconButtonWithTouchCustom(
-                            iconRes = R.drawable.ic_appbar_setting,
-                            contentDescription = "설정",
-                            onClick = onNavigateSetting,
-                            iconSize = 48.dp,
-                        )
-                    },
-                    isInMainRoute = true
-                )
-            }
-
             item("profile") {
                 MyPageProfileSection(
                     modifier = Modifier.background(PickleTheme.colors.base0),

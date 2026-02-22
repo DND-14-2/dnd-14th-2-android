@@ -35,10 +35,10 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 @Composable
 fun PickleDialog(
     title: String,
-    subtitle: String,
     buttonLayout: PickleDialogButtonLayout,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     @DrawableRes imageRes: Int? = null,
     inputField: (@Composable () -> Unit)? = null,
 ) {
@@ -79,18 +79,20 @@ fun PickleDialog(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                Spacer(modifier = Modifier.height(Dimensions.dialogTitleSubtitleSpacing))
+                if (subtitle != null) {
+                    Spacer(modifier = Modifier.height(Dimensions.dialogTitleSubtitleSpacing))
 
-                Text(
-                    text = subtitle,
-                    style = PickleTheme.typography.body2Medium,
-                    color = PickleTheme.colors.gray600,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                    Text(
+                        text = subtitle,
+                        style = PickleTheme.typography.body2Medium,
+                        color = PickleTheme.colors.gray600,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 if (inputField != null) {
-                    Spacer(modifier = Modifier.height(Dimensions.dialogSubtitleInputSpacing))
+                    Spacer(modifier = Modifier.height(Dimensions.dialogInputTopSpacing))
                     inputField()
                 }
 
@@ -206,6 +208,21 @@ private fun PickleDialogSinglePreview() {
     }
 }
 
+@Preview(name = "Type 1 - Single Button (No Subtitle)")
+@Composable
+private fun PickleDialogSingleNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
+            buttonLayout = PickleDialogButtonLayout.Single(
+                text = "확인",
+                onClick = {},
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
 @Preview(name = "Type 2 - Horizontal Buttons")
 @Composable
 private fun PickleDialogHorizontalPreview() {
@@ -213,6 +230,23 @@ private fun PickleDialogHorizontalPreview() {
         PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
+            buttonLayout = PickleDialogButtonLayout.Horizontal(
+                confirmText = "확인",
+                cancelText = "취소",
+                onConfirmClick = {},
+                onCancelClick = {},
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview(name = "Type 2 - Horizontal Buttons (No Subtitle)")
+@Composable
+private fun PickleDialogHorizontalNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
             buttonLayout = PickleDialogButtonLayout.Horizontal(
                 confirmText = "확인",
                 cancelText = "취소",
@@ -242,6 +276,23 @@ private fun PickleDialogVerticalPreview() {
     }
 }
 
+@Preview(name = "Type 3 - Vertical Buttons (No Subtitle)")
+@Composable
+private fun PickleDialogVerticalNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
+            buttonLayout = PickleDialogButtonLayout.Vertical(
+                primaryText = "시작하기",
+                ghostText = "다음에 하기",
+                onPrimaryClick = {},
+                onGhostClick = {},
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
 @Preview(name = "Type 4 - With Image")
 @Composable
 private fun PickleDialogWithImagePreview() {
@@ -249,6 +300,22 @@ private fun PickleDialogWithImagePreview() {
         PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
+            buttonLayout = PickleDialogButtonLayout.Single(
+                text = "확인",
+                onClick = {},
+            ),
+            onDismiss = {},
+            imageRes = R.drawable.illust_profile_default,
+        )
+    }
+}
+
+@Preview(name = "Type 4 - With Image (No Subtitle)")
+@Composable
+private fun PickleDialogWithImageNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
             buttonLayout = PickleDialogButtonLayout.Single(
                 text = "확인",
                 onClick = {},
@@ -286,6 +353,32 @@ private fun PickleDialogWithInputFieldPreview() {
     }
 }
 
+@Preview(name = "Type 5 - With Input Field (No Subtitle)")
+@Composable
+private fun PickleDialogWithInputFieldNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
+            buttonLayout = PickleDialogButtonLayout.Horizontal(
+                confirmText = "확인",
+                cancelText = "취소",
+                onConfirmClick = {},
+                onCancelClick = {},
+            ),
+            onDismiss = {},
+            inputField = {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dimensions.inputHeight),
+                    color = PickleTheme.colors.gray100,
+                    shape = RoundedCornerShape(Dimensions.radius),
+                ) {}
+            },
+        )
+    }
+}
+
 @Preview(name = "Type 6 - Vertical Buttons with HyperText")
 @Composable
 private fun PickleDialogVerticalWithHyperTextPreview() {
@@ -293,6 +386,27 @@ private fun PickleDialogVerticalWithHyperTextPreview() {
         PickleDialog(
             title = "타이틀",
             subtitle = "서브타이틀 텍스트가 들어갑니다",
+            buttonLayout = PickleDialogButtonLayout.Vertical(
+                primaryText = "시작하기",
+                ghostText = "다음에 하기",
+                onPrimaryClick = {},
+                onGhostClick = {},
+                action = PickleDialogButtonLayout.Action(
+                    text = "하이퍼 텍스트",
+                    onClick = {},
+                ),
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview(name = "Type 6 - Vertical Buttons with HyperText (No Subtitle)")
+@Composable
+private fun PickleDialogVerticalWithHyperTextNoSubtitlePreview() {
+    PickleTheme {
+        PickleDialog(
+            title = "타이틀",
             buttonLayout = PickleDialogButtonLayout.Vertical(
                 primaryText = "시작하기",
                 ghostText = "다음에 하기",

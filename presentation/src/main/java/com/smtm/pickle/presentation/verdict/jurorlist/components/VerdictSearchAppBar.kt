@@ -47,7 +47,7 @@ fun VerdictSearchAppBar(
     val trailingIcon = remember(hasText) {
         if (hasText) {
             @Composable {
-                IconButton(onClick = { onSearchValueChange(searchValue) }) {
+                IconButton(onClick = { onSearchValueChange("") }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_search_close),
                         contentDescription = null,

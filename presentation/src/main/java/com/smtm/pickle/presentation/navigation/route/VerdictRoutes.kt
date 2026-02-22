@@ -15,7 +15,7 @@ data object VerdictResultRoute
 data object JurorListRoute
 
 @Serializable
-data class JurorDetailRoute(val jurorId: Long)
+data object JurorDetailRoute
 
 @Serializable
 data object MateRequestRoute

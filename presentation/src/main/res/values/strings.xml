@@ -58,6 +58,11 @@
 
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
+    <string name="invite_bottom_sheet_title">친구와 함께\n소비심판을 받아보세요</string>
+    <string name="invite_bottom_sheet_subtitle">내 초대 코드를 공유해요</string>
+    <string name="invite_bottom_sheet_my_invitation_code">내 초대 코드</string>
+    <string name="invite_bottom_sheet_copy">복사하기</string>
+    <string name="invite_bottom_sheet_share">문자로 공유하기</string>
 
     <!-- Ledger -->
     <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>

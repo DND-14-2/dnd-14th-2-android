@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -51,14 +52,14 @@ fun InviteBottomSheetContent(
         Spacer(modifier = Modifier.height(26.dp))
 
         Text(
-            text = "친구와 함께\n소비심판을 받아보세요",
+            text = stringResource(R.string.invite_bottom_sheet_title),
             style = PickleTheme.typography.head2SemiBold,
             color = PickleTheme.colors.gray800,
         )
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "내 초대 코드를 공유해요",
+            text = stringResource(R.string.invite_bottom_sheet_subtitle),
             style = PickleTheme.typography.body3Regular,
             color = PickleTheme.colors.gray700,
         )
@@ -74,7 +75,7 @@ fun InviteBottomSheetContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "내 초대 코드",
+                    text = stringResource(R.string.invite_bottom_sheet_my_invitation_code),
                     style = PickleTheme.typography.body2Medium,
                     color = PickleTheme.colors.gray800,
                 )
@@ -98,7 +99,7 @@ fun InviteBottomSheetContent(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_common_copy),
-                            contentDescription = "복사하기",
+                            contentDescription = stringResource(R.string.invite_bottom_sheet_copy),
                         )
                     }
                 }
@@ -110,7 +111,7 @@ fun InviteBottomSheetContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, bottom = 16.dp),
-            text = "문자로 공유하기",
+            text = stringResource(R.string.invite_bottom_sheet_share),
             onClick = {
                 try {
                     context.startActivity(intent)

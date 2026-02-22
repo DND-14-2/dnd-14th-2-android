@@ -75,6 +75,6 @@ object Dimensions {
     val dialogContentButtonSpacing = 24.dp
     val dialogImageSize = 140.dp
     val dialogImageTitleSpacing = 24.dp
-    val dialogSubtitleInputSpacing = 20.dp
+    val dialogInputTopSpacing = 20.dp
     val dialogButtonActionTextSpacing = 10.dp
 }

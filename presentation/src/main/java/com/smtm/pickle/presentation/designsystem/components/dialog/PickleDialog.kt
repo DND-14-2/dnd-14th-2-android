@@ -79,9 +79,8 @@ fun PickleDialog(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                if (subtitle != null) {
+                if (!subtitle.isNullOrBlank()) {
                     Spacer(modifier = Modifier.height(Dimensions.dialogTitleSubtitleSpacing))
-
                     Text(
                         text = subtitle,
                         style = PickleTheme.typography.body2Medium,

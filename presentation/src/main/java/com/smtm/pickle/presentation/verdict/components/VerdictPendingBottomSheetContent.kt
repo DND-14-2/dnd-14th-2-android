@@ -91,7 +91,13 @@ fun VerdictPendingBottomSheetContent(
                     )
                 }
 
-                else -> {}
+                else -> {
+                    JudgmentResultChip(
+                        resultText = "미완료",
+                        containerColor = PickleTheme.colors.gray100,
+                        contentColor = PickleTheme.colors.gray700
+                    )
+                }
             }
         }
     }
@@ -149,18 +155,24 @@ private fun BottomSheetProfile(
 }
 
 @Composable
-fun JudgmentResultChip(resultText: String, containerColor: Color, contentColor: Color) {
+private fun JudgmentResultChip(
+    resultText: String,
+    containerColor: Color,
+    contentColor: Color
+) {
     Box(
         modifier = Modifier
-            .size(37.dp, 24.dp)
             .clip(RoundedCornerShape(6.dp))
-            .background(containerColor),
+            .background(containerColor)
+            .padding(horizontal = 4.dp, vertical = 3.5.dp)
+        ,
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = resultText,
             style = PickleTheme.typography.caption1Medium,
             color = contentColor,
+            modifier = Modifier.padding(horizontal = 2.dp)
         )
     }
 }

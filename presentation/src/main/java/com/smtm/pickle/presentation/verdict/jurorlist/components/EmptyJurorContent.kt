@@ -51,7 +51,10 @@ fun EmptyJurorContent(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.height(Dimensions.buttonHeightMedium)
         ) {
-            Text(stringResource(id = R.string.juror_list_invite_friend))
+            Text(
+                text = stringResource(id = R.string.juror_list_invite_friend),
+                style = PickleTheme.typography.body4Medium,
+            )
         }
     }
 }

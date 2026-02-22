@@ -145,5 +145,8 @@
     <string name="juror_list_invite_friend">친구 초대하기</string>
     <string name="juror_list_together_verdict_count">함께한 심판 %1$d회</string>
     <string name="juror_list_cancel">취소</string>
+    <string name="juror_list_mate_request_title">메이트 요청</string>
     <string name="juror_list_mate_request">새로운 메이트 요청이 있어요</string>
+    <string name="juror_list_accept">추가</string>
+    <string name="juror_list_reject">삭제</string>
 </resources>

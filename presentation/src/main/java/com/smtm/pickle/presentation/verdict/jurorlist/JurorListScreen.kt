@@ -66,7 +66,6 @@ fun JurorListScreen(
         jurors = dummyJurors,
         isExpendedSearchBar = isExpendedSearchBar,
         searchQuery = "",
-        isEmpty = false,
         onBackClick = onNavigateBack,
         onSearchToggle = { isExpendedSearchBar = !isExpendedSearchBar },
         onInviteClick = { showBottomSheet = true },
@@ -81,7 +80,6 @@ private fun JurorListContent(
     jurors: List<Juror>,
     isExpendedSearchBar: Boolean,
     searchQuery: String,
-    isEmpty: Boolean,
     onBackClick: () -> Unit,
     onSearchToggle: () -> Unit,
     onInviteClick: () -> Unit,
@@ -118,17 +116,18 @@ private fun JurorListContent(
                 .background(PickleTheme.colors.base0)
                 .padding(paddingValues),
         ) {
-            if (isEmpty) {
+            if (jurors.isEmpty()) {
                 EmptyJurorContent(onInviteClick = onInviteClick)
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                 ) {
+                    // TODO: 메이트 요청 여부에 따라 보이도록 조절
                     item {
                         JurorListMateRequestBanner(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
-                                .padding(bottom = 16.dp),
+                                .padding(vertical = 10.dp),
                             onClick = onMateRequestClick
                         )
                     }
@@ -161,7 +160,6 @@ private fun JurorListContentPreview() {
             isExpendedSearchBar = false,
             onSearchToggle = {},
             searchQuery = "",
-            isEmpty = false,
             onBackClick = {},
             onSearchQueryChanged = {},
             onJurorClick = {},
@@ -180,7 +178,6 @@ private fun JurorListEmptyPreview() {
             isExpendedSearchBar = true,
             onSearchToggle = {},
             searchQuery = "",
-            isEmpty = true,
             onBackClick = {},
             onSearchQueryChanged = {},
             onJurorClick = {},

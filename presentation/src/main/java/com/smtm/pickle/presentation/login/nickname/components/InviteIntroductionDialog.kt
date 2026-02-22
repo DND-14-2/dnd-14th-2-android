@@ -11,18 +11,18 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun InviteIntroductionDialog(
     modifier: Modifier = Modifier,
-    onInviteButtonClick: () -> Unit,
+    onPrimaryButtonClick: () -> Unit,
+    onGhostButtonClick: () -> Unit,
     onAlreadyReceivedTextClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     PickleDialog(
-        title = "함께 소비 습관을\n개선하고 싶은 사람이 있나요?",
-        subtitle = "이미 초대코드를 받았어요",
+        title = "함께 소비를 개선할\n친구를 초대할까요?",
         buttonLayout = PickleDialogButtonLayout.Vertical(
             primaryText = "초대하기",
             ghostText = "괜찮아요",
-            onPrimaryClick = onInviteButtonClick,
-            onGhostClick = onDismiss,
+            onPrimaryClick = onPrimaryButtonClick,
+            onGhostClick = onGhostButtonClick,
             action = PickleDialogButtonLayout.Action(
                 text = "이미 초대코드를 받았어요",
                 onClick = onAlreadyReceivedTextClick
@@ -34,7 +34,7 @@ fun InviteIntroductionDialog(
     )
 }
 
-@Preview(
+                @Preview(
     name = "InviteIntroductionDialog",
     showBackground = true,
     widthDp = 360,
@@ -43,7 +43,8 @@ fun InviteIntroductionDialog(
 private fun InviteIntroductionDialogPreview() {
     PickleTheme {
         InviteIntroductionDialog(
-            onInviteButtonClick = {},
+            onPrimaryButtonClick = {},
+            onGhostButtonClick = {},
             onAlreadyReceivedTextClick = {},
             onDismiss = {}
         )

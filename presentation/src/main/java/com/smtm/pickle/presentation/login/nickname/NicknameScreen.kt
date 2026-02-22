@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -32,8 +34,12 @@ import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.login.nickname.components.InviteIntroductionDialog
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
+import com.smtm.pickle.presentation.login.nickname.components.WelcomeDialog
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
+import com.smtm.pickle.presentation.ui.dialog.InputInviteCodeDialog
+import com.smtm.pickle.presentation.ui.dialog.ShareInviteCodeDialog
 
 @Composable
 fun NicknameScreen(
@@ -65,6 +71,44 @@ fun NicknameScreen(
         onSaveNickname = viewModel::saveNickname,
         onBackClick = viewModel::onBackClick,
     )
+
+    when (uiState.dialogState) {
+        NicknameDialogState.None -> Unit
+        NicknameDialogState.InviteIntroduction -> {
+            InviteIntroductionDialog(
+                onPrimaryButtonClick = viewModel::onInviteClick,
+                onGhostButtonClick = viewModel::onSkipInviteClick,
+                onAlreadyReceivedTextClick = viewModel::onAlreadyHasCodeClick,
+                onDismiss = viewModel::onDialogDismiss,
+            )
+        }
+
+        NicknameDialogState.InputInviteCode -> {
+            var inviteCode = remember { mutableStateOf("") }
+            InputInviteCodeDialog(
+                inviteCode = inviteCode.value,
+                onInviteCodeChange = { inviteCode.value = it },
+                onSuccessClick = { viewModel.onStartClick() },
+                onCancelClick = viewModel::onDialogDismiss,
+                onDismiss = viewModel::onDialogDismiss,
+            )
+        }
+
+        NicknameDialogState.ShareInviteCode -> {
+            ShareInviteCodeDialog(
+                inviteCode = "ABACD",
+                onShareToSms = {},
+                onDismiss = viewModel::onDialogDismiss,
+            )
+        }
+
+        NicknameDialogState.Welcome -> {
+            WelcomeDialog(
+                onStartClick = viewModel::onStartClick,
+                onDismiss = viewModel::onDialogDismiss,
+            )
+        }
+    }
 }
 
 @Composable

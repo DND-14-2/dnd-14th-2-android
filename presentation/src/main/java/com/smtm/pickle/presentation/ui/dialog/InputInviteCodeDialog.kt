@@ -14,18 +14,18 @@ fun InputInviteCodeDialog(
     modifier: Modifier = Modifier,
     inviteCode: String,
     onInviteCodeChange: (String) -> Unit,
+    onSuccessClick: (String) -> Unit,
+    onCancelClick: () -> Unit,
     onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit,
 ) {
     PickleDialog(
         modifier = modifier,
         title = "초대코드를 입력해주세요",
-        subtitle = "subtitle",
         buttonLayout = PickleDialogButtonLayout.Horizontal(
             confirmText = "완료",
             cancelText = "취소",
-            onConfirmClick = { onConfirm(inviteCode) },
-            onCancelClick = onDismiss,
+            onConfirmClick = { onSuccessClick(inviteCode) },
+            onCancelClick = onCancelClick,
         ),
         onDismiss = onDismiss,
         inputField = {
@@ -49,8 +49,9 @@ private fun InputInviteCodeDialogPreview() {
         InputInviteCodeDialog(
             inviteCode = "",
             onInviteCodeChange = {},
+            onSuccessClick = {},
+            onCancelClick = {},
             onDismiss = {},
-            onConfirm = {}
         )
     }
 }

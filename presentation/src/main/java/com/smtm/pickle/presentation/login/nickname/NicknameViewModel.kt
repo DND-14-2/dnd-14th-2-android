@@ -45,7 +45,7 @@ class NicknameViewModel @Inject constructor(
         viewModelScope.launch {
             saveNicknameUseCase(_uiState.value.nickname)
                 .onSuccess {
-                    _effect.emit(NicknameEffect.NavigateToMain)
+                    _uiState.update { it.copy(dialogState = NicknameDialogState.InviteIntroduction) }
                 }
                 .onFailure { e ->
                     Timber.e(e, "닉네임 저장 실패")
@@ -54,6 +54,32 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun onBackClick() {
+        emitNavigateToMainEffect()
+    }
+
+    fun onInviteClick() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.InputInviteCode) }
+    }
+
+    fun onSkipInviteClick() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.ShareInviteCode) }
+    }
+
+    fun onAlreadyHasCodeClick() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.Welcome) }
+    }
+
+    fun onStartClick() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
+        emitNavigateToMainEffect()
+    }
+
+    fun onDialogDismiss() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
+        emitNavigateToMainEffect()
+    }
+
+    private fun emitNavigateToMainEffect() {
         viewModelScope.launch {
             _effect.emit(NicknameEffect.NavigateToMain)
         }

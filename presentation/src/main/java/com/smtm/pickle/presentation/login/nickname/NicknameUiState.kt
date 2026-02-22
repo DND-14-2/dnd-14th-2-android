@@ -10,4 +10,13 @@ import com.smtm.pickle.presentation.designsystem.components.textfield.model.Inpu
 data class NicknameUiState(
     val nickname: String = "",
     val inputState: InputState = InputState.Idle,
+    val dialogState: NicknameDialogState = NicknameDialogState.None,
 )
+
+sealed interface NicknameDialogState {
+    data object None : NicknameDialogState
+    data object InviteIntroduction : NicknameDialogState
+    data object InputInviteCode : NicknameDialogState
+    data object ShareInviteCode : NicknameDialogState
+    data object Welcome : NicknameDialogState
+}

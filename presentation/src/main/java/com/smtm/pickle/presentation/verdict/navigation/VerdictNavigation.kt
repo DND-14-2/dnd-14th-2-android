@@ -32,8 +32,8 @@ fun NavGraphBuilder.verdictDestinations(navController: NavController) {
             onNavigateToMateRequest = {
                 navController.navigate(MateRequestRoute)
             },
-            onNavigateToJurorDetail = {
-                navController.navigate(JurorDetailRoute)
+            onNavigateToJurorDetail = { jurorId ->
+                navController.navigate(JurorDetailRoute(jurorId))
             }
         )
     }

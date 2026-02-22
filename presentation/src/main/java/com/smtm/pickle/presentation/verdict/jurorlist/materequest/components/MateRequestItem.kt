@@ -40,7 +40,7 @@ fun MateRequestItem(
         PickleProfile(type = ProfileType.NORMAL)
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
                 text = nickname,
                 style = PickleTheme.typography.body1Bold,

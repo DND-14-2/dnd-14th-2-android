@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +26,6 @@ import androidx.core.net.toUri
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
-import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
-import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
-import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import kotlinx.coroutines.launch
 
@@ -38,7 +34,6 @@ fun InviteBottomSheetContent(
     invitationCode: String
 ) {
     val scope = rememberCoroutineScope()
-    val snackbarState = remember { SnackbarState() }
     val context = LocalContext.current
     val clipBoardManager = LocalClipboard.current
     val clipData = ClipData.newPlainText("invitationCode", invitationCode)
@@ -48,7 +43,11 @@ fun InviteBottomSheetContent(
         putExtra("sms_body", invitationCode) // TODO: 문자 메시지 내용 정하기
     }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    ) {
         Spacer(modifier = Modifier.height(26.dp))
 
         Text(
@@ -63,7 +62,7 @@ fun InviteBottomSheetContent(
             style = PickleTheme.typography.body3Regular,
             color = PickleTheme.colors.gray700,
         )
-        Spacer(modifier = Modifier.height(23.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         PickleCard(
             modifier = Modifier.fillMaxWidth(),
@@ -91,6 +90,10 @@ fun InviteBottomSheetContent(
                     IconButton(
                         onClick = {
                             scope.launch { clipBoardManager.setClipEntry(ClipEntry(clipData)) }
+                            /*
+                             * TODO: 복사 성공 스낵바 (호출부에 선언) - 피그마 마이페이지 참조
+                             *  https://www.figma.com/design/8pJf8gopSeRoPlzLUy3Cd5/DND-2%EC%A1%B0?node-id=905-13959&t=BWQJ2ZlHRS67Ms5e-4
+                             */
                         }
                     ) {
                         Image(
@@ -112,17 +115,11 @@ fun InviteBottomSheetContent(
                 try {
                     context.startActivity(intent)
                 } catch (_: Exception) {
-                    snackbarState.show(
-                        PickleSnackbar.toastError(
-                            message = "문자를 전송할 수 없습니다.",
-                        )
-                    )
+                    // TODO: 공유 실패 스낵바
                 }
             }
         )
     }
-
-    SnackbarHost(snackbarState)
 }
 
 @Preview(showBackground = true)

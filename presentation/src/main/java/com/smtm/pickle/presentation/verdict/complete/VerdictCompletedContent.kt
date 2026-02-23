@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.verdict.submit
+package com.smtm.pickle.presentation.verdict.complete
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -18,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
@@ -46,17 +45,6 @@ fun VerdictCompletedContent(
                     }
                 }
             )
-        },
-        bottomBar = {
-            PickleButton(
-                text = "홈화면으로 돌아가기",
-                onClick = onDismiss,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 14.dp)
-                    .navigationBarsPadding()
-            )
         }
     ) { paddingValues ->
         Column(
@@ -72,19 +60,12 @@ fun VerdictCompletedContent(
                     withStyle(style = SpanStyle(color = PickleTheme.colors.primary500)) {
                         append(defendantNickname)
                     }
-                    append("님에게\n판결을 보냈어요!")
+                    append(stringResource(R.string.verdict_request_send))
                 },
                 style = PickleTheme.typography.head2SemiBold,
                 color = PickleTheme.colors.gray800,
             )
             Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "피고인에게 알림이 전송돼요",
-                style = PickleTheme.typography.body2Medium,
-                color = PickleTheme.colors.gray600,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
 
             Box(
                 modifier = Modifier

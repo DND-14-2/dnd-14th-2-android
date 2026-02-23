@@ -29,6 +29,7 @@ import com.smtm.pickle.presentation.designsystem.components.PickleCard
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun InviteBottomSheetContent(
@@ -56,13 +57,6 @@ fun InviteBottomSheetContent(
             style = PickleTheme.typography.head2SemiBold,
             color = PickleTheme.colors.gray800,
         )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(R.string.invite_bottom_sheet_subtitle),
-            style = PickleTheme.typography.body3Regular,
-            color = PickleTheme.colors.gray700,
-        )
         Spacer(modifier = Modifier.height(16.dp))
 
         PickleCard(
@@ -74,13 +68,6 @@ fun InviteBottomSheetContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text = stringResource(R.string.invite_bottom_sheet_my_invitation_code),
-                    style = PickleTheme.typography.body2Medium,
-                    color = PickleTheme.colors.gray800,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = invitationCode,
@@ -91,15 +78,11 @@ fun InviteBottomSheetContent(
                     IconButton(
                         onClick = {
                             scope.launch { clipBoardManager.setClipEntry(ClipEntry(clipData)) }
-                            /*
-                             * TODO: 복사 성공 스낵바 (호출부에 선언) - 피그마 마이페이지 참조
-                             *  https://www.figma.com/design/8pJf8gopSeRoPlzLUy3Cd5/DND-2%EC%A1%B0?node-id=905-13959&t=BWQJ2ZlHRS67Ms5e-4
-                             */
                         }
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_common_copy),
-                            contentDescription = stringResource(R.string.invite_bottom_sheet_copy),
+                            contentDescription = "복사하기",
                         )
                     }
                 }
@@ -115,8 +98,8 @@ fun InviteBottomSheetContent(
             onClick = {
                 try {
                     context.startActivity(intent)
-                } catch (_: Exception) {
-                    // TODO: 공유 실패 스낵바
+                } catch (e: Exception) {
+                    Timber.e(e, "문자 전송 시도 실패")
                 }
             }
         )

@@ -14,8 +14,10 @@ import com.smtm.pickle.presentation.verdict.submit.VerdictCompletedContent
 import com.smtm.pickle.presentation.verdict.create.VerdictCreateScreen
 import com.smtm.pickle.presentation.verdict.jurordetail.JurorDetailScreen
 import com.smtm.pickle.presentation.verdict.jurorlist.JurorListScreen
+import com.smtm.pickle.presentation.verdict.jurorlist.materequest.MateRequestScreen
 import com.smtm.pickle.presentation.verdict.request.VerdictRequestScreen
 import com.smtm.pickle.presentation.verdict.result.VerdictResultScreen
+import com.smtm.pickle.presentation.navigation.route.MateRequestRoute
 
 fun NavGraphBuilder.verdictDestinations(navController: NavController) {
     composable<VerdictCreateRoute> {
@@ -28,10 +30,23 @@ fun NavGraphBuilder.verdictDestinations(navController: NavController) {
         VerdictResultScreen()
     }
     composable<JurorListRoute> {
-        JurorListScreen()
+        JurorListScreen(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToMateRequest = {
+                navController.navigate(MateRequestRoute)
+            },
+            onNavigateToJurorDetail = { jurorId ->
+                navController.navigate(JurorDetailRoute(jurorId))
+            }
+        )
     }
     composable<JurorDetailRoute> {
         JurorDetailScreen()
+    }
+    composable<MateRequestRoute> {
+        MateRequestScreen(
+            onNavigateBack = { navController.popBackStack() }
+        )
     }
     composable<VerdictCompletedRoute> { backStackEntry ->
         val args = backStackEntry.toRoute<VerdictCompletedRoute>()

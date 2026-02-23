@@ -58,6 +58,11 @@
 
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
+    <string name="invite_bottom_sheet_title">친구와 함께\n소비심판을 받아보세요</string>
+    <string name="invite_bottom_sheet_subtitle">내 초대 코드를 공유해요</string>
+    <string name="invite_bottom_sheet_my_invitation_code">내 초대 코드</string>
+    <string name="invite_bottom_sheet_copy">복사하기</string>
+    <string name="invite_bottom_sheet_share">문자로 공유하기</string>
 
     <!-- Ledger -->
     <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>
@@ -138,4 +143,15 @@
     <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
     <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
 
+    <!-- Juror List -->
+    <string name="juror_list_title">내 배심원</string>
+    <string name="juror_list_search_hint">닉네임을 검색하세요</string>
+    <string name="juror_list_empty">아직 추가한 친구가 없어요</string>
+    <string name="juror_list_invite_friend">친구 초대하기</string>
+    <string name="juror_list_together_verdict_count">함께한 심판 %1$d회</string>
+    <string name="juror_list_cancel">취소</string>
+    <string name="juror_list_mate_request_title">메이트 요청</string>
+    <string name="juror_list_mate_request">새로운 메이트 요청이 있어요</string>
+    <string name="juror_list_accept">추가</string>
+    <string name="juror_list_reject">삭제</string>
 </resources>

@@ -29,9 +29,10 @@ fun JurorListItem(
     togetherVerdictCount: Int,
     code: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 14.dp),
@@ -85,7 +86,7 @@ fun JurorListItemPreview() {
             nickname = "juror_nickname",
             togetherVerdictCount = 3,
             code = "#1234",
-            onClick = {}
+            onClick = {},
         )
     }
 }

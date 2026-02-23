@@ -8,13 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,6 +24,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.domain.model.verdict.VerdictResult
 import com.smtm.pickle.domain.model.verdict.VerdictStatus
@@ -60,7 +60,7 @@ fun VerdictScreen(
     onNavigateJurorDetail: (Long) -> Unit,
     onNavigateVerdictCompleted: (String) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val sheetState = rememberModalBottomSheetState(
@@ -88,11 +88,11 @@ fun VerdictScreen(
             sheetState = sheetState,
             onDismiss = viewModel::onDismissBottomSheet,
         ) {
-            if (uiState.selectedTabIndex == 0) {
+            if (uiState.selectedTabIndex == TabIndex.JUDGEMENTS) {
                 VerdictPendingBottomSheetContent(
                     modifier = Modifier,
-                    jurorNickname = selectedVerdict.defendant.nickname,
-                    defendantNickname = uiState.userNickname,
+                    jurorNickname = uiState.userNickname,
+                    defendantNickname = selectedVerdict.defendant.nickname,
                     title = selectedVerdict.ledger.description,
                     category = selectedVerdict.ledger.category,
                     amount = selectedVerdict.ledger.amount,
@@ -102,8 +102,8 @@ fun VerdictScreen(
             } else {
                 VerdictPendingBottomSheetContent(
                     modifier = Modifier,
-                    jurorNickname = uiState.userNickname,
-                    defendantNickname = selectedVerdict.defendant.nickname,
+                    jurorNickname = selectedVerdict.defendant.nickname,
+                    defendantNickname = uiState.userNickname,
                     title = selectedVerdict.ledger.description,
                     category = selectedVerdict.ledger.category,
                     amount = selectedVerdict.ledger.amount,
@@ -184,16 +184,16 @@ private fun VerdictContent(
 
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            val items = if (selectedTabIndex == 0) myJudgementItems else myVerdictItems
+            val items = if (selectedTabIndex == TabIndex.JUDGEMENTS) myJudgementItems else myVerdictItems
             if (items.isEmpty()) {
                 item {
                     EmptyVerdictContent(selectedTabIndex = selectedTabIndex)
                 }
             } else {
-                items(
+                itemsIndexed(
                     items = items,
-                    key = { it.id }
-                ) { item ->
+                    key = { _, item -> item.id }
+                ) { index, item ->
                     Box {
                         if (item.isNew) {
                             Image(
@@ -215,7 +215,7 @@ private fun VerdictContent(
                             modifier = Modifier.padding(horizontal = defaultPadding)
                         )
                     }
-                    if (item != items.last())
+                    if (index < items.lastIndex)
                         Spacer(modifier = Modifier.height(12.dp))
                     else
                         Spacer(modifier = Modifier.height(80.dp))

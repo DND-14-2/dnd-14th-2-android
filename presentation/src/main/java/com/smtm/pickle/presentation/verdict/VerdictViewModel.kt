@@ -56,29 +56,39 @@ class VerdictViewModel @Inject constructor(
     }
 
     fun onTabSelected(index: Int) {
-        _uiState.update { it.copy(selectedTabIndex = index) }
-        updateUiState()
+        _uiState.update { state ->
+            state.copy(selectedTabIndex = index).applyFilters()
+        }
     }
 
     fun onFilterSelected(index: Int) {
         _uiState.update { state ->
-            if (state.selectedTabIndex == 0) {
-                state.copy(
-                    judgements = state.judgements.copy(filterIndex = index)
-                )
+            val updated = if (state.selectedTabIndex == TabIndex.JUDGEMENTS) {
+                state.copy(judgements = state.judgements.copy(filterIndex = index))
             } else {
-                state.copy(
-                    verdicts = state.verdicts.copy(filterIndex = index)
-                )
+                state.copy(verdicts = state.verdicts.copy(filterIndex = index))
             }
+            updated.applyFilters()
         }
-        updateUiState()
+    }
+
+    private fun VerdictUiState.applyFilters(): VerdictUiState {
+        return copy(
+            judgements = judgements.copy(
+                items = filterVerdicts(allMyJudgements, judgements.filterIndex),
+                counts = calculateCounts(allMyJudgements)
+            ),
+            verdicts = verdicts.copy(
+                items = filterVerdicts(allMyVerdicts, verdicts.filterIndex),
+                counts = calculateCounts(allMyVerdicts)
+            )
+        )
     }
 
     fun onVerdictItemClick(verdict: VerdictUiModel) {
         when (verdict.status) {
             VerdictStatus.PENDING -> {
-                if (_uiState.value.selectedTabIndex == 0) {
+                if (_uiState.value.selectedTabIndex == TabIndex.JUDGEMENTS) {
                     _uiState.update { it.copy(selectedVerdict = verdict) }
                 } else {
                     _uiState.update { it.copy(selectedVerdictForJudgement = verdict) }
@@ -119,28 +129,7 @@ class VerdictViewModel @Inject constructor(
         allMyJudgements = createDummyMyJudgements()
         allMyVerdicts = createDummyMyVerdicts()
 
-        updateUiState()
-    }
-
-    private fun updateUiState() {
-        val currentMyJudgments = allMyJudgements
-        val currentMyVerdicts = allMyVerdicts
-
-        val filteredJudgements = filterVerdicts(currentMyJudgments, _uiState.value.judgements.filterIndex)
-        val filteredVerdicts = filterVerdicts(currentMyVerdicts, _uiState.value.verdicts.filterIndex)
-
-        _uiState.update { state ->
-            state.copy(
-                judgements = state.judgements.copy(
-                    items = filteredJudgements,
-                    counts = calculateCounts(currentMyJudgments)
-                ),
-                verdicts = state.verdicts.copy(
-                    items = filteredVerdicts,
-                    counts = calculateCounts(currentMyVerdicts)
-                ),
-            )
-        }
+        _uiState.update { it.applyFilters() }
     }
 
     private fun calculateCounts(verdicts: List<VerdictUiModel>): VerdictCounts {
@@ -254,26 +243,25 @@ class VerdictViewModel @Inject constructor(
     }
 }
 
+object TabIndex {
+    const val JUDGEMENTS = 0
+    const val VERDICTS = 1
+}
+
 data class VerdictUiState(
-    val selectedTabIndex: Int = 0,
+    val selectedTabIndex: Int = TabIndex.JUDGEMENTS,
     val userNickname: String = "유저 닉네임",
     val selectedVerdict: VerdictUiModel? = null,
     val selectedVerdictForJudgement: VerdictUiModel? = null,
-    val judgements: Judgements = Judgements(),
-    val verdicts: Verdict = Verdict(),
-) {
-    data class Judgements(
-        val filterIndex: Int = 0,
-        val items: List<VerdictUiModel> = emptyList(),
-        val counts: VerdictCounts = VerdictCounts(),
-    )
+    val judgements: VerdictListState = VerdictListState(),
+    val verdicts: VerdictListState = VerdictListState(),
+)
 
-    data class Verdict(
-        val filterIndex: Int = 0,
-        val items: List<VerdictUiModel> = emptyList(),
-        val counts: VerdictCounts = VerdictCounts(),
-    )
-}
+data class VerdictListState(
+    val filterIndex: Int = 0,
+    val items: List<VerdictUiModel> = emptyList(),
+    val counts: VerdictCounts = VerdictCounts(),
+)
 
 sealed interface VerdictEffect {
     data object NavigateToRequest : VerdictEffect

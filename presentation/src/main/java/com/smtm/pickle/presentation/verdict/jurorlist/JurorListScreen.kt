@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.Juror
+import com.smtm.pickle.domain.model.verdict.User
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
@@ -44,7 +44,7 @@ fun JurorListScreen(
     val sheetState = rememberModalBottomSheetState()
 
     val dummyJurors = (1..5).map {
-        Juror(it.toLong(), "지인닉네임$it")
+        User(it.toLong(), "지인닉네임$it")
     }
 
     BackHandler(isExpendedSearchBar) {
@@ -77,7 +77,7 @@ fun JurorListScreen(
 
 @Composable
 private fun JurorListContent(
-    jurors: List<Juror>,
+    jurors: List<User>,
     isExpendedSearchBar: Boolean,
     searchQuery: String,
     onBackClick: () -> Unit,
@@ -155,7 +155,7 @@ private fun JurorListContentPreview() {
     PickleTheme {
         JurorListContent(
             jurors = (1..5).map {
-                Juror(it.toLong(), "지인닉네임")
+                User(it.toLong(), "지인닉네임")
             },
             isExpendedSearchBar = false,
             onSearchToggle = {},

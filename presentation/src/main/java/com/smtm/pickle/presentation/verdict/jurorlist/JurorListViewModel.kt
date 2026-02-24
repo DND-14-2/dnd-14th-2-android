@@ -3,6 +3,7 @@ package com.smtm.pickle.presentation.verdict.jurorlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
+import com.smtm.pickle.domain.usecase.mate.GetReceivedMateRequestsUseCase
 import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
 import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class JurorListViewModel @Inject constructor(
     private val getMatesUseCase: GetMatesUseCase,
     private val inviteMateUseCase: InviteMateUseCase,
+    private val getReceivedMateRequestsUseCase: GetReceivedMateRequestsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JurorListUiState())
@@ -31,18 +33,16 @@ class JurorListViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<JurorListEffect>()
     val effect: SharedFlow<JurorListEffect> = _effect.asSharedFlow()
 
+
     init {
         loadMates()
-
-        // 더미 데이터
-        _uiState.update { state ->
-            state.copy(
-                jurors = state.jurors + (1..5).map { MateUiModel(it.toLong(), "지인닉네임$it", "${it * 111}", it) },
-                myInviteCode = "ABCDEF"
-            )
-        }
+        checkHasReceivedRequests()
     }
 
+
+    fun onResume() {
+        checkHasReceivedRequests()
+    }
 
     fun onAddJurorClick() {
         _uiState.update {
@@ -172,10 +172,22 @@ class JurorListViewModel @Inject constructor(
                 }
         }
     }
+
+    private fun checkHasReceivedRequests() {
+        viewModelScope.launch {
+            getReceivedMateRequestsUseCase()
+                .onSuccess { requests ->
+                    _uiState.update {
+                        it.copy(hasReceivedMateRequests = requests.isNotEmpty())
+                    }
+                }
+        }
+    }
 }
 
 data class JurorListUiState(
     val jurors: List<MateUiModel> = emptyList(),
+    val hasReceivedMateRequests: Boolean = false,
     val myInviteCode: String = "",
     val inputInviteCode: String = "",
     val inputInviteCodeState: InputState = InputState.Idle,

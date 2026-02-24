@@ -78,6 +78,8 @@ fun JurorListScreen(
 
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.onResume()
+
             viewModel.effect.collect { effect ->
                 when (effect) {
                     is JurorListEffect.ShowSnackBar -> {
@@ -135,6 +137,7 @@ fun JurorListScreen(
 
     JurorListContent(
         jurors = uiState.jurors,
+        hasReceivedRequests = uiState.hasReceivedMateRequests,
         onNavigateBack = onNavigateBack,
         onJurorInviteClick = viewModel::onJurorInviteClick,
         onAddJuryClick = viewModel::onAddJurorClick,
@@ -149,6 +152,7 @@ fun JurorListScreen(
 @Composable
 private fun JurorListContent(
     jurors: List<MateUiModel>,
+    hasReceivedRequests: Boolean,
     onNavigateBack: () -> Unit,
     onJurorInviteClick: () -> Unit,
     onAddJuryClick: () -> Unit,
@@ -182,14 +186,15 @@ private fun JurorListContent(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    // TODO: 메이트 요청 여부에 따라 보이도록 조절
-                    item {
-                        JurorListMateRequestBanner(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(vertical = 10.dp),
-                            onClick = onMateRequestClick
-                        )
+                    if (hasReceivedRequests) {
+                        item {
+                            JurorListMateRequestBanner(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .padding(vertical = 10.dp),
+                                onClick = onMateRequestClick
+                            )
+                        }
                     }
 
                     items(
@@ -233,12 +238,13 @@ private fun JurorListContentPreview() {
             jurors = (1..5).map {
                 MateUiModel(it.toLong(), "지인닉네임", "${it * 111}", it)
             },
+            hasReceivedRequests = true,
             onNavigateBack = {},
-            onJurorClick = {},
             onJurorInviteClick = {},
             onAddJuryClick = {},
             onMateRequestClick = {},
-            onJurorMoreClick = {}
+            onJurorClick = {},
+            onJurorMoreClick = {},
         )
     }
 }
@@ -249,12 +255,13 @@ private fun JurorListEmptyPreview() {
     PickleTheme {
         JurorListContent(
             jurors = emptyList(),
+            hasReceivedRequests = false,
             onNavigateBack = {},
-            onJurorClick = {},
             onJurorInviteClick = {},
             onAddJuryClick = {},
             onMateRequestClick = {},
-            onJurorMoreClick = {}
+            onJurorClick = {},
+            onJurorMoreClick = {},
         )
     }
 }

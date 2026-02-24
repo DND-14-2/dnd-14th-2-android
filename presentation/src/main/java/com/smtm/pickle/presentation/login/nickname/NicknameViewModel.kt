@@ -57,8 +57,8 @@ class NicknameViewModel @Inject constructor(
         emitNavigateToMainEffect()
     }
 
-    fun onInviteClick() {
-        _uiState.update { it.copy(dialogState = NicknameDialogState.InputInviteCode) }
+    fun showInputInvitationCodeDialog() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.InputInvitationCode()) }
     }
 
     fun onSkipInviteClick() {
@@ -67,6 +67,24 @@ class NicknameViewModel @Inject constructor(
 
     fun onAlreadyHasCodeClick() {
         _uiState.update { it.copy(dialogState = NicknameDialogState.Welcome) }
+    }
+
+    fun inviteMate(invitationCode: String) {
+        viewModelScope.launch {
+            // TODO: Call InviteMateUseCase
+            // .onSuccess {
+            //     _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
+            //     emitNavigateToMainEffect()
+            // }
+            // .onFailure {
+            //     _uiState.update {
+            //         it.copy(dialogState = NicknameDialogState.InputInvitationCode(
+            //             errorMessage = "만료된 초대코드입니다"
+            //         ))
+            //     }
+            // }
+        }
+        onStartClick() // TODO REMOVE
     }
 
     fun onStartClick() {

@@ -23,16 +23,16 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
 fun InputInvitationCodeDialog(
-    invitationCode: String,
     modifier: Modifier = Modifier,
     invitationCodeErrorMessage: String? = null,
-    onInvitationCodeChange: (String) -> Unit,
     onCompleteClick: (String) -> Unit,
     onCancelClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
+    var invitationCode by remember { mutableStateOf("") }
     var inputErrorMessage by remember { mutableStateOf<String?>(null) }
-    val displayError = inputErrorMessage ?: invitationCodeErrorMessage
+    var userHasEdited by remember(invitationCodeErrorMessage) { mutableStateOf(false) }
+    val displayError = inputErrorMessage ?: invitationCodeErrorMessage?.takeIf { !userHasEdited }
     val lengthErrorMessage = stringResource(R.string.input_invitation_code_error_length)
     val uppercaseErrorMessage = stringResource(R.string.input_invitation_code_error_uppercase)
 
@@ -64,7 +64,8 @@ fun InputInvitationCodeDialog(
                 code = invitationCode,
                 onCodeChange = { newCode ->
                     inputErrorMessage = null
-                    onInvitationCodeChange(newCode)
+                    userHasEdited = true
+                    invitationCode = newCode
                 },
                 errorMessage = displayError,
             )
@@ -130,8 +131,6 @@ private fun InvitationCodeText(
 private fun InputInvitationCodeDialogIdlePreview() {
     PickleTheme {
         InputInvitationCodeDialog(
-            invitationCode = "",
-            onInvitationCodeChange = {},
             onCompleteClick = {},
             onCancelClick = {},
             onDismiss = {},
@@ -148,8 +147,6 @@ private fun InputInvitationCodeDialogIdlePreview() {
 private fun InputInvitationCodeDialogTypingPreview() {
     PickleTheme {
         InputInvitationCodeDialog(
-            invitationCode = "ABC",
-            onInvitationCodeChange = {},
             onCompleteClick = {},
             onCancelClick = {},
             onDismiss = {},
@@ -166,9 +163,7 @@ private fun InputInvitationCodeDialogTypingPreview() {
 private fun InputInvitationCodeDialogErrorShortPreview() {
     PickleTheme {
         InputInvitationCodeDialog(
-            invitationCode = "AB",
             invitationCodeErrorMessage = "6자로 입력해주세요",
-            onInvitationCodeChange = {},
             onCompleteClick = {},
             onCancelClick = {},
             onDismiss = {},
@@ -185,9 +180,7 @@ private fun InputInvitationCodeDialogErrorShortPreview() {
 private fun InputInvitationCodeDialogErrorExpiredPreview() {
     PickleTheme {
         InputInvitationCodeDialog(
-            invitationCode = "ABCDEF",
             invitationCodeErrorMessage = "만료된 초대코드입니다",
-            onInvitationCodeChange = {},
             onCompleteClick = {},
             onCancelClick = {},
             onDismiss = {},
@@ -204,8 +197,6 @@ private fun InputInvitationCodeDialogErrorExpiredPreview() {
 private fun InputInvitationCodeDialogSuccessPreview() {
     PickleTheme {
         InputInvitationCodeDialog(
-            invitationCode = "ABCDEF",
-            onInvitationCodeChange = {},
             onCompleteClick = {},
             onCancelClick = {},
             onDismiss = {},

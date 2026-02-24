@@ -16,7 +16,9 @@ data class NicknameUiState(
 sealed interface NicknameDialogState {
     data object None : NicknameDialogState
     data object InviteIntroduction : NicknameDialogState
-    data object InputInviteCode : NicknameDialogState
+    data class InputInvitationCode(
+        val errorMessage: String? = null
+    ) : NicknameDialogState
     data object ShareInviteCode : NicknameDialogState
     data object Welcome : NicknameDialogState
 }

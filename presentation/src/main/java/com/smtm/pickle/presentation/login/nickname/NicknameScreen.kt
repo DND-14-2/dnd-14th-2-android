@@ -72,23 +72,21 @@ fun NicknameScreen(
         onBackClick = viewModel::onBackClick,
     )
 
-    when (uiState.dialogState) {
+    when (val dialogState = uiState.dialogState) {
         NicknameDialogState.None -> Unit
         NicknameDialogState.InviteIntroduction -> {
             InviteIntroductionDialog(
-                onPrimaryButtonClick = viewModel::onInviteClick,
+                onPrimaryButtonClick = viewModel::showInputInvitationCodeDialog,
                 onGhostButtonClick = viewModel::onSkipInviteClick,
                 onAlreadyReceivedTextClick = viewModel::onAlreadyHasCodeClick,
                 onDismiss = viewModel::onDialogDismiss,
             )
         }
 
-        NicknameDialogState.InputInviteCode -> {
-            var invitationCode = remember { mutableStateOf("") }
+        is NicknameDialogState.InputInvitationCode -> {
             InputInvitationCodeDialog(
-                invitationCode = invitationCode.value,
-                onInvitationCodeChange = { invitationCode.value = it },
-                onCompleteClick = { viewModel.onStartClick() },
+                invitationCodeErrorMessage = dialogState.errorMessage,
+                onCompleteClick = viewModel::inviteMate,
                 onCancelClick = viewModel::onDialogDismiss,
                 onDismiss = viewModel::onDialogDismiss,
             )

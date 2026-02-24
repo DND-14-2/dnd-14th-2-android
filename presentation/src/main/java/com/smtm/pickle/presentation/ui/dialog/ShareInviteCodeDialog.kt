@@ -1,17 +1,23 @@
 package com.smtm.pickle.presentation.ui.dialog
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButton
 import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
+import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextField
+import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
 fun ShareInviteCodeDialog(
     modifier: Modifier = Modifier,
     inviteCode: String,
+    onInviteCodeClick: () -> Unit,
     onShareToSms: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -26,7 +32,19 @@ fun ShareInviteCodeDialog(
         ),
         onDismiss = onDismiss,
         inputField = {
-            Text(text = inviteCode)
+            PickleTextField(
+                value = inviteCode,
+                onValueChange = {},
+                inputState = InputState.Idle,
+                trailingIcon = {
+                    PickleIconButton(
+                        painter = painterResource(R.drawable.ic_copy),
+                        onClick = onInviteCodeClick,
+                        buttonSize = 24.dp,
+                        iconSize = 20.dp,
+                    )
+                }
+            )
         },
     )
 }
@@ -37,6 +55,7 @@ private fun ShareInviteCodeDialogPreview() {
     PickleTheme {
         ShareInviteCodeDialog(
             inviteCode = "inviteCode",
+            onInviteCodeClick = {},
             onShareToSms = {},
             onDismiss = {},
         )

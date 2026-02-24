@@ -44,21 +44,6 @@ class JurorListViewModel @Inject constructor(
     }
 
 
-    private fun loadMates() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-
-            getMatesUseCase()
-                .onSuccess { mates ->
-                    _uiState.update { it.copy(isLoading = false, jurors = mates.map { mate -> mate.toUiModel() }) }
-                }
-                .onFailure {
-                    _uiState.update { it.copy(isLoading = false) }
-                    _effect.emit(JurorListEffect.ShowSnackBar("친구 목록을 불러오지 못했습니다."))
-                }
-        }
-    }
-
     fun onAddJurorClick() {
         _uiState.update {
             it.copy(dialogState = JurorListDialogState.InputInviteCode)
@@ -120,18 +105,22 @@ class JurorListViewModel @Inject constructor(
             inviteMateUseCase(code)
                 .onSuccess {
                     _uiState.update {
-                        it.copy(inputInviteCode = "")
+                        it.copy(
+                            isLoading = false,
+                            inputInviteCode = ""
+                        )
                     }
                     _effect.emit(JurorListEffect.ShowSnackBar("메이트 요청을 보냈어요"))
                     dismissDialog()
                 }
                 .onFailure { e ->
                     _uiState.update {
-                        it.copy(inputInviteCodeState = InputState.Error(e.message ?: "알 수 없는 에러가 발생했어요"))
+                        it.copy(
+                            isLoading = false,
+                            inputInviteCodeState = InputState.Error(e.message ?: "알 수 없는 에러가 발생했어요")
+                        )
                     }
                 }
-
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -167,6 +156,21 @@ class JurorListViewModel @Inject constructor(
 
     fun dismissBottomSheet() {
         _uiState.update { it.copy(bottomSheetState = JurorListBottomSheetState.None) }
+    }
+
+    private fun loadMates() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            getMatesUseCase()
+                .onSuccess { mates ->
+                    _uiState.update { it.copy(isLoading = false, jurors = mates.map { mate -> mate.toUiModel() }) }
+                }
+                .onFailure {
+                    _uiState.update { it.copy(isLoading = false) }
+                    _effect.emit(JurorListEffect.ShowSnackBar("친구 목록을 불러오지 못했습니다."))
+                }
+        }
     }
 }
 

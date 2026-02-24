@@ -117,7 +117,7 @@ class JurorListViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            inputInviteCodeState = InputState.Error(e.message ?: "알 수 없는 에러가 발생했어요")
+                            inputInviteCodeState = InputState.Error(e.message ?: "초대코드를 확인해주세요")
                         )
                     }
                 }

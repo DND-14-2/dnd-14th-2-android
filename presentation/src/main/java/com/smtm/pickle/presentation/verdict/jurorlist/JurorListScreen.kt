@@ -43,7 +43,8 @@ import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateBottomSheetContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateConfirmDialog
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
-import com.smtm.pickle.presentation.common.components.MateInvitationDialog
+import com.smtm.pickle.presentation.common.components.ShareInviteCodeDialog
+import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListInputInviteCodeDialog
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import timber.log.Timber
 
@@ -88,7 +89,7 @@ fun JurorListScreen(
     }
 
     when (val state = uiState.bottomSheetState) {
-        is JurorListBottomSheetState.JurorAction -> {
+        is JurorListBottomSheetState.JurorDelete -> {
             PickleBottomSheet(
                 sheetState = sheetState,
                 onDismiss = viewModel::dismissBottomSheet,
@@ -103,8 +104,8 @@ fun JurorListScreen(
     }
 
     when (uiState.dialogState) {
-        JurorListDialogState.Invite -> {
-            MateInvitationDialog(
+        JurorListDialogState.CopyInviteCode -> {
+            ShareInviteCodeDialog(
                 invitationCode = uiState.inviteCode,
                 onPrimaryClick = { shareInviteCode(uiState.inviteCode) },
                 onDismiss = viewModel::dismissDialog,
@@ -118,13 +119,25 @@ fun JurorListScreen(
             )
         }
 
+        is JurorListDialogState.InputInviteCode -> {
+            JurorListInputInviteCodeDialog(
+                value = uiState.inputInviteCode,
+                inputState = uiState.inputInviteCodeState,
+                onValueChange = viewModel::onInputInviteCodeChanged,
+                onConfirm = viewModel::onInputInviteConfirmClick,
+                onDismiss = viewModel::dismissDialog,
+                onActionDone = viewModel::onInputInviteActionDone,
+            )
+        }
+
         JurorListDialogState.None -> Unit
     }
 
     JurorListContent(
         jurors = uiState.jurors,
         onNavigateBack = onNavigateBack,
-        onInviteClick = viewModel::onInviteClick,
+        onJurorInviteClick = viewModel::onJurorInviteClick,
+        onAddJuryClick = viewModel::onAddJurorClick,
         onMateRequestClick = onNavigateToMateRequest,
         onJurorClick = onNavigateToJurorDetail,
         onJurorMoreClick = viewModel::onJurorMoreClick,
@@ -137,7 +150,8 @@ fun JurorListScreen(
 private fun JurorListContent(
     jurors: List<MateUiModel>,
     onNavigateBack: () -> Unit,
-    onInviteClick: () -> Unit,
+    onJurorInviteClick: () -> Unit,
+    onAddJuryClick: () -> Unit,
     onMateRequestClick: () -> Unit,
     onJurorClick: (Long) -> Unit,
     onJurorMoreClick: (Long) -> Unit,
@@ -150,7 +164,7 @@ private fun JurorListContent(
             ) {
                 PickleIconButtonWithTouchCustom(
                     iconRes = R.drawable.ic_verdict_mate_request,
-                    onClick = onInviteClick, /// todo
+                    onClick = onAddJuryClick,
                     tint = PickleTheme.colors.gray700,
                 )
             }
@@ -163,7 +177,7 @@ private fun JurorListContent(
                 .padding(paddingValues)
         ) {
             if (jurors.isEmpty()) {
-                EmptyJurorContent(onInviteClick = onInviteClick)
+                EmptyJurorContent(onInviteClick = onJurorInviteClick)
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -221,7 +235,8 @@ private fun JurorListContentPreview() {
             },
             onNavigateBack = {},
             onJurorClick = {},
-            onInviteClick = {},
+            onJurorInviteClick = {},
+            onAddJuryClick = {},
             onMateRequestClick = {},
             onJurorMoreClick = {}
         )
@@ -236,7 +251,8 @@ private fun JurorListEmptyPreview() {
             jurors = emptyList(),
             onNavigateBack = {},
             onJurorClick = {},
-            onInviteClick = {},
+            onJurorInviteClick = {},
+            onAddJuryClick = {},
             onMateRequestClick = {},
             onJurorMoreClick = {}
         )

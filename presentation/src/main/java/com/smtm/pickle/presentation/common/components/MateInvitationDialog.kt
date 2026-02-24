@@ -28,7 +28,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import kotlinx.coroutines.launch
 
 @Composable
-fun MateInvitationDialog(
+fun ShareInviteCodeDialog(
     modifier: Modifier = Modifier,
     invitationCode: String,
     onPrimaryClick: () -> Unit,
@@ -65,14 +65,13 @@ fun MateInvitationDialog(
                 ) {
                     Text(
                         text = invitationCode,
-                        style = PickleTheme.typography.body2Medium,
+                        style = PickleTheme.typography.body3Regular,
                         color = PickleTheme.colors.gray800
                     )
                     PickleIconButtonWithTouchCustom(
                         iconRes = R.drawable.ic_common_copy,
                         onClick = {
                             scope.launch { clipBoardManager.setClipEntry(ClipEntry(clipData)) }
-                            onDismiss()
                         }
                     )
                 }
@@ -83,9 +82,9 @@ fun MateInvitationDialog(
 
 @Preview
 @Composable
-private fun MateInvitationDialogPreview() {
+private fun ShareInviteCodeDialogPreview() {
     PickleTheme {
-        MateInvitationDialog(
+        ShareInviteCodeDialog(
             invitationCode = "ABCDEFG",
             onPrimaryClick = {},
             onDismiss = {}

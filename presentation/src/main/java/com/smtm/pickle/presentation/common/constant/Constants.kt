@@ -6,3 +6,9 @@ object NicknameValidation {
     const val AVAILABLE_LENGTH = 5
     const val MAX_NICKNAME_LENGTH = 30
 }
+
+object InviteCodeValidation {
+    val FORMAT_REGEX = Regex("^[A-Z]+$")
+
+    const val AVAILABLE_LENGTH = 6
+}

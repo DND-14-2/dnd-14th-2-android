@@ -3,6 +3,8 @@ package com.smtm.pickle.presentation.verdict.jurorlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
+import com.smtm.pickle.presentation.common.utils.InputStateUtils
+import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,15 +56,38 @@ class JurorListViewModel @Inject constructor(
         }
     }
 
-    fun onInviteClick() {
-        _uiState.update { it.copy(dialogState = JurorListDialogState.Invite) }
+    fun onAddJurorClick() {
+        _uiState.update {
+            it.copy(dialogState = JurorListDialogState.InputInviteCode)
+        }
+    }
+
+    fun onJurorInviteClick() {
+        _uiState.update {
+            it.copy(dialogState = JurorListDialogState.CopyInviteCode)
+        }
+    }
+
+    fun onInputInviteCodeChanged(code: String) {
+        _uiState.update {
+            it.copy(
+                inputInviteCode = code,
+                inputInviteCodeState = if (code.isBlank()) {
+                    InputState.Idle
+                } else {
+                    InputState.Success(null)
+                }
+            )
+        }
+    }
+
+    fun onInputInviteActionDone() {
+        _uiState.update { it.copy(inputInviteCodeState = InputState.Idle) }
     }
 
     fun onJurorMoreClick(jurorId: Long) {
         _uiState.update {
-            it.copy(
-                bottomSheetState = JurorListBottomSheetState.JurorAction(jurorId)
-            )
+            it.copy(bottomSheetState = JurorListBottomSheetState.JurorDelete(jurorId))
         }
     }
 
@@ -75,13 +100,28 @@ class JurorListViewModel @Inject constructor(
         }
     }
 
+    fun onInputInviteConfirmClick() {
+        val code = _uiState.value.inputInviteCode
+        val validationState = InputStateUtils.validateInviteCodeFormat(code)
+
+        if (validationState is InputState.Error) {
+            _uiState.update { it.copy(inputInviteCodeState = validationState) }
+            return
+        }
+
+        viewModelScope.launch {
+            // TODO: 친구 추가 API 호출
+            dismissDialog()
+        }
+    }
+
     fun confirmDeleteJuror() {
         val currentState = _uiState.value.dialogState
         if (currentState is JurorListDialogState.DeleteConfirm) {
             val jurorId = currentState.jurorId
             viewModelScope.launch {
                 _uiState.update { it.copy(isLoading = true, dialogState = JurorListDialogState.None) }
-                // TODO: juror 삭제 usecase
+                // TODO: Juror 삭제 API 호출
 
                 // mock
                 _uiState.update { state ->
@@ -96,7 +136,13 @@ class JurorListViewModel @Inject constructor(
     }
 
     fun dismissDialog() {
-        _uiState.update { it.copy(dialogState = JurorListDialogState.None) }
+        _uiState.update {
+            it.copy(
+                dialogState = JurorListDialogState.None,
+                inputInviteCode = "",
+                inputInviteCodeState = InputState.Idle
+            )
+        }
     }
 
     fun dismissBottomSheet() {
@@ -107,6 +153,8 @@ class JurorListViewModel @Inject constructor(
 data class JurorListUiState(
     val jurors: List<MateUiModel> = emptyList(),
     val inviteCode: String = "",
+    val inputInviteCode: String = "",
+    val inputInviteCodeState: InputState = InputState.Idle,
     val isLoading: Boolean = false,
     val dialogState: JurorListDialogState = JurorListDialogState.None,
     val bottomSheetState: JurorListBottomSheetState = JurorListBottomSheetState.None
@@ -114,13 +162,14 @@ data class JurorListUiState(
 
 sealed interface JurorListDialogState {
     data object None : JurorListDialogState
-    data object Invite : JurorListDialogState
+    data object CopyInviteCode : JurorListDialogState
+    data object InputInviteCode : JurorListDialogState
     data class DeleteConfirm(val jurorId: Long) : JurorListDialogState
 }
 
 sealed interface JurorListBottomSheetState {
     data object None : JurorListBottomSheetState
-    data class JurorAction(val jurorId: Long) : JurorListBottomSheetState
+    data class JurorDelete(val jurorId: Long) : JurorListBottomSheetState
 }
 
 sealed interface JurorListEffect {

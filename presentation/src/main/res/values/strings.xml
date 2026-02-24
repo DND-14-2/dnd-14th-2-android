@@ -58,8 +58,9 @@
 
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
-    <string name="invite_bottom_sheet_title">내 초대코드를\n친구에게 공유해보세요</string>
-    <string name="invite_bottom_sheet_share">문자로 공유하기</string>
+    <string name="invite_dialog_title">내 초대코드를\n친구에게 공유해보세요</string>
+    <string name="invite_primary_click">문자로 공유하기</string>
+    <string name="invite_ghost_click">괜찮아요</string>
 
     <!-- Ledger -->
     <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>

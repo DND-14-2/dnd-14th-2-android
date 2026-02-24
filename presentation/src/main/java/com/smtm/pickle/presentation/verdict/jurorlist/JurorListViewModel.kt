@@ -3,6 +3,7 @@ package com.smtm.pickle.presentation.verdict.jurorlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.model.verdict.User
+import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JurorListViewModel @Inject constructor(
-
+    private val getMatesUseCase: GetMatesUseCase,
+    // UseCase 추가
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JurorListUiState())

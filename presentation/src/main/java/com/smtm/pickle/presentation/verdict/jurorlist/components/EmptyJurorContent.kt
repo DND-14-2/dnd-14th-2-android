@@ -52,7 +52,7 @@ fun EmptyJurorContent(
             modifier = Modifier.height(Dimensions.buttonHeightMedium)
         ) {
             Text(
-                text = stringResource(id = R.string.juror_list_invite_friend),
+                text = stringResource(id = R.string.juror_list_invite_mate),
                 style = PickleTheme.typography.body4Medium,
             )
         }

@@ -1,38 +1,25 @@
 package com.smtm.pickle.presentation.verdict.jurorlist
 
-import android.content.ClipData
 import android.content.Intent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,18 +34,17 @@ import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
-import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
-import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.verdict.jurorlist.components.EmptyJurorContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
+import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateBottomSheetContent
+import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateConfirmDialog
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
+import com.smtm.pickle.presentation.common.components.MateInvitationDialog
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,18 +56,23 @@ fun JurorListScreen(
     onNavigateToJurorDetail: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
-    val clipBoardManager = LocalClipboard.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val scope = rememberCoroutineScope()
     val snackbarState = remember { SnackbarState() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
-    val clipData = ClipData.newPlainText("invitationCode", uiState.inviteCode)
-    val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = "smsto:".toUri()
-        putExtra("sms_body", uiState.inviteCode) // TODO: 문자 메시지 내용 정하기
+    val shareInviteCode = { code: String ->
+        try {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = "smsto:".toUri()
+                putExtra("sms_body", code)
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Timber.e(e, "문자 전송 시도 실패")
+        }
     }
 
     LaunchedEffect(lifecycleOwner) {
@@ -102,26 +93,9 @@ fun JurorListScreen(
                 sheetState = sheetState,
                 onDismiss = viewModel::dismissBottomSheet,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { viewModel.onDeleteJurorClick(state.jurorId) }
-                        .padding(horizontal = 20.dp, vertical = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_ledger_detail_trashcan), // using trashcan as generic delete
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Text(
-                        text = "친구 삭제하기",
-                        style = PickleTheme.typography.body1Bold,
-                        color = PickleTheme.colors.gray800
-                    )
-                }
-                Spacer(modifier = Modifier.height(20.dp))
+                JurorListDeleteMateBottomSheetContent(
+                    onDeleteClick = { viewModel.onDeleteJurorClick(state.jurorId) }
+                )
             }
         }
 
@@ -130,65 +104,16 @@ fun JurorListScreen(
 
     when (uiState.dialogState) {
         JurorListDialogState.Invite -> {
-            PickleDialog(
-                title = stringResource(R.string.invite_dialog_title),
-                subtitle = "",
-                buttonLayout = PickleDialogButtonLayout.Vertical(
-                    primaryText = stringResource(R.string.invite_primary_click),
-                    ghostText = stringResource(R.string.invite_ghost_click),
-                    onPrimaryClick = {
-                        try {
-                            context.startActivity(intent)
-                        } catch (e: Exception) {
-                            Timber.e(e, "문자 전송 시도 실패")
-                        }
-                    },
-                    onGhostClick = viewModel::dismissDialog
-                ),
+            MateInvitationDialog(
+                invitationCode = uiState.inviteCode,
+                onPrimaryClick = { shareInviteCode(uiState.inviteCode) },
                 onDismiss = viewModel::dismissDialog,
-                inputField = {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Dimensions.inputHeight),
-                        color = PickleTheme.colors.background50,
-                        shape = RoundedCornerShape(Dimensions.radius)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = uiState.inviteCode,
-                                style = PickleTheme.typography.body2Medium,
-                                color = PickleTheme.colors.gray800
-                            )
-                            PickleIconButtonWithTouchCustom(
-                                iconRes = R.drawable.ic_common_copy,
-                                onClick = {
-                                    scope.launch { clipBoardManager.setClipEntry(ClipEntry(clipData)) }
-                                    viewModel.dismissDialog()
-                                }
-                            )
-                        }
-                    }
-                }
             )
         }
 
         is JurorListDialogState.DeleteConfirm -> {
-            PickleDialog(
-                title = "친구를 삭제할까요?",
-                subtitle = "삭제 후에는 복구할 수 없어요",
-                buttonLayout = PickleDialogButtonLayout.Horizontal(
-                    confirmText = "삭제",
-                    cancelText = "취소",
-                    onConfirmClick = viewModel::confirmDeleteJuror,
-                    onCancelClick = viewModel::dismissDialog
-                ),
+            JurorListDeleteMateConfirmDialog(
+                onConfirmClick = viewModel::confirmDeleteJuror,
                 onDismiss = viewModel::dismissDialog
             )
         }
@@ -225,7 +150,7 @@ private fun JurorListContent(
             ) {
                 PickleIconButtonWithTouchCustom(
                     iconRes = R.drawable.ic_verdict_mate_request,
-                    onClick = onInviteClick,
+                    onClick = onInviteClick, /// todo
                     tint = PickleTheme.colors.gray700,
                 )
             }
@@ -265,6 +190,7 @@ private fun JurorListContent(
                             JurorListItem(
                                 nickname = juror.nickname,
                                 onClick = { onJurorClick(juror.id) },
+                                enabled = false,
                                 togetherVerdictCount = juror.verdictCount,
                                 code = juror.invitationCode,
                                 modifier = Modifier.weight(1f)

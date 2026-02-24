@@ -35,6 +35,7 @@ class JurorListViewModel @Inject constructor(
                 inviteCode = "ABCDEF"
             )
         }
+        loadMates()
     }
 
 

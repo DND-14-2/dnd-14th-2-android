@@ -11,6 +11,7 @@
     <string name="login_tooltip_fast">3초만에 로그인하기!</string>
 
     <!-- Nickname -->
+    <string name="welcome_dialog_title">피클에 오신 것을 환영해요</string>
     <string name="profile_title">내 프로필</string>
     <string name="nickname_label">닉네임</string>
     <string name="nickname_title">닉네임 입력</string>
@@ -50,6 +51,7 @@
     <string name="common_negative">아니요</string>
     <string name="common_positive">네</string>
     <string name="common_typo">함께하는 똑똑한 소비, 피클</string>
+    <string name="common_start">시작하기</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>

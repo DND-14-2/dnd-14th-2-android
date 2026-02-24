@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.login.nickname.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
@@ -13,13 +14,13 @@ fun WelcomeDialog(
     onDismiss: () -> Unit,
 ) {
     PickleDialog(
-        title = "피클에 오신 것을 환영해요",
+        title = stringResource(R.string.welcome_dialog_title),
         buttonLayout = PickleDialogButtonLayout.Single(
-            text = "시작하기",
+            text = stringResource(R.string.common_start),
             onClick = onStartClick
         ),
         onDismiss = onDismiss,
         modifier = modifier,
-        imageRes = R.drawable.img_pickle_code,
+        imageRes = R.drawable.img_complete_signup,
     )
 }

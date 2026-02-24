@@ -38,7 +38,7 @@ import com.smtm.pickle.presentation.login.nickname.components.InviteIntroduction
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
 import com.smtm.pickle.presentation.login.nickname.components.WelcomeDialog
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
-import com.smtm.pickle.presentation.ui.dialog.InputInviteCodeDialog
+import com.smtm.pickle.presentation.ui.dialog.InputInvitationCodeDialog
 import com.smtm.pickle.presentation.ui.dialog.ShareInviteCodeDialog
 
 @Composable
@@ -84,10 +84,10 @@ fun NicknameScreen(
         }
 
         NicknameDialogState.InputInviteCode -> {
-            var inviteCode = remember { mutableStateOf("") }
-            InputInviteCodeDialog(
-                inviteCode = inviteCode.value,
-                onInviteCodeChange = { inviteCode.value = it },
+            var invitationCode = remember { mutableStateOf("") }
+            InputInvitationCodeDialog(
+                invitationCode = invitationCode.value,
+                onInvitationCodeChange = { invitationCode.value = it },
                 onSuccessClick = { viewModel.onStartClick() },
                 onCancelClick = viewModel::onDialogDismiss,
                 onDismiss = viewModel::onDialogDismiss,

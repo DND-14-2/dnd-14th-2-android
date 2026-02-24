@@ -6,10 +6,10 @@ import com.smtm.pickle.domain.model.mate.MateStatus
 import com.smtm.pickle.domain.repository.MateRepository
 import javax.inject.Inject
 
-class UpdateMateStatusUseCase @Inject constructor(
+class UpdateMateRequestStatusUseCase @Inject constructor(
     private val mateRepository: MateRepository,
 ) {
     suspend operator fun invoke(mateId: MateId, status: MateStatus): Result<Unit> = runSuspendCatching {
-        mateRepository.updateMateStatus(mateId, status)
+        mateRepository.updateMateRequestStatus(mateId, status)
     }
 }

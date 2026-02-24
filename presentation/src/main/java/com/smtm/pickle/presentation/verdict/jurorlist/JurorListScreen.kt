@@ -106,8 +106,8 @@ fun JurorListScreen(
     when (uiState.dialogState) {
         JurorListDialogState.CopyInviteCode -> {
             ShareInviteCodeDialog(
-                invitationCode = uiState.inviteCode,
-                onPrimaryClick = { shareInviteCode(uiState.inviteCode) },
+                invitationCode = uiState.myInviteCode,
+                onPrimaryClick = { shareInviteCode(uiState.myInviteCode) },
                 onDismiss = viewModel::dismissDialog,
             )
         }

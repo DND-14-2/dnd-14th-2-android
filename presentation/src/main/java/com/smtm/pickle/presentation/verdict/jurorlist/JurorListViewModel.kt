@@ -3,6 +3,7 @@ package com.smtm.pickle.presentation.verdict.jurorlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
+import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
 import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JurorListViewModel @Inject constructor(
     private val getMatesUseCase: GetMatesUseCase,
+    private val inviteMateUseCase: InviteMateUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JurorListUiState())
@@ -30,14 +32,15 @@ class JurorListViewModel @Inject constructor(
     val effect: SharedFlow<JurorListEffect> = _effect.asSharedFlow()
 
     init {
+        loadMates()
+
         // 더미 데이터
         _uiState.update { state ->
             state.copy(
-                jurors = (1..5).map { MateUiModel(it.toLong(), "지인닉네임$it", "${it * 111}", it) },
-                inviteCode = "ABCDEF"
+                jurors = state.jurors + (1..5).map { MateUiModel(it.toLong(), "지인닉네임$it", "${it * 111}", it) },
+                myInviteCode = "ABCDEF"
             )
         }
-        loadMates()
     }
 
 
@@ -101,6 +104,8 @@ class JurorListViewModel @Inject constructor(
     }
 
     fun onInputInviteConfirmClick() {
+        if (_uiState.value.isLoading) return
+
         val code = _uiState.value.inputInviteCode
         val validationState = InputStateUtils.validateInviteCodeFormat(code)
 
@@ -110,8 +115,23 @@ class JurorListViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO: 친구 추가 API 호출
-            dismissDialog()
+            _uiState.update { it.copy(isLoading = true) }
+
+            inviteMateUseCase(code)
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(inputInviteCode = "")
+                    }
+                    _effect.emit(JurorListEffect.ShowSnackBar("메이트 요청을 보냈어요"))
+                    dismissDialog()
+                }
+                .onFailure { e ->
+                    _uiState.update {
+                        it.copy(inputInviteCodeState = InputState.Error(e.message ?: "알 수 없는 에러가 발생했어요"))
+                    }
+                }
+
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -152,7 +172,7 @@ class JurorListViewModel @Inject constructor(
 
 data class JurorListUiState(
     val jurors: List<MateUiModel> = emptyList(),
-    val inviteCode: String = "",
+    val myInviteCode: String = "",
     val inputInviteCode: String = "",
     val inputInviteCodeState: InputState = InputState.Idle,
     val isLoading: Boolean = false,

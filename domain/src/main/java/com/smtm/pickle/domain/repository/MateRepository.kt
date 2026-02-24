@@ -17,5 +17,5 @@ interface MateRepository {
     suspend fun getReceivedMateRequests(): List<MateRequest>
 
     /** 받은 친구 요청 수락 거절 */
-    suspend fun updateMateStatus(mateId: MateId, status: MateStatus)
+    suspend fun updateMateRequestStatus(mateId: MateId, status: MateStatus)
 }

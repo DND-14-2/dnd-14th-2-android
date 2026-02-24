@@ -29,8 +29,8 @@ class MateRepositoryImpl @Inject constructor(
         return mateApi.getReceivedMateRequests().map { it.toDomain() }
     }
 
-    override suspend fun updateMateStatus(mateId: MateId, status: MateStatus) {
-        mateApi.updateMateStatus(
+    override suspend fun updateMateRequestStatus(mateId: MateId, status: MateStatus) {
+        mateApi.updateMateRequestStatus(
             mateId = mateId.value,
             request = MateStatusUpdateRequest(status.toRemote()),
         )

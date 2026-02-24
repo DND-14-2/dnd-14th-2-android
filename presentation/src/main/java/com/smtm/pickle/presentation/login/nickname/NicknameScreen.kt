@@ -41,7 +41,7 @@ import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
 import com.smtm.pickle.presentation.login.nickname.components.WelcomeDialog
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
 import com.smtm.pickle.presentation.ui.dialog.InputInvitationCodeDialog
-import com.smtm.pickle.presentation.ui.dialog.ShareInviteCodeDialog
+import com.smtm.pickle.presentation.ui.dialog.ShareInvitationCodeDialog
 import kotlinx.coroutines.launch
 
 @Composable
@@ -80,7 +80,7 @@ fun NicknameScreen(
         NicknameDialogState.InviteIntroduction -> {
             InviteIntroductionDialog(
                 onPrimaryButtonClick = viewModel::showInputInvitationCodeDialog,
-                onGhostButtonClick = viewModel::onSkipInviteClick,
+                onGhostButtonClick = viewModel::showShareInvitationCodeDialog,
                 onAlreadyReceivedTextClick = viewModel::showWelcomeDialog,
                 onDismiss = viewModel::onDialogDismiss,
             )
@@ -95,13 +95,13 @@ fun NicknameScreen(
             )
         }
 
-        NicknameDialogState.ShareInviteCode -> {
+        NicknameDialogState.ShareInvitationCode -> {
             val clipboard = LocalClipboard.current
             val scope = rememberCoroutineScope()
             val inviteCode = "ABACD"
 
 
-            ShareInviteCodeDialog(
+            ShareInvitationCodeDialog(
                 inviteCode = inviteCode,
                 onShareToSms = {},
                 onInviteCodeClick = {

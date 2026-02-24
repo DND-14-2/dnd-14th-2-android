@@ -63,8 +63,8 @@ class NicknameViewModel @Inject constructor(
         _uiState.update { it.copy(dialogState = NicknameDialogState.InputInvitationCode()) }
     }
 
-    fun onSkipInviteClick() {
-        _uiState.update { it.copy(dialogState = NicknameDialogState.ShareInviteCode) }
+    fun showShareInvitationCodeDialog() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.ShareInvitationCode) }
     }
 
     fun showWelcomeDialog() {

@@ -5,6 +5,7 @@ import com.smtm.pickle.data.source.remote.api.MateApi
 import com.smtm.pickle.data.source.remote.model.mate.InviteMateRequest
 import com.smtm.pickle.domain.model.mate.Mate
 import com.smtm.pickle.domain.model.mate.MateId
+import com.smtm.pickle.domain.model.mate.ReceivedMate
 import com.smtm.pickle.domain.repository.MateRepository
 import javax.inject.Inject
 
@@ -18,5 +19,9 @@ class MateRepositoryImpl @Inject constructor(
 
     override suspend fun getMates(): List<Mate> {
         return mateApi.getMates().map { it.toDomain() }
+    }
+
+    override suspend fun getReceivedMates(): List<ReceivedMate> {
+        return mateApi.getReceivedMates().map { it.toDomain() }
     }
 }

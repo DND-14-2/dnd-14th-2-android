@@ -9,3 +9,9 @@ data class Mate(
     val invitationCode: String,
     val verdictCount: Int,
 )
+
+data class ReceivedMate(
+    val id: MateId,
+    val nickname: String,
+    val invitationCode: String,
+)

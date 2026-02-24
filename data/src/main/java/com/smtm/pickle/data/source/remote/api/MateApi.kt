@@ -2,6 +2,7 @@ package com.smtm.pickle.data.source.remote.api
 
 import com.smtm.pickle.data.source.remote.model.mate.InviteMateRequest
 import com.smtm.pickle.data.source.remote.model.mate.RemoteMate
+import com.smtm.pickle.data.source.remote.model.mate.RemoteReceivedMate
 import com.smtm.pickle.domain.model.mate.MateId
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,4 +17,7 @@ interface MateApi {
 
     @GET("mates")
     suspend fun getMates(): List<RemoteMate>
+
+    @GET("mates/received")
+    suspend fun getReceivedMates(): List<RemoteReceivedMate>
 }

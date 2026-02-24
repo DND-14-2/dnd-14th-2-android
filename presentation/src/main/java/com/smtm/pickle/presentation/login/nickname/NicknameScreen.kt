@@ -88,7 +88,7 @@ fun NicknameScreen(
             InputInvitationCodeDialog(
                 invitationCode = invitationCode.value,
                 onInvitationCodeChange = { invitationCode.value = it },
-                onSuccessClick = { viewModel.onStartClick() },
+                onCompleteClick = { viewModel.onStartClick() },
                 onCancelClick = viewModel::onDialogDismiss,
                 onDismiss = viewModel::onDialogDismiss,
             )

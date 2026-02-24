@@ -38,7 +38,7 @@ import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
-import com.smtm.pickle.presentation.verdict.model.JurorUiModel
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -188,7 +188,7 @@ private fun VerdictListItemPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            defendant = JurorUiModel(1, "홍길동"),
+            defendant = MateUiModel(1, "홍길동"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now()
         )

@@ -9,7 +9,7 @@ import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
-import com.smtm.pickle.presentation.verdict.model.JurorUiModel
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -163,7 +163,7 @@ class VerdictViewModel @Inject constructor(
                     paymentMethod = PaymentMethodUiModel.BankTransfer,
                     memo = null,
                 ),
-                defendant = JurorUiModel(201, "홍길동"),
+                defendant = MateUiModel(201, "홍길동"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
@@ -179,7 +179,7 @@ class VerdictViewModel @Inject constructor(
                     paymentMethod = PaymentMethodUiModel.CreditCard,
                     memo = null
                 ),
-                defendant = JurorUiModel(202, "김철수"),
+                defendant = MateUiModel(202, "김철수"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(2)
@@ -196,7 +196,7 @@ class VerdictViewModel @Inject constructor(
                     paymentMethod = PaymentMethodUiModel.CreditCard,
                     memo = null
                 ),
-                defendant = JurorUiModel(203, "이영희"),
+                defendant = MateUiModel(203, "이영희"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.INNOCENT,
                 createdAt = LocalDateTime.now().minusDays(3)
@@ -218,7 +218,7 @@ class VerdictViewModel @Inject constructor(
                     paymentMethod = PaymentMethodUiModel.CreditCard,
                     memo = null
                 ),
-                defendant = JurorUiModel(211, "박민수"),
+                defendant = MateUiModel(211, "박민수"),
                 status = VerdictStatus.PENDING,
                 createdAt = LocalDateTime.now().minusDays(1)
             ),
@@ -234,7 +234,7 @@ class VerdictViewModel @Inject constructor(
                     paymentMethod = PaymentMethodUiModel.Cash,
                     memo = null
                 ),
-                defendant = JurorUiModel(212, "최수진"),
+                defendant = MateUiModel(212, "최수진"),
                 status = VerdictStatus.COMPLETED,
                 result = VerdictResult.GUILTY,
                 createdAt = LocalDateTime.now().minusDays(5)

@@ -42,7 +42,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.smtm.pickle.domain.model.verdict.User
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
@@ -58,6 +57,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.verdict.jurorlist.components.EmptyJurorContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -197,7 +197,6 @@ fun JurorListScreen(
     }
 
     JurorListContent(
-        modifier = Modifier,
         jurors = uiState.jurors,
         onNavigateBack = onNavigateBack,
         onInviteClick = viewModel::onInviteClick,
@@ -211,8 +210,7 @@ fun JurorListScreen(
 
 @Composable
 private fun JurorListContent(
-    modifier: Modifier = Modifier,
-    jurors: List<User>,
+    jurors: List<MateUiModel>,
     onNavigateBack: () -> Unit,
     onInviteClick: () -> Unit,
     onMateRequestClick: () -> Unit,
@@ -232,7 +230,6 @@ private fun JurorListContent(
                 )
             }
         },
-        modifier = modifier
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -268,8 +265,8 @@ private fun JurorListContent(
                             JurorListItem(
                                 nickname = juror.nickname,
                                 onClick = { onJurorClick(juror.id) },
-                                togetherVerdictCount = 0,
-                                code = "CODE23",
+                                togetherVerdictCount = juror.verdictCount,
+                                code = juror.invitationCode,
                                 modifier = Modifier.weight(1f)
                             )
 
@@ -294,7 +291,7 @@ private fun JurorListContentPreview() {
     PickleTheme {
         JurorListContent(
             jurors = (1..5).map {
-                User(it.toLong(), "지인닉네임")
+                MateUiModel(it.toLong(), "지인닉네임", "${it * 111}", it)
             },
             onNavigateBack = {},
             onJurorClick = {},

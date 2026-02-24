@@ -2,8 +2,9 @@ package com.smtm.pickle.presentation.verdict.jurorlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.model.verdict.User
 import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
+import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class JurorListViewModel @Inject constructor(
     private val getMatesUseCase: GetMatesUseCase,
-    // UseCase 추가
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JurorListUiState())
@@ -31,9 +31,25 @@ class JurorListViewModel @Inject constructor(
         // 더미 데이터
         _uiState.update { state ->
             state.copy(
-                jurors = (1..5).map { User(it.toLong(), "지인닉네임$it") },
+                jurors = (1..5).map { MateUiModel(it.toLong(), "지인닉네임$it", "${it * 111}", it) },
                 inviteCode = "ABCDEF"
             )
+        }
+    }
+
+
+    private fun loadMates() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            getMatesUseCase()
+                .onSuccess { mates ->
+                    _uiState.update { it.copy(isLoading = false, jurors = mates.map { mate -> mate.toUiModel() }) }
+                }
+                .onFailure {
+                    _uiState.update { it.copy(isLoading = false) }
+                    _effect.emit(JurorListEffect.ShowSnackBar("친구 목록을 불러오지 못했습니다."))
+                }
         }
     }
 
@@ -88,7 +104,7 @@ class JurorListViewModel @Inject constructor(
 }
 
 data class JurorListUiState(
-    val jurors: List<User> = emptyList(),
+    val jurors: List<MateUiModel> = emptyList(),
     val inviteCode: String = "",
     val isLoading: Boolean = false,
     val dialogState: JurorListDialogState = JurorListDialogState.None,

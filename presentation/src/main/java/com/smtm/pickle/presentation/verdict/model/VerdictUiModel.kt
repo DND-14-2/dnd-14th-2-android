@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class VerdictUiModel(
     val id: Long,
     val ledger: LedgerUiModel,
-    val defendant: JurorUiModel,
+    val defendant: MateUiModel,
     val status: VerdictStatus,
     val result: VerdictResult? = null,
     val createdAt: LocalDateTime,

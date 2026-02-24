@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.User
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.jurorlist.materequest.components.MateRequestItem
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 
 @Composable
 fun MateRequestScreen(
@@ -25,7 +25,7 @@ fun MateRequestScreen(
 ) {
     // 임시 더미 데이터 (뷰모델 연결 전)
     val dummyRequests = (1..2).map {
-        User(it.toLong(), "지인닉네임")
+        MateUiModel(it.toLong(), "지인닉네임")
     }
 
     MateRequestContent(
@@ -39,7 +39,7 @@ fun MateRequestScreen(
 
 @Composable
 private fun MateRequestContent(
-    requests: List<User>,
+    requests: List<MateUiModel>,
     invitationCode: String,
     onBackClick: () -> Unit,
     onAcceptClick: (Long) -> Unit,
@@ -85,7 +85,7 @@ private fun MateRequestContent(
 private fun MateRequestContentPreview() {
     PickleTheme {
         MateRequestContent(
-            requests = (1..2).map { User(it.toLong(), "지인닉네임") },
+            requests = (1..2).map { MateUiModel(it.toLong(), "지인닉네임") },
             onBackClick = {},
             onAcceptClick = {},
             onRejectClick = {},

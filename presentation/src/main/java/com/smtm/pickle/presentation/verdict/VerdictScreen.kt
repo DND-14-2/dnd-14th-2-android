@@ -42,7 +42,7 @@ import com.smtm.pickle.presentation.verdict.components.JudgementDialog
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
-import com.smtm.pickle.presentation.verdict.model.JurorUiModel
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
 import java.time.LocalDate
@@ -241,7 +241,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.Cash,
                 memo = null
             ),
-            defendant = JurorUiModel(201, "홍길동"),
+            defendant = MateUiModel(201, "홍길동"),
             status = VerdictStatus.PENDING,
             createdAt = LocalDateTime.now().minusDays(1),
             isNew = true
@@ -258,7 +258,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            defendant = JurorUiModel(202, "김철수"),
+            defendant = MateUiModel(202, "김철수"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.GUILTY,
             createdAt = LocalDateTime.now().minusDays(2)
@@ -275,7 +275,7 @@ private fun VerdictContentPreview() {
                 paymentMethod = PaymentMethodUiModel.CreditCard,
                 memo = null
             ),
-            defendant = JurorUiModel(203, "이영희"),
+            defendant = MateUiModel(203, "이영희"),
             status = VerdictStatus.COMPLETED,
             result = VerdictResult.INNOCENT,
             createdAt = LocalDateTime.now().minusDays(3)

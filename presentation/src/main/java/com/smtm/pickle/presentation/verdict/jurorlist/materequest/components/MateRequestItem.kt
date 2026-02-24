@@ -27,7 +27,7 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun MateRequestItem(
     nickname: String,
-    code: String,
+    invitationCode: String,
     onAcceptClick: () -> Unit,
     onRejectClick: () -> Unit,
 ) {
@@ -47,7 +47,7 @@ fun MateRequestItem(
                 color = PickleTheme.colors.gray800
             )
             Text(
-                text = code,
+                text = invitationCode,
                 style = PickleTheme.typography.caption1Medium,
                 color = PickleTheme.colors.gray600
             )
@@ -104,7 +104,7 @@ private fun MateRequestItemPreview() {
     PickleTheme {
         MateRequestItem(
             nickname = "지인닉네임",
-            code = "CODE23",
+            invitationCode = "CODE23",
             onAcceptClick = {},
             onRejectClick = {}
         )

@@ -8,39 +8,62 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
+import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.jurorlist.materequest.components.MateRequestItem
-import com.smtm.pickle.presentation.verdict.model.MateUiModel
+import com.smtm.pickle.presentation.verdict.model.MateRequestUiModel
 
 @Composable
 fun MateRequestScreen(
+    viewModel: MateRequestViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {}
 ) {
-    // 임시 더미 데이터 (뷰모델 연결 전)
-    val dummyRequests = (1..2).map {
-        MateUiModel(it.toLong(), "지인닉네임")
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarState = remember { SnackbarState() }
+
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    is MateRequestEffect.ShowSnackBar -> {
+                        snackbarState.show(PickleSnackbar.toastSuccess(message = effect.msg))
+                    }
+                }
+            }
+        }
     }
 
     MateRequestContent(
-        requests = dummyRequests,
-        invitationCode = "CODE",
+        requests = uiState.requests,
         onBackClick = onNavigateBack,
-        onAcceptClick = {},
-        onRejectClick = {},
+        onAcceptClick = viewModel::onAcceptClick,
+        onRejectClick = viewModel::onRejectClick,
     )
+
+    SnackbarHost(snackbarState)
 }
 
 @Composable
 private fun MateRequestContent(
-    requests: List<MateUiModel>,
-    invitationCode: String,
+    requests: List<MateRequestUiModel>,
     onBackClick: () -> Unit,
     onAcceptClick: (Long) -> Unit,
     onRejectClick: (Long) -> Unit,
@@ -70,7 +93,7 @@ private fun MateRequestContent(
                 ) { request ->
                     MateRequestItem(
                         nickname = request.nickname,
-                        code = invitationCode,
+                        invitationCode = request.invitationCode,
                         onAcceptClick = { onAcceptClick(request.id) },
                         onRejectClick = { onRejectClick(request.id) }
                     )
@@ -85,11 +108,10 @@ private fun MateRequestContent(
 private fun MateRequestContentPreview() {
     PickleTheme {
         MateRequestContent(
-            requests = (1..2).map { MateUiModel(it.toLong(), "지인닉네임") },
+            requests = (1..2).map { MateRequestUiModel(it.toLong(), "지인닉네임", "ABCDEF") },
             onBackClick = {},
             onAcceptClick = {},
             onRejectClick = {},
-            invitationCode = "CODE23"
         )
     }
 }

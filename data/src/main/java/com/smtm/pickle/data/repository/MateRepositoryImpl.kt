@@ -1,5 +1,6 @@
 package com.smtm.pickle.data.repository
 
+import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.source.remote.api.MateApi
 import com.smtm.pickle.data.source.remote.model.mate.InviteMateRequest
 import com.smtm.pickle.domain.model.mate.MateId
@@ -11,6 +12,6 @@ class MateRepositoryImpl @Inject constructor(
 ) : MateRepository {
 
     override suspend fun inviteMate(invitationCode: String): MateId {
-        return mateApi.inviteMate(InviteMateRequest(invitationCode))
+        return mateApi.inviteMate(InviteMateRequest(invitationCode)).toDomain()
     }
 }

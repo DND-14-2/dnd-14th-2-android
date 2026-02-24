@@ -31,7 +31,7 @@ fun InputInvitationCodeDialog(
 ) {
     var invitationCode by remember { mutableStateOf("") }
     var inputErrorMessage by remember { mutableStateOf<String?>(null) }
-    var userHasEdited by remember(invitationCodeErrorMessage) { mutableStateOf(false) }
+    var userHasEdited by remember { mutableStateOf(false) }
     val displayError = inputErrorMessage ?: invitationCodeErrorMessage?.takeIf { !userHasEdited }
     val lengthErrorMessage = stringResource(R.string.input_invitation_code_error_length)
     val uppercaseErrorMessage = stringResource(R.string.input_invitation_code_error_uppercase)
@@ -53,6 +53,7 @@ fun InputInvitationCodeDialog(
                     inputErrorMessage = errorMessage
                 } else {
                     inputErrorMessage = null
+                    userHasEdited = false
                     onCompleteClick(invitationCode)
                 }
             },

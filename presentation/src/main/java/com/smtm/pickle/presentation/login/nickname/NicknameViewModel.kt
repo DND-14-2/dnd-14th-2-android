@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.login.nickname
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
 import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation.MAX_NICKNAME_LENGTH
 import com.smtm.pickle.presentation.common.utils.NicknameUtils
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NicknameViewModel @Inject constructor(
-    private val saveNicknameUseCase: SaveNicknameUseCase
+    private val saveNicknameUseCase: SaveNicknameUseCase,
+    private val inviteMateUseCase: InviteMateUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NicknameUiState())
@@ -71,20 +73,19 @@ class NicknameViewModel @Inject constructor(
 
     fun inviteMate(invitationCode: String) {
         viewModelScope.launch {
-            // TODO: Call InviteMateUseCase
-            // .onSuccess {
-            //     _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
-            //     emitNavigateToMainEffect()
-            // }
-            // .onFailure {
-            //     _uiState.update {
-            //         it.copy(dialogState = NicknameDialogState.InputInvitationCode(
-            //             errorMessage = "만료된 초대코드입니다"
-            //         ))
-            //     }
-            // }
+            inviteMateUseCase(invitationCode)
+                .onSuccess {
+                    onDialogDismiss()
+                }
+                .onFailure { e ->
+                    Timber.e(e)
+                    _uiState.update {
+                        it.copy(dialogState = NicknameDialogState.InputInvitationCode(
+                            errorMessage = "초대코드를 확인해주세요"
+                        ))
+                    }
+                }
         }
-        onStartClick() // TODO REMOVE
     }
 
     fun onStartClick() {

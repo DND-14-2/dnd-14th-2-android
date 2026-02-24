@@ -14,8 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -78,7 +76,7 @@ fun NicknameScreen(
             InviteIntroductionDialog(
                 onPrimaryButtonClick = viewModel::showInputInvitationCodeDialog,
                 onGhostButtonClick = viewModel::onSkipInviteClick,
-                onAlreadyReceivedTextClick = viewModel::onAlreadyHasCodeClick,
+                onAlreadyReceivedTextClick = viewModel::showWelcomeDialog,
                 onDismiss = viewModel::onDialogDismiss,
             )
         }
@@ -87,8 +85,8 @@ fun NicknameScreen(
             InputInvitationCodeDialog(
                 invitationCodeErrorMessage = dialogState.errorMessage,
                 onCompleteClick = viewModel::inviteMate,
-                onCancelClick = viewModel::onDialogDismiss,
-                onDismiss = viewModel::onDialogDismiss,
+                onCancelClick = viewModel::showWelcomeDialog,
+                onDismiss = viewModel::showWelcomeDialog,
             )
         }
 

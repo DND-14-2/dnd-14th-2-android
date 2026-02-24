@@ -67,7 +67,7 @@ class NicknameViewModel @Inject constructor(
         _uiState.update { it.copy(dialogState = NicknameDialogState.ShareInviteCode) }
     }
 
-    fun onAlreadyHasCodeClick() {
+    fun showWelcomeDialog() {
         _uiState.update { it.copy(dialogState = NicknameDialogState.Welcome) }
     }
 
@@ -75,7 +75,7 @@ class NicknameViewModel @Inject constructor(
         viewModelScope.launch {
             inviteMateUseCase(invitationCode)
                 .onSuccess {
-                    onDialogDismiss()
+                    showWelcomeDialog()
                 }
                 .onFailure { e ->
                     Timber.e(e)

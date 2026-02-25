@@ -11,4 +11,5 @@ interface UserRepository {
 
     suspend fun getFirstLogin(): Boolean
 
+    suspend fun getInvitationCode(): String
 }

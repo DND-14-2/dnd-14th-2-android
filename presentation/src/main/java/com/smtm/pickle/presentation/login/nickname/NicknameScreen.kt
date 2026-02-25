@@ -95,11 +95,10 @@ fun NicknameScreen(
             )
         }
 
-        NicknameDialogState.ShareInvitationCode -> {
+        is NicknameDialogState.ShareInvitationCode -> {
             val clipboard = LocalClipboard.current
             val scope = rememberCoroutineScope()
-            val inviteCode = "ABACD"
-
+            val inviteCode = dialogState.invitationCode
 
             ShareInvitationCodeDialog(
                 inviteCode = inviteCode,
@@ -111,7 +110,6 @@ fun NicknameScreen(
                         )
                     }
                 },
-
                 onDismiss = viewModel::onDialogDismiss,
             )
         }

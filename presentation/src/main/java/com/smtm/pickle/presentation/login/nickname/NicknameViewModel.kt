@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
 import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.GetInvitationCodeUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation.MAX_NICKNAME_LENGTH
 import com.smtm.pickle.presentation.common.utils.NicknameUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class NicknameViewModel @Inject constructor(
     private val saveNicknameUseCase: SaveNicknameUseCase,
     private val inviteMateUseCase: InviteMateUseCase,
+    private val getInvitationCodeUseCase: GetInvitationCodeUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NicknameUiState())
@@ -64,7 +66,17 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun showShareInvitationCodeDialog() {
-        _uiState.update { it.copy(dialogState = NicknameDialogState.ShareInvitationCode) }
+        viewModelScope.launch {
+            getInvitationCodeUseCase()
+                .onSuccess { code ->
+                    _uiState.update {
+                        it.copy(dialogState = NicknameDialogState.ShareInvitationCode(code))
+                    }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "초대코드 받기 실패")
+                }
+        }
     }
 
     fun showWelcomeDialog() {
@@ -80,9 +92,11 @@ class NicknameViewModel @Inject constructor(
                 .onFailure { e ->
                     Timber.e(e)
                     _uiState.update {
-                        it.copy(dialogState = NicknameDialogState.InputInvitationCode(
-                            errorMessage = "초대코드를 확인해주세요"
-                        ))
+                        it.copy(
+                            dialogState = NicknameDialogState.InputInvitationCode(
+                                errorMessage = "초대코드를 확인해주세요"
+                            )
+                        )
                     }
                 }
         }

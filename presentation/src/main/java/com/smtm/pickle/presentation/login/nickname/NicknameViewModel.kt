@@ -102,12 +102,7 @@ class NicknameViewModel @Inject constructor(
         }
     }
 
-    fun onStartClick() {
-        _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
-        emitNavigateToMainEffect()
-    }
-
-    fun onDialogDismiss() {
+    fun onCompleteWelcome() {
         _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
         emitNavigateToMainEffect()
     }

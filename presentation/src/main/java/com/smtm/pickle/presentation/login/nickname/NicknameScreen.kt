@@ -80,7 +80,7 @@ fun NicknameScreen(
                 onPrimaryButtonClick = viewModel::showInputInvitationCodeDialog,
                 onGhostButtonClick = viewModel::showShareInvitationCodeDialog,
                 onAlreadyReceivedTextClick = viewModel::showWelcomeDialog,
-                onDismiss = viewModel::onDialogDismiss,
+                onDismiss = viewModel::showWelcomeDialog,
             )
         }
 
@@ -103,18 +103,19 @@ fun NicknameScreen(
                 inviteCode = inviteCode,
                 onShareToSms = {
                     context.sendSms(smsMessage)
+                    viewModel.showWelcomeDialog()
                 },
                 onInviteCodeClick = {
                     copyToClipboard(inviteCode)
                 },
-                onDismiss = viewModel::onDialogDismiss,
+                onDismiss = viewModel::showWelcomeDialog,
             )
         }
 
         NicknameDialogState.Welcome -> {
             WelcomeDialog(
-                onStartClick = viewModel::onStartClick,
-                onDismiss = viewModel::onDialogDismiss,
+                onStartClick = viewModel::onCompleteWelcome,
+                onDismiss = viewModel::onCompleteWelcome,
             )
         }
     }

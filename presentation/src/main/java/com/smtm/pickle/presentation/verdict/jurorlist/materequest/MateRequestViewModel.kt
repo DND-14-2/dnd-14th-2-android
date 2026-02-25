@@ -67,9 +67,9 @@ class MateRequestViewModel @Inject constructor(
     private fun updateStatus(mateId: Long, status: MateStatus, successMsg: String) {
         viewModelScope.launch {
             updateMateRequestStatusUseCase(MateId(mateId), status)
-                .onSuccess {
+                .onSuccess { processedMateId ->
                     _uiState.update { state ->
-                        state.copy(requests = state.requests.filter { it.id != mateId })
+                        state.copy(requests = state.requests.filter { it.id != processedMateId })
                     }
                     _effect.emit(MateRequestEffect.ShowSnackBar(successMsg))
                 }

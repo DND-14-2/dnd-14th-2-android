@@ -2,6 +2,7 @@ package com.smtm.pickle.data.repository
 
 import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.source.remote.api.AuthService
+import com.smtm.pickle.data.source.remote.api.UserApi
 import com.smtm.pickle.data.source.remote.datasource.GoogleAuthDataSource
 import com.smtm.pickle.data.source.remote.model.auth.LoginRequest
 import com.smtm.pickle.domain.model.auth.AuthToken
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
+    private val userApi: UserApi,
     private val tokenProvider: TokenProvider,
     private val googleAuthDataSource: GoogleAuthDataSource,
 ) : AuthRepository {
@@ -49,7 +51,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun withdrawAccount() {
-        authService.withdrawAccount()
+        userApi.withdrawAccount()
         tokenProvider.clearToken()
     }
 }

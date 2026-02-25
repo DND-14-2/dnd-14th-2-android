@@ -1,6 +1,5 @@
 package com.smtm.pickle.presentation.login.nickname
 
-import android.content.ClipData
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
+import com.smtm.pickle.presentation.common.extension.sendSms
+import com.smtm.pickle.presentation.common.utils.rememberCopyToClipboard
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
@@ -42,7 +41,6 @@ import com.smtm.pickle.presentation.login.nickname.components.WelcomeDialog
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
 import com.smtm.pickle.presentation.ui.dialog.InputInvitationCodeDialog
 import com.smtm.pickle.presentation.ui.dialog.ShareInvitationCodeDialog
-import kotlinx.coroutines.launch
 
 @Composable
 fun NicknameScreen(
@@ -96,19 +94,18 @@ fun NicknameScreen(
         }
 
         is NicknameDialogState.ShareInvitationCode -> {
-            val clipboard = LocalClipboard.current
-            val scope = rememberCoroutineScope()
+            val context = LocalContext.current
+            val copyToClipboard = rememberCopyToClipboard()
             val inviteCode = dialogState.invitationCode
+            val smsMessage = stringResource(R.string.share_invitation_sms_body, inviteCode)
 
             ShareInvitationCodeDialog(
                 inviteCode = inviteCode,
-                onShareToSms = {},
+                onShareToSms = {
+                    context.sendSms(smsMessage)
+                },
                 onInviteCodeClick = {
-                    scope.launch {
-                        clipboard.setClipEntry(
-                            ClipData.newPlainText("초대코드", inviteCode).toClipEntry()
-                        )
-                    }
+                    copyToClipboard(inviteCode)
                 },
                 onDismiss = viewModel::onDialogDismiss,
             )

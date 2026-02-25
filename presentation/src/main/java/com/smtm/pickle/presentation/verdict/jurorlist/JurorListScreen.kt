@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.common.components.ShareInviteCodeDialog
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
@@ -39,12 +40,11 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHos
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.jurorlist.components.EmptyJurorContent
-import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateBottomSheetContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateConfirmDialog
-import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
-import com.smtm.pickle.presentation.common.components.ShareInviteCodeDialog
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListInputInviteCodeDialog
+import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
+import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import timber.log.Timber
 
@@ -64,11 +64,12 @@ fun JurorListScreen(
     val snackbarState = remember { SnackbarState() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
-    val shareInviteCode = { code: String ->
+    val message = stringResource(R.string.invite_message, uiState.myInviteCode, context.packageName)
+    val shareInviteCode = {
         try {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = "smsto:".toUri()
-                putExtra("sms_body", code)
+                putExtra("sms_body", message)
             }
             context.startActivity(intent)
         } catch (e: Exception) {
@@ -109,7 +110,7 @@ fun JurorListScreen(
         JurorListDialogState.CopyInviteCode -> {
             ShareInviteCodeDialog(
                 invitationCode = uiState.myInviteCode,
-                onPrimaryClick = { shareInviteCode(uiState.myInviteCode) },
+                onPrimaryClick = { shareInviteCode() },
                 onDismiss = viewModel::dismissDialog,
             )
         }
@@ -181,7 +182,18 @@ private fun JurorListContent(
                 .padding(paddingValues)
         ) {
             if (jurors.isEmpty()) {
-                EmptyJurorContent(onInviteClick = onJurorInviteClick)
+                Column {
+                    if (hasReceivedRequests) {
+                        JurorListMateRequestBanner(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(vertical = 10.dp),
+                            onClick = onMateRequestClick
+                        )
+                    }
+
+                    EmptyJurorContent(onInviteClick = onJurorInviteClick)
+                }
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -256,6 +268,23 @@ private fun JurorListEmptyPreview() {
         JurorListContent(
             jurors = emptyList(),
             hasReceivedRequests = false,
+            onNavigateBack = {},
+            onJurorInviteClick = {},
+            onAddJuryClick = {},
+            onMateRequestClick = {},
+            onJurorClick = {},
+            onJurorMoreClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun JurorListEmptyMateRequestPreview() {
+    PickleTheme {
+        JurorListContent(
+            jurors = emptyList(),
+            hasReceivedRequests = true,
             onNavigateBack = {},
             onJurorInviteClick = {},
             onAddJuryClick = {},

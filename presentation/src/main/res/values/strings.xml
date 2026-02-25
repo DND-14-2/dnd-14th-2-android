@@ -62,6 +62,8 @@
     <string name="invite_primary_click">문자로 공유하기</string>
     <string name="invite_ghost_click">괜찮아요</string>
     <string name="dialog_cancel">취소</string>
+    <string name="invite_message">피클의 초대장이 도착했어요\n앱 설치 후, [심판 > 메이트 추가]에서 초대코드를 입력하세요.\n친구의 초대코드: [%1$s]\n\n서로의 소비를 판결하고, 함께 소비습관을 개선할 수 있어요.\n지금 바로 시작해보세요 ✨\n\n◆ pickle 다운로드\nhttps://play.google.com/store/apps/details?id=%2$s</string>
+
 
     <!-- Ledger -->
     <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>

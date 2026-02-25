@@ -23,10 +23,11 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun EmptyJurorContent(
+    modifier: Modifier = Modifier,
     onInviteClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

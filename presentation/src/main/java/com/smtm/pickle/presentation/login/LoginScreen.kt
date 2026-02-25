@@ -62,7 +62,7 @@ fun LoginScreen(
                     }
 
                     LoginViewModel.LoginEffect.NavigateToMain -> {
-                        navigator.navigateToNickname()
+                        navigator.navigateToMain()
                     }
 
                     is LoginViewModel.LoginEffect.ShowSnackbar -> {

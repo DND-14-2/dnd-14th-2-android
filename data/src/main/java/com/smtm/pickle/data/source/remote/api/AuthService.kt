@@ -10,4 +10,6 @@ interface AuthService {
     @POST("oauth/login")
     suspend fun socialLogin(@Body request: LoginRequest): LoginResponse
 
+    @POST("logout")
+    suspend fun logout()
 }

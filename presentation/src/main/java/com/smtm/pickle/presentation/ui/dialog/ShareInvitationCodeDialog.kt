@@ -33,7 +33,7 @@ fun ShareInvitationCodeDialog(
     val tailingIcon = @Composable {
         if (isCopied) {
             Icon(
-                painter = painterResource(R.drawable.ic_primary_circle_check),
+                painter = painterResource(R.drawable.ic_textfield_success),
                 contentDescription = "copied",
                 modifier = Modifier.size(24.dp),
                 tint = Color.Unspecified,

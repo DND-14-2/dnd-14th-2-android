@@ -43,8 +43,8 @@ class LedgerDetailViewModel @Inject constructor(
     private val _effect: MutableSharedFlow<LedgerDetailEffect> = MutableSharedFlow(replay = 0)
     val effect: SharedFlow<LedgerDetailEffect> = _effect.asSharedFlow()
 
-    private val _showDeleteDialog = MutableStateFlow(false)
-    val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
+    private val _dialogState = MutableStateFlow<LedgerDetailDialogState>(LedgerDetailDialogState.None)
+    val dialogState: StateFlow<LedgerDetailDialogState> = _dialogState.asStateFlow()
 
     init {
         observeLedger()
@@ -82,17 +82,21 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
-    fun showDeleteDialog() {
-        _showDeleteDialog.update { true }
+    fun onDeleteClick() {
+        _dialogState.update { LedgerDetailDialogState.DeleteConfirm }
     }
 
-    fun dismissDeleteDialog() {
-        _showDeleteDialog.update { false }
+    fun onJudgmentRequestClick() {
+        _dialogState.update { LedgerDetailDialogState.JudgmentRequest }
+    }
+
+    fun dismissDialog() {
+        _dialogState.update { LedgerDetailDialogState.None }
     }
 
     fun deleteLedger() {
         viewModelScope.launch {
-            dismissDeleteDialog()
+            dismissDialog()
             deleteLedgerUseCase(ledgerId)
                 .onSuccess {
                     _effect.emit(LedgerDetailEffect.NavigateBack)
@@ -101,6 +105,13 @@ class LedgerDetailViewModel @Inject constructor(
                     Timber.e(e, "Failed to delete ledger: id=${ledgerId.value}")
                     _effect.emit(LedgerDetailEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
                 }
+        }
+    }
+
+    fun confirmJudgmentRequest() {
+        viewModelScope.launch {
+            dismissDialog()
+            _effect.emit(LedgerDetailEffect.ShowSnackBar("메시지에 마침표를 찍어요"))
         }
     }
 
@@ -115,6 +126,12 @@ class LedgerDetailViewModel @Inject constructor(
             _effect.emit(LedgerDetailEffect.NavigateToEdit)
         }
     }
+}
+
+sealed interface LedgerDetailDialogState {
+    data object None : LedgerDetailDialogState
+    data object DeleteConfirm : LedgerDetailDialogState
+    data object JudgmentRequest : LedgerDetailDialogState
 }
 
 sealed interface LedgerDetailUiState {

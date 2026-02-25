@@ -1,0 +1,14 @@
+package com.smtm.pickle.domain.model.verdict
+
+import com.smtm.pickle.domain.model.ledger.Ledger
+import com.smtm.pickle.domain.model.mate.Mate
+import java.time.LocalDateTime
+
+data class Verdict(
+    val id: Long,
+    val ledger: Ledger,
+    val defendant: Mate,
+    val status: VerdictStatus,
+    val result: VerdictResult? = null,
+    val createdAt: LocalDateTime,
+)

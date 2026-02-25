@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
 import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation
-import com.smtm.pickle.presentation.common.utils.NicknameUtils
+import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,7 +57,7 @@ class NicknameSettingViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 editingNickname = correctNickname,
-                inputState = NicknameUtils.validateNicknameFormat(correctNickname, savedNickname),
+                inputState = InputStateUtils.validateNicknameFormat(correctNickname, savedNickname),
                 isNicknameModified = true
             )
         }

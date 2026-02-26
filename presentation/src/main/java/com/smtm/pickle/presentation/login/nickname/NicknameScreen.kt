@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,14 +27,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
+import com.smtm.pickle.presentation.common.extension.sendSms
+import com.smtm.pickle.presentation.common.utils.rememberCopyToClipboard
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.login.nickname.components.InviteIntroductionDialog
 import com.smtm.pickle.presentation.login.nickname.components.TrailingIcon
+import com.smtm.pickle.presentation.login.nickname.components.WelcomeDialog
 import com.smtm.pickle.presentation.navigation.navigator.AuthNavigator
+import com.smtm.pickle.presentation.ui.dialog.InputInvitationCodeDialog
+import com.smtm.pickle.presentation.ui.dialog.ShareInvitationCodeDialog
 
 @Composable
 fun NicknameScreen(
@@ -65,6 +72,53 @@ fun NicknameScreen(
         onSaveNickname = viewModel::saveNickname,
         onBackClick = viewModel::onBackClick,
     )
+
+    when (val dialogState = uiState.dialogState) {
+        NicknameDialogState.None -> Unit
+        NicknameDialogState.InviteIntroduction -> {
+            InviteIntroductionDialog(
+                onPrimaryButtonClick = viewModel::showInputInvitationCodeDialog,
+                onGhostButtonClick = viewModel::showShareInvitationCodeDialog,
+                onAlreadyReceivedTextClick = viewModel::showWelcomeDialog,
+                onDismiss = viewModel::showWelcomeDialog,
+            )
+        }
+
+        is NicknameDialogState.InputInvitationCode -> {
+            InputInvitationCodeDialog(
+                invitationCodeErrorMessage = dialogState.errorMessage,
+                onCompleteClick = viewModel::inviteMate,
+                onCancelClick = viewModel::showWelcomeDialog,
+                onDismiss = viewModel::showWelcomeDialog,
+            )
+        }
+
+        is NicknameDialogState.ShareInvitationCode -> {
+            val context = LocalContext.current
+            val copyToClipboard = rememberCopyToClipboard()
+            val inviteCode = dialogState.invitationCode
+            val smsMessage = stringResource(R.string.share_invitation_sms_body, inviteCode)
+
+            ShareInvitationCodeDialog(
+                inviteCode = inviteCode,
+                onShareToSms = {
+                    context.sendSms(smsMessage)
+                    viewModel.showWelcomeDialog()
+                },
+                onInviteCodeClick = {
+                    copyToClipboard(inviteCode)
+                },
+                onDismiss = viewModel::showWelcomeDialog,
+            )
+        }
+
+        NicknameDialogState.Welcome -> {
+            WelcomeDialog(
+                onStartClick = viewModel::onCompleteWelcome,
+                onDismiss = viewModel::onCompleteWelcome,
+            )
+        }
+    }
 }
 
 @Composable

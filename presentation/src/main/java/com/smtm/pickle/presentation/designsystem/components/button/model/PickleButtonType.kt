@@ -38,7 +38,7 @@ fun PickleButtonType.toColors(): ButtonColors {
 
         PickleButtonType.Ghost -> ButtonColors(
             containerColor = colors.base0,
-            contentColor = colors.gray500,
+            contentColor = colors.gray700,
             disabledContainerColor = colors.base0,
             disabledContentColor = colors.gray400,
         )

@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.VerdictResult
+import com.smtm.pickle.domain.model.verdict.VerdictType
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
@@ -39,7 +39,7 @@ fun VerdictPendingBottomSheetContent(
     amount: Long,
     paymentMethod: PaymentMethodUiModel,
     modifier: Modifier = Modifier,
-    result: VerdictResult? = null,
+    verdictType: VerdictType = VerdictType.Pending,
 ) {
     Column(
         modifier = modifier
@@ -74,8 +74,8 @@ fun VerdictPendingBottomSheetContent(
                     .padding(vertical = 11.dp)
             )
 
-            when (result) {
-                VerdictResult.GUILTY -> {
+            when (verdictType) {
+                VerdictType.Guilty -> {
                     JudgmentResultChip(
                         resultText = "유죄",
                         containerColor = PickleTheme.semantic.guiltyBackground,
@@ -83,7 +83,7 @@ fun VerdictPendingBottomSheetContent(
                     )
                 }
 
-                VerdictResult.INNOCENT -> {
+                VerdictType.NotGuilty -> {
                     JudgmentResultChip(
                         resultText = "무죄",
                         containerColor = PickleTheme.semantic.innocentBackground,
@@ -91,7 +91,7 @@ fun VerdictPendingBottomSheetContent(
                     )
                 }
 
-                else -> {
+                VerdictType.Pending -> {
                     JudgmentResultChip(
                         resultText = "미완료",
                         containerColor = PickleTheme.colors.gray100,
@@ -164,8 +164,7 @@ private fun JudgmentResultChip(
         modifier = Modifier
             .clip(RoundedCornerShape(6.dp))
             .background(containerColor)
-            .padding(horizontal = 4.dp, vertical = 3.5.dp)
-        ,
+            .padding(horizontal = 4.dp, vertical = 3.5.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -191,7 +190,6 @@ private fun VerdictPendingBottomSheetContentPendingPreview() {
             category = CategoryUiModel.Food,
             amount = 15000L,
             paymentMethod = PaymentMethodUiModel.Cash,
-            result = null
         )
     }
 }
@@ -210,7 +208,7 @@ private fun VerdictPendingBottomSheetContentGuiltyPreview() {
             category = CategoryUiModel.Food,
             amount = 15000L,
             paymentMethod = PaymentMethodUiModel.Cash,
-            result = VerdictResult.GUILTY
+            verdictType = VerdictType.Guilty
         )
     }
 }
@@ -229,7 +227,7 @@ private fun VerdictPendingBottomSheetContentInnocentPreview() {
             category = CategoryUiModel.Food,
             amount = 15000L,
             paymentMethod = PaymentMethodUiModel.Cash,
-            result = VerdictResult.INNOCENT
+            verdictType = VerdictType.NotGuilty
         )
     }
 }

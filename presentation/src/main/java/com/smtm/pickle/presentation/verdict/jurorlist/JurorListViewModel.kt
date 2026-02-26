@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.GetMatesUseCase
 import com.smtm.pickle.domain.usecase.mate.GetReceivedMateRequestsUseCase
 import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
+import com.smtm.pickle.domain.usecase.user.GetInvitationCodeUseCase
 import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
@@ -25,6 +26,7 @@ class JurorListViewModel @Inject constructor(
     private val getMatesUseCase: GetMatesUseCase,
     private val inviteMateUseCase: InviteMateUseCase,
     private val getReceivedMateRequestsUseCase: GetReceivedMateRequestsUseCase,
+    private val getInvitationCodeUseCase: GetInvitationCodeUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JurorListUiState())
@@ -36,6 +38,7 @@ class JurorListViewModel @Inject constructor(
 
     init {
         loadMates()
+        loadInvitationCode()
         checkHasReceivedRequests()
     }
 
@@ -180,6 +183,15 @@ class JurorListViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(hasReceivedMateRequests = requests.isNotEmpty())
                     }
+                }
+        }
+    }
+
+    private fun loadInvitationCode() {
+        viewModelScope.launch {
+            getInvitationCodeUseCase()
+                .onSuccess { code ->
+                    _uiState.update { it.copy(myInviteCode = code) }
                 }
         }
     }

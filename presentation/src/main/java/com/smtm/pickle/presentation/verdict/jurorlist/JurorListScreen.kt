@@ -248,7 +248,7 @@ private fun JurorListContentPreview() {
     PickleTheme {
         JurorListContent(
             jurors = (1..5).map {
-                MateUiModel(it.toLong(), "지인닉네임", "${it * 111}", it)
+                MateUiModel(id = it.toLong(), nickname = "지인닉네임", invitationCode = "${it * 111}", verdictCount = it)
             },
             hasReceivedRequests = true,
             onNavigateBack = {},

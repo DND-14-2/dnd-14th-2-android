@@ -2,10 +2,12 @@ package com.smtm.pickle.presentation.verdict.model
 
 import com.smtm.pickle.domain.model.mate.Mate
 import com.smtm.pickle.domain.model.mate.MateRequest
+import com.smtm.pickle.domain.model.verdict.DefendantInfo
 
 data class MateUiModel(
     val id: Long,
     val nickname: String,
+    val level: Int = 0,
     val invitationCode: String = "",
     val verdictCount: Int = 0,
 )
@@ -15,6 +17,13 @@ fun Mate.toUiModel(): MateUiModel = MateUiModel(
     nickname = nickname,
     invitationCode = invitationCode,
     verdictCount = verdictCount
+)
+
+fun DefendantInfo.toUiModel() = MateUiModel(
+    id = id,
+    nickname = nickname,
+    level = level,
+    invitationCode = invitationCode,
 )
 
 data class MateRequestUiModel(

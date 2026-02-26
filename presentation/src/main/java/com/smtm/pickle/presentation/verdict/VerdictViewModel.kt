@@ -2,16 +2,15 @@ package com.smtm.pickle.presentation.verdict
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.model.verdict.VerdictResult
-import com.smtm.pickle.domain.model.verdict.VerdictStatus
+import com.smtm.pickle.domain.model.verdict.VerdictType
 import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
-import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
-import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
-import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
-import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
-import com.smtm.pickle.presentation.verdict.model.MateUiModel
+import com.smtm.pickle.domain.usecase.verdict.GetJurorVerdictsUseCase
+import com.smtm.pickle.domain.usecase.verdict.GetMyVerdictsUseCase
+import com.smtm.pickle.domain.usecase.verdict.JudgeVerdictUseCase
+import com.smtm.pickle.presentation.verdict.model.JurorVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.MyVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
-import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,13 +22,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class VerdictViewModel @Inject constructor(
     observeNicknameUseCase: ObserveNicknameUseCase,
+    private val getJurorVerdictsUseCase: GetJurorVerdictsUseCase,
+    private val getMyVerdictsUseCase: GetMyVerdictsUseCase,
+    private val judgeVerdictUseCase: JudgeVerdictUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(VerdictUiState())
@@ -47,12 +48,11 @@ class VerdictViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<VerdictEffect>(replay = 0)
     val effect: SharedFlow<VerdictEffect> = _effect.asSharedFlow()
 
-    // 원본 데이터 저장용
-    private var allMyJudgements: List<VerdictUiModel> = emptyList()
-    private var allMyVerdicts: List<VerdictUiModel> = emptyList()
+    private var allJurorVerdicts: List<JurorVerdictUiModel> = emptyList()
+    private var allMyVerdicts: List<MyVerdictUiModel> = emptyList()
 
     init {
-        loadDummyData()
+        loadVerdicts()
     }
 
     fun onTabSelected(index: Int) {
@@ -75,48 +75,61 @@ class VerdictViewModel @Inject constructor(
     private fun VerdictUiState.applyFilters(): VerdictUiState {
         return copy(
             judgements = judgements.copy(
-                items = filterVerdicts(allMyJudgements, judgements.filterIndex),
-                counts = calculateCounts(allMyJudgements)
+                items = filterJurorVerdicts(allJurorVerdicts, judgements.filterIndex),
+                counts = calculateJurorCounts(allJurorVerdicts)
             ),
             verdicts = verdicts.copy(
-                items = filterVerdicts(allMyVerdicts, verdicts.filterIndex),
-                counts = calculateCounts(allMyVerdicts)
+                items = filterMyVerdicts(allMyVerdicts, verdicts.filterIndex),
+                counts = calculateMyCounts(allMyVerdicts)
             )
         )
     }
 
-    fun onVerdictItemClick(verdict: VerdictUiModel) {
-        when (verdict.status) {
-            VerdictStatus.PENDING -> {
-                if (_uiState.value.selectedTabIndex == TabIndex.JUDGEMENTS) {
-                    _uiState.update { it.copy(selectedVerdict = verdict) }
-                } else {
-                    _uiState.update { it.copy(selectedVerdictForJudgement = verdict) }
-                }
+    fun onJurorVerdictItemClick(verdict: JurorVerdictUiModel) {
+        when (verdict.verdictType) {
+            VerdictType.Pending -> {
+                _uiState.update { it.copy(selectedJurorVerdictForJudgement = verdict) }
             }
 
-            VerdictStatus.COMPLETED -> {
-                _uiState.update { it.copy(selectedVerdict = verdict) }
+            VerdictType.Guilty, VerdictType.NotGuilty -> {
+                _uiState.update { it.copy(selectedJurorVerdict = verdict) }
             }
         }
     }
 
-    fun onJudgementDialogDismiss() {
-        _uiState.update { it.copy(selectedVerdictForJudgement = null) }
+    fun onMyVerdictItemClick(verdict: MyVerdictUiModel) {
+        _uiState.update { it.copy(selectedMyVerdict = verdict) }
     }
 
-    // TODO: 서버에 Guilty 여부 전달
+    fun onJudgementDialogDismiss() {
+        _uiState.update { it.copy(selectedJurorVerdictForJudgement = null) }
+    }
+
     fun onSubmitJudgement(isGuilty: Boolean) {
-        val verdict = _uiState.value.selectedVerdictForJudgement ?: return
+        val verdict = _uiState.value.selectedJurorVerdictForJudgement ?: return
+        val verdictType = if (isGuilty) VerdictType.Guilty else VerdictType.NotGuilty
 
         viewModelScope.launch {
-            _uiState.update { it.copy(selectedVerdictForJudgement = null) }
-            _effect.emit(VerdictEffect.NavigateToCompleted(verdict.defendant.nickname))
+            _uiState.update { it.copy(selectedJurorVerdictForJudgement = null) }
+
+            judgeVerdictUseCase(verdict.id, verdictType)
+                .onSuccess {
+                    _effect.emit(VerdictEffect.NavigateToCompleted(verdict.defendant.nickname))
+                    loadVerdicts()
+                }
+                .onFailure { e ->
+                    Timber.e(e, "판결 실패: id=${verdict.id}")
+                }
         }
     }
 
     fun onDismissBottomSheet() {
-        _uiState.update { it.copy(selectedVerdict = null) }
+        _uiState.update {
+            it.copy(
+                selectedJurorVerdict = null,
+                selectedMyVerdict = null,
+            )
+        }
     }
 
     fun navigateToJurorList() {
@@ -125,121 +138,67 @@ class VerdictViewModel @Inject constructor(
         }
     }
 
-    private fun loadDummyData() {
-        allMyJudgements = createDummyMyJudgements()
-        allMyVerdicts = createDummyMyVerdicts()
-
-        _uiState.update { it.applyFilters() }
+    private fun loadVerdicts() {
+        viewModelScope.launch {
+            getJurorVerdictsUseCase()
+                .onSuccess { jurorVerdicts ->
+                    allJurorVerdicts = jurorVerdicts.map { it.toUiModel() }
+                    _uiState.update { it.applyFilters() }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "배심원 평결 로드 실패")
+                }
+        }
+        viewModelScope.launch {
+            getMyVerdictsUseCase()
+                .onSuccess { myVerdicts ->
+                    allMyVerdicts = myVerdicts.map { it.toUiModel() }
+                    _uiState.update { it.applyFilters() }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "내 평가 로드 실패")
+                }
+        }
     }
 
-    private fun calculateCounts(verdicts: List<VerdictUiModel>): VerdictCounts {
+    private fun calculateJurorCounts(verdicts: List<JurorVerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
-            pending = verdicts.count { it.status == VerdictStatus.PENDING },
-            completed = verdicts.count { it.status == VerdictStatus.COMPLETED }
+            pending = verdicts.count { it.verdictType == VerdictType.Pending },
+            completed = verdicts.count { it.verdictType != VerdictType.Pending }
         )
     }
 
-    private fun filterVerdicts(verdicts: List<VerdictUiModel>, filterIndex: Int): List<VerdictUiModel> {
+    private fun calculateMyCounts(verdicts: List<MyVerdictUiModel>): VerdictCounts {
+        return VerdictCounts(
+            total = verdicts.size,
+            pending = verdicts.count { it.verdictType == VerdictType.Pending },
+            completed = verdicts.count { it.verdictType != VerdictType.Pending }
+        )
+    }
+
+    private fun filterJurorVerdicts(
+        verdicts: List<JurorVerdictUiModel>,
+        filterIndex: Int,
+    ): List<JurorVerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
-            1 -> verdicts.filter { it.status == VerdictStatus.PENDING }
-            2 -> verdicts.filter { it.status == VerdictStatus.COMPLETED }
+            1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
+            2 -> verdicts.filter { it.verdictType != VerdictType.Pending }
             else -> verdicts
         }
     }
 
-    private fun createDummyMyJudgements(): List<VerdictUiModel> {
-        return listOf(
-            VerdictUiModel(
-                id = 1,
-                ledger = LedgerUiModel(
-                    id = 101L,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 15000,
-                    category = CategoryUiModel.Food,
-                    description = "가계부 15자 입력",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.BankTransfer,
-                    memo = null,
-                ),
-                defendant = MateUiModel(201, "홍길동"),
-                status = VerdictStatus.PENDING,
-                createdAt = LocalDateTime.now().minusDays(1)
-            ),
-            VerdictUiModel(
-                id = 2,
-                ledger = LedgerUiModel(
-                    id = 102L,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 5000,
-                    category = CategoryUiModel.Food,
-                    description = "커피 한잔",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.CreditCard,
-                    memo = null
-                ),
-                defendant = MateUiModel(202, "김철수"),
-                status = VerdictStatus.COMPLETED,
-                result = VerdictResult.GUILTY,
-                createdAt = LocalDateTime.now().minusDays(2)
-            ),
-            VerdictUiModel(
-                id = 3,
-                ledger = LedgerUiModel(
-                    id = 103L,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 25000,
-                    category = CategoryUiModel.Food,
-                    description = "야식 치킨",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.CreditCard,
-                    memo = null
-                ),
-                defendant = MateUiModel(203, "이영희"),
-                status = VerdictStatus.COMPLETED,
-                result = VerdictResult.INNOCENT,
-                createdAt = LocalDateTime.now().minusDays(3)
-            )
-        )
-    }
-
-    private fun createDummyMyVerdicts(): List<VerdictUiModel> {
-        return listOf(
-            VerdictUiModel(
-                id = 11,
-                ledger = LedgerUiModel(
-                    id = 111L,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 12000,
-                    category = CategoryUiModel.Transport,
-                    description = "택시비",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.CreditCard,
-                    memo = null
-                ),
-                defendant = MateUiModel(211, "박민수"),
-                status = VerdictStatus.PENDING,
-                createdAt = LocalDateTime.now().minusDays(1)
-            ),
-            VerdictUiModel(
-                id = 12,
-                ledger = LedgerUiModel(
-                    id = 112,
-                    type = LedgerTypeUiModel.Expense,
-                    amount = 14000,
-                    category = CategoryUiModel.LeisureHobby,
-                    description = "영화 관람",
-                    occurredOn = LocalDate.now(),
-                    paymentMethod = PaymentMethodUiModel.Cash,
-                    memo = null
-                ),
-                defendant = MateUiModel(212, "최수진"),
-                status = VerdictStatus.COMPLETED,
-                result = VerdictResult.GUILTY,
-                createdAt = LocalDateTime.now().minusDays(5)
-            )
-        )
+    private fun filterMyVerdicts(
+        verdicts: List<MyVerdictUiModel>,
+        filterIndex: Int,
+    ): List<MyVerdictUiModel> {
+        return when (filterIndex) {
+            0 -> verdicts
+            1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
+            2 -> verdicts.filter { it.verdictType != VerdictType.Pending }
+            else -> verdicts
+        }
     }
 }
 
@@ -251,15 +210,22 @@ object TabIndex {
 data class VerdictUiState(
     val selectedTabIndex: Int = TabIndex.JUDGEMENTS,
     val userNickname: String = "유저 닉네임",
-    val selectedVerdict: VerdictUiModel? = null,
-    val selectedVerdictForJudgement: VerdictUiModel? = null,
-    val judgements: VerdictListState = VerdictListState(),
-    val verdicts: VerdictListState = VerdictListState(),
+    val selectedJurorVerdict: JurorVerdictUiModel? = null,
+    val selectedMyVerdict: MyVerdictUiModel? = null,
+    val selectedJurorVerdictForJudgement: JurorVerdictUiModel? = null,
+    val judgements: JurorVerdictListState = JurorVerdictListState(),
+    val verdicts: MyVerdictListState = MyVerdictListState(),
 )
 
-data class VerdictListState(
+data class JurorVerdictListState(
     val filterIndex: Int = 0,
-    val items: List<VerdictUiModel> = emptyList(),
+    val items: List<JurorVerdictUiModel> = emptyList(),
+    val counts: VerdictCounts = VerdictCounts(),
+)
+
+data class MyVerdictListState(
+    val filterIndex: Int = 0,
+    val items: List<MyVerdictUiModel> = emptyList(),
     val counts: VerdictCounts = VerdictCounts(),
 )
 

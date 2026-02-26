@@ -11,6 +11,7 @@
     <string name="login_tooltip_fast">3초만에 로그인하기!</string>
 
     <!-- Nickname -->
+    <string name="welcome_dialog_title">피클에 오신 것을 환영해요</string>
     <string name="profile_title">내 프로필</string>
     <string name="nickname_label">닉네임</string>
     <string name="nickname_title">닉네임 입력</string>
@@ -50,6 +51,9 @@
     <string name="common_negative">아니요</string>
     <string name="common_positive">네</string>
     <string name="common_typo">함께하는 똑똑한 소비, 피클</string>
+    <string name="common_start">시작하기</string>
+    <string name="common_complete">완료</string>
+    <string name="common_cancel">취소</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>
@@ -161,4 +165,18 @@
 
     <!-- Verdict Request -->
     <string name="verdict_request_send">님에게\n판결을 보냈어요!</string>
+
+    <!-- InputInvitationCode -->
+    <string name="input_invitation_code_dialog_title">초대코드를 입력해주세요</string>
+    <string name="input_invitation_code_dialog_hint">내용을 입력하세요</string>
+    <string name="input_invitation_code_error_length">6자로 입력해주세요</string>
+    <string name="input_invitation_code_error_uppercase">영어 대문자로 입력해주세요</string>
+    <string name="input_invitation_code_error_expired">만료된 초대코드입니다</string>
+
+    <!-- ShareInvitationCode -->
+    <string name="share_invitation_code_dialog_title">친구에게 내 초대코드를\n공유해볼까요?</string>
+    <string name="share_invitation_code_dialog_share_sms">문자로 공유하기</string>
+    <string name="share_invitation_code_dialog_dismiss">괜찮아요</string>
+    <string name="share_invitation_sms_body">피클의 초대장이 도착했어요\n앱 설치 후, [심판 &gt; 메이트 추가]에서 초대코드를 입력하세요.\n친구의 초대코드: %1$s\n\n서로의 소비를 판결하고, 함께 소비습관을 개선할 수 있어요.\n지금 바로 시작해보세요 ✨\n\n◆ pickle 다운로드\nhttps://play.google.com/store/games?hl=ko</string>
+
 </resources>

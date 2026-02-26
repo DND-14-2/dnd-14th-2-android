@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProfileResponse(
-    val nickname: String
+    val nickname: String,
+    val invitationCode: String,
 )

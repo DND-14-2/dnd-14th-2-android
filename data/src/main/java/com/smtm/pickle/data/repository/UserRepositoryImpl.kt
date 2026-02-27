@@ -34,13 +34,11 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getInvitationCode(): String {
-        var invitationCode = profileDataStore.getInvitationCode()
-        if (invitationCode == null) {
-            val profile = userApi.getProfile()
-            profileDataStore.setInvitationCode(profile.invitationCode)
-            invitationCode = profile.invitationCode
+        return profileDataStore.getInvitationCode() ?: run {
+            val newCode = userApi.getProfile().invitationCode
+            profileDataStore.setInvitationCode(newCode)
+            newCode
         }
-        return invitationCode
     }
 
     override suspend fun saveNickname(nickname: String) {

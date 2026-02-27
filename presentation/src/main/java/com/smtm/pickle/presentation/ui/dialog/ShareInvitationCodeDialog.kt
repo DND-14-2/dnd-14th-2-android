@@ -1,5 +1,6 @@
 package com.smtm.pickle.presentation.ui.dialog
 
+import android.content.ClipData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,10 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,17 +34,20 @@ import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
+import kotlinx.coroutines.launch
 
 @Composable
 fun ShareInvitationCodeDialog(
     modifier: Modifier = Modifier,
-    inviteCode: String,
-    onInviteCodeClick: () -> Unit,
-    onShareToSms: (String) -> Unit,
+    invitationCode: String,
+    onPrimaryClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val clipboardManager = LocalClipboard.current
+
     var isCopied by remember { mutableStateOf(false) }
-    val tailingIcon = @Composable {
+    val trailingIcon = @Composable {
         if (isCopied) {
             Icon(
                 painter = painterResource(R.drawable.ic_textfield_success),
@@ -53,7 +60,10 @@ fun ShareInvitationCodeDialog(
                 painter = painterResource(R.drawable.ic_copy),
                 onClick = {
                     isCopied = true
-                    onInviteCodeClick()
+                    scope.launch {
+                        val clipData = ClipData.newPlainText("invitationCode", invitationCode)
+                        clipboardManager.setClipEntry(ClipEntry(clipData))
+                    }
                 },
                 buttonSize = 24.dp,
                 iconSize = 20.dp,
@@ -67,14 +77,14 @@ fun ShareInvitationCodeDialog(
         buttonLayout = PickleDialogButtonLayout.Vertical(
             primaryText = stringResource(R.string.share_invitation_code_dialog_share_sms),
             ghostText = stringResource(R.string.share_invitation_code_dialog_dismiss),
-            onPrimaryClick = { onShareToSms(inviteCode) },
+            onPrimaryClick = onPrimaryClick,
             onGhostClick = onDismiss,
         ),
         onDismiss = onDismiss,
         inputField = {
             InvitationCodeText(
-                value = inviteCode,
-                trailingIcon = tailingIcon,
+                value = invitationCode,
+                trailingIcon = trailingIcon,
             )
         },
     )
@@ -86,7 +96,6 @@ private fun InvitationCodeText(
     modifier: Modifier = Modifier,
     trailingIcon: @Composable () -> Unit,
 ) {
-
     Box(
         modifier = modifier
             .height(Dimensions.inputHeight)
@@ -115,7 +124,6 @@ private fun InvitationCodeText(
             trailingIcon()
         }
     }
-
 }
 
 @Preview
@@ -123,9 +131,8 @@ private fun InvitationCodeText(
 private fun ShareInvitationCodeDialogPreview() {
     PickleTheme {
         ShareInvitationCodeDialog(
-            inviteCode = "inviteCode",
-            onInviteCodeClick = {},
-            onShareToSms = {},
+            invitationCode = "ABCDEF",
+            onPrimaryClick = {},
             onDismiss = {},
         )
     }

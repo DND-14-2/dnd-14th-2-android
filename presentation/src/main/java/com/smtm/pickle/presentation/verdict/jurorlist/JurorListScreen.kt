@@ -1,6 +1,5 @@
 package com.smtm.pickle.presentation.verdict.jurorlist
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,14 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.common.components.ShareInviteCodeDialog
+import com.smtm.pickle.presentation.common.extension.sendSms
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
@@ -39,6 +37,7 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnack
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.ui.dialog.ShareInvitationCodeDialog
 import com.smtm.pickle.presentation.verdict.jurorlist.components.EmptyJurorContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateBottomSheetContent
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListDeleteMateConfirmDialog
@@ -46,7 +45,7 @@ import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListInputI
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListItem
 import com.smtm.pickle.presentation.verdict.jurorlist.components.JurorListMateRequestBanner
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
-import timber.log.Timber
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,18 +63,6 @@ fun JurorListScreen(
     val snackbarState = remember { SnackbarState() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
-    val message = stringResource(R.string.invite_message, uiState.myInviteCode, context.packageName)
-    val shareInviteCode = {
-        try {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = "smsto:".toUri()
-                putExtra("sms_body", message)
-            }
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Timber.e(e, "문자 전송 시도 실패")
-        }
-    }
 
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -108,9 +95,11 @@ fun JurorListScreen(
 
     when (uiState.dialogState) {
         JurorListDialogState.CopyInviteCode -> {
-            ShareInviteCodeDialog(
+            val message = stringResource(R.string.share_invitation_sms_body, uiState.myInviteCode, context.packageName)
+
+            ShareInvitationCodeDialog(
                 invitationCode = uiState.myInviteCode,
-                onPrimaryClick = { shareInviteCode() },
+                onPrimaryClick = { context.sendSms(message) },
                 onDismiss = viewModel::dismissDialog,
             )
         }

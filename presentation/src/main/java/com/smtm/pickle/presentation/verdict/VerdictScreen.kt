@@ -12,6 +12,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -28,6 +29,9 @@ import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
+import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
+import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
+import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
 import com.smtm.pickle.presentation.verdict.components.JudgementDialog
@@ -55,6 +59,8 @@ fun VerdictScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val snackbarState = remember { SnackbarState() }
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
         confirmValueChange = { true }
@@ -69,6 +75,11 @@ fun VerdictScreen(
                     is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
                     is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
                     is VerdictEffect.NavigateToCompleted -> onNavigateVerdictCompleted(effect.defendantNickname)
+                    is VerdictEffect.ShowSnackBar -> {
+                        snackbarState.show(
+                            PickleSnackbar.toastError(effect.message)
+                        )
+                    }
                 }
             }
         }
@@ -139,6 +150,8 @@ fun VerdictScreen(
         onJurorVerdictItemClick = viewModel::onJurorVerdictItemClick,
         onMyVerdictItemClick = viewModel::onMyVerdictItemClick,
     )
+
+    SnackbarHost(snackbarState)
 }
 
 @Composable

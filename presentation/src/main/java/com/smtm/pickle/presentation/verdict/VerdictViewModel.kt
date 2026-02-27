@@ -88,17 +88,33 @@ class VerdictViewModel @Inject constructor(
     fun onJurorVerdictItemClick(verdict: JurorVerdictUiModel) {
         when (verdict.verdictType) {
             VerdictType.Pending -> {
-                _uiState.update { it.copy(selectedJurorVerdictForJudgement = verdict) }
+                _uiState.update {
+                    it.copy(
+                        selectedJurorVerdictForJudgement = verdict,
+                        selectedMyVerdict = null,
+                    )
+                }
             }
 
             VerdictType.Guilty, VerdictType.NotGuilty -> {
-                _uiState.update { it.copy(selectedJurorVerdict = verdict) }
+                _uiState.update {
+                    it.copy(
+                        selectedJurorVerdict = verdict,
+                        selectedMyVerdict = null,
+                    )
+                }
             }
         }
     }
 
     fun onMyVerdictItemClick(verdict: MyVerdictUiModel) {
-        _uiState.update { it.copy(selectedMyVerdict = verdict) }
+        _uiState.update {
+            it.copy(
+                selectedMyVerdict = verdict,
+                selectedJurorVerdict = null,
+                selectedJurorVerdictForJudgement = null,
+            )
+        }
     }
 
     fun onJudgementDialogDismiss() {
@@ -119,6 +135,11 @@ class VerdictViewModel @Inject constructor(
                 }
                 .onFailure { e ->
                     Timber.e(e, "판결 실패: id=${verdict.id}")
+                    _effect.emit(
+                        VerdictEffect.ShowSnackBar(
+                            e.message ?: "판결 처리 중 오류가 발생했습니다"
+                        )
+                    )
                 }
         }
     }
@@ -235,4 +256,5 @@ sealed interface VerdictEffect {
     data class NavigateToResult(val id: Long) : VerdictEffect
     data class NavigateToJurorDetail(val id: Long) : VerdictEffect
     data class NavigateToCompleted(val defendantNickname: String) : VerdictEffect
+    data class ShowSnackBar(val message: String) : VerdictEffect
 }

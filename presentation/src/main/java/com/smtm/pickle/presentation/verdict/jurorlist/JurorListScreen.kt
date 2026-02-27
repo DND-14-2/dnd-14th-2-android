@@ -99,7 +99,10 @@ fun JurorListScreen(
 
             ShareInvitationCodeDialog(
                 invitationCode = uiState.myInviteCode,
-                onPrimaryClick = { context.sendSms(message) },
+                onPrimaryClick = {
+                    context.sendSms(message)
+                    viewModel.dismissDialog()
+                },
                 onDismiss = viewModel::dismissDialog,
             )
         }

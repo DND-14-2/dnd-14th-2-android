@@ -39,14 +39,21 @@ jobs:
 
       - name: Decode debug keystore
         run: |
+          set -euo pipefail
           mkdir -p keystore
-          echo "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | base64 --decode > keystore/debug.keystore
+          [ -n "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" ] || { echo "ERROR: DEBUG_KEYSTORE_BASE64 is empty"; exit 1; }
+          printf '%s' "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | base64 --decode > keystore/debug.keystore
+          [ -s keystore/debug.keystore ] || { echo "ERROR: debug.keystore is empty after decode"; exit 1; }
 
       - name: Decode release keystore
-        run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > keystore/release.keystore
+        run: |
+          set -euo pipefail
+          [ -n "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" ] || { echo "ERROR: RELEASE_KEYSTORE_BASE64 is empty"; exit 1; }
+          printf '%s' "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > keystore/release.keystore
+          [ -s keystore/release.keystore ] || { echo "ERROR: release.keystore is empty after decode"; exit 1; }
 
       - name: Create local.properties
-        run: | 
+        run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "DEBUG_KEYSTORE_PATH=../keystore/debug.keystore" >> local.properties
           echo "DEBUG_KEYSTORE_PASSWORD=${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" >> local.properties

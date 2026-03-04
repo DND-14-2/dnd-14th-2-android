@@ -62,6 +62,9 @@ jobs:
           echo "BASE_URL_QA=${{ secrets.BASE_URL_QA }}" >> local.properties
           echo "BASE_URL_RELEASE=${{ secrets.BASE_URL_RELEASE }}" >> local.properties
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build debug APK
         run: ./gradlew assembleDebug
 

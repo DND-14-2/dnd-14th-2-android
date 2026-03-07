@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="VectorRaster">
+        <ignore path="src/main/res/drawable/img_typo_logo.xml" />
+    </issue>
+
+    <!-- minSdk 30+, vector drawables only, no raster fallback needed -->
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+</lint>

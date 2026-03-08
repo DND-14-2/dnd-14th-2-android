@@ -1,10 +1,9 @@
 package com.smtm.pickle.presentation.mypage.navigation
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.smtm.pickle.presentation.mypage.myledger.MyLedgerScreen
@@ -42,7 +41,7 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
         SettingScreen(
             onNavigateToPrivacyPolicy = {
                 runCatching {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PrivacyPolicyUrl))
+                    val intent = Intent(Intent.ACTION_VIEW, PrivacyPolicyUrl.toUri())
                     context.startActivity(intent)
                 }
             },

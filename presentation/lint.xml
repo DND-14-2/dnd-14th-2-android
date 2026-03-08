@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="VectorRaster">
+        <!-- width=296dp > 200dp 기준 초과로 경고 발생. 래스터 비트맵 미포함 순수 벡터이며
+             minSdk 30+ 환경에서 하드웨어 가속 렌더링되므로 폴백 불필요. 디자인 크기 유지. -->
+        <ignore path="src/main/res/drawable/img_typo_logo.xml" />
+    </issue>
+
+    <!-- minSdk 30+, vector drawables only, no raster fallback needed -->
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+</lint>

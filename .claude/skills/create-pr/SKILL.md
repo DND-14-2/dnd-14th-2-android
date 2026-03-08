@@ -27,10 +27,19 @@ git branch --show-current
 - 현재 브랜치가 `develop` 또는 `main`이면 즉시 중단한다:
   > 현재 브랜치가 `{브랜치명}`입니다. feature/fix 브랜치에서 PR을 생성해주세요.
 
+### Step 1.5: 원격 브랜치 최신화
+
+```bash
+git fetch origin
+```
+
+로컬 `develop`이 stale한 경우 커밋 목록·diff·PR 본문이 오래된 기준으로 계산되는 것을 방지한다.
+이후 모든 비교 기준은 `origin/develop`을 사용한다.
+
 ### Step 2: develop과의 커밋 목록 확인
 
 ```bash
-git log develop..HEAD --oneline
+git log origin/develop..HEAD --oneline
 ```
 
 - 커밋이 없으면 즉시 중단한다:
@@ -39,7 +48,7 @@ git log develop..HEAD --oneline
 ### Step 3: develop과의 전체 diff 확인
 
 ```bash
-git diff develop...HEAD
+git diff origin/develop...HEAD
 ```
 
 변경된 파일 목록과 내용을 파악한다.
@@ -163,10 +172,16 @@ PR 생성을 중단합니다. 아래 문제를 수정한 뒤 다시 시도해주
 
 ### Step 7: PR 생성
 
-사용자가 **Yes** 또는 **수정 후 재확인**을 하면 아래 명령으로 PR을 생성한다:
+사용자가 **Yes** 또는 **수정 후 재확인**을 하면 아래 순서로 PR을 생성한다.
+
+줄바꿈·따옴표·백틱 등 특수문자가 포함된 멀티라인 Markdown 본문은 `--body` 직접 전달 시 shell quoting 문제가 발생할 수 있으므로, 임시 파일을 사용한다:
 
 ```bash
-gh pr create --base develop --title "[PR 제목]" --body "[작성된 본문]"
+cat > /tmp/pr_body.md << 'EOF'
+[작성된 PR 본문 전체]
+EOF
+
+gh pr create --base develop --title "[PR 제목]" --body-file /tmp/pr_body.md
 ```
 
 생성 후 PR URL을 출력한다.

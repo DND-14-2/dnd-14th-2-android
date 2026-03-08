@@ -56,6 +56,7 @@ git diff origin/develop...HEAD
 ### Step 3.5: Kotlin 컴파일 검증
 
 ```bash
+set -o pipefail
 ./gradlew compileDebugKotlin 2>&1 | tail -30
 ```
 

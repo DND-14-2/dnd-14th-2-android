@@ -44,6 +44,17 @@ git diff develop...HEAD
 
 변경된 파일 목록과 내용을 파악한다.
 
+### Step 3.5: Kotlin 컴파일 검증
+
+```bash
+./gradlew compileDebugKotlin 2>&1 | tail -30
+```
+
+- 빌드 **실패** 시 → 오류 내용을 출력하고 PR 생성을 **중단**한다.
+- 빌드 **성공** 시 → Step 5-B의 PR 체크리스트에서 `🛠️ 빌드 성공` 항목을 자동으로 체크한다.
+
+> `compileDebugKotlin`을 선택한 이유: 전체 `build`보다 빠르고, Kotlin 컴파일 오류·import 오류·타입 불일치를 모두 잡을 수 있다.
+
 ### Step 4: 자체 코드 리뷰
 
 아래 **크리티컬 기준**으로 diff를 검토한다.
@@ -60,7 +71,7 @@ git diff develop...HEAD
 | **비즈니스 로직** | UseCase/Repository 계층 역할 혼용, 도메인 규칙 위반 |
 | **네트워크** | 에러 핸들링 완전 누락 (try-catch도 없고 Result도 없는 경우) |
 | **빌드 파괴** | import 오류, 미정의 참조, 시그니처 불일치 |
-| **디자인 시스템** | `PickleTheme` 미사용, 하드코딩된 Color/TextStyle/dp 값 |
+| **디자인 시스템** | `PickleTheme` 미사용, 하드코딩된 `Color`/`TextStyle` (dp 수치값은 애니메이션 offset 등 디자인 토큰이 없는 특수 목적의 경우 예외 허용) |
 | **아키텍처** | Composable에서 직접 Repository 호출, UI 레이어에서 데이터 직접 파싱 |
 
 #### 비크리티컬 (참고만, PR 차단 안 함)
@@ -110,7 +121,7 @@ PR 생성을 중단합니다. 아래 문제를 수정한 뒤 다시 시도해주
 
 ### ✅ 체크리스트
 - [x] 🌱 merge 브랜치 확인
-- [ ] 🛠️ 빌드 성공
+- [x] 🛠️ 빌드 성공
 - [ ] 💬 관련 이슈 연결 ([Closes | Fixes | Resolves] #123)
 
 ### 🔍 중점 리뷰 사항

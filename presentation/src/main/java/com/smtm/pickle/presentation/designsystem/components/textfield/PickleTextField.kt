@@ -389,9 +389,9 @@ object PickleTextField {
     fun MultiLine(
         value: String,
         onValueChange: (String) -> Unit,
+        modifier: Modifier = Modifier,
         inputState: InputState = InputState.Idle,
         maxCount: Int,
-        modifier: Modifier = Modifier,
         readOnly: Boolean = false,
         hint: String = "",
         minLines: Int = 4,

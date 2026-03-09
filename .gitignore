@@ -8,7 +8,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-keystore/release.keystore
+keystore/
 /app/release/
 /app/debug/
 /app/qa/

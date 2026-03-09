@@ -1,6 +1,6 @@
 package com.smtm.pickle.presentation.login
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,13 +42,15 @@ fun LoginScreen(
     navigator: AuthNavigator,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val kakaoLoginManager = remember {
-        EntryPointAccessors
-            .fromActivity(activity, KakaoLoginManagerEntryPoint::class.java)
-            .kakaoLoginManager()
+        activity?.let {
+            EntryPointAccessors
+                .fromActivity(it, KakaoLoginManagerEntryPoint::class.java)
+                .kakaoLoginManager()
+        }
     }
     val snackbarState = remember { SnackbarState() }
 
@@ -87,7 +88,7 @@ fun LoginScreen(
         uiState = uiState,
         onGoogleLogin = viewModel::loginWithGoogle,
         onKakaoLogin = {
-            kakaoLoginManager.login(
+            kakaoLoginManager?.login(
                 onSuccess = { token ->
                     viewModel.loginWithKakao(token)
                 },

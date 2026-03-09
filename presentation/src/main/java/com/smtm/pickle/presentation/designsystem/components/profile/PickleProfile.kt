@@ -32,9 +32,9 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun PickleProfile(
+    modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
     type: ProfileType = ProfileType.NORMAL,
-    modifier: Modifier = Modifier,
     enabled: Boolean = false,
     onClick: () -> Unit = {},
 ) {
@@ -57,10 +57,10 @@ fun PickleProfile(
 @Composable
 fun PickleCircleProfile(
     nickname: String,
+    modifier: Modifier = Modifier,
     status: ProfileStatus = ProfileStatus.DEFAULT,
     @DrawableRes iconRes: Int = R.drawable.illust_profile_default,
     selected: Boolean = false,
-    modifier: Modifier = Modifier,
 ) {
     val colors = PickleTheme.colors
 

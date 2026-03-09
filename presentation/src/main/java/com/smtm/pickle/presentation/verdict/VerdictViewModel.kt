@@ -236,6 +236,7 @@ data class VerdictUiState(
     val selectedJurorVerdictForJudgement: JurorVerdictUiModel? = null,
     val judgements: JurorVerdictListState = JurorVerdictListState(),
     val verdicts: MyVerdictListState = MyVerdictListState(),
+    val isRefreshing: Boolean = false,
 )
 
 data class JurorVerdictListState(

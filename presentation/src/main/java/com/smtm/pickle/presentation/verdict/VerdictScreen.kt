@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -137,6 +138,8 @@ fun VerdictScreen(
     }
 
     VerdictContent(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = viewModel::loadVerdicts,
         selectedTabIndex = uiState.selectedTabIndex,
         myJudgementFilterIndex = uiState.judgements.filterIndex,
         myVerdictFilterIndex = uiState.verdicts.filterIndex,
@@ -156,6 +159,8 @@ fun VerdictScreen(
 
 @Composable
 private fun VerdictContent(
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     selectedTabIndex: Int,
     myJudgementFilterIndex: Int,
     myVerdictFilterIndex: Int,
@@ -185,6 +190,10 @@ private fun VerdictContent(
                 .fillMaxSize(),
         ) {
             item { Spacer(modifier = Modifier.height(16.dp)) }
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+    ) {
 
             item("tabs") {
                 VerdictTabs(
@@ -245,6 +254,7 @@ private fun VerdictContent(
                             Spacer(modifier = Modifier.height(12.dp))
                         else
                             Spacer(modifier = Modifier.height(80.dp))
+                        }
                     }
                 }
             }
@@ -284,6 +294,8 @@ private fun VerdictContentPreview() {
     )
     PickleTheme {
         VerdictContent(
+            isRefreshing = false,
+            onRefresh = {},
             selectedTabIndex = 0,
             myJudgementFilterIndex = 0,
             myVerdictFilterIndex = 0,
@@ -326,6 +338,8 @@ private fun VerdictContentEmptyJudgementPreview() {
 private fun VerdictContentEmptyVerdictPreview() {
     PickleTheme {
         VerdictContent(
+            isRefreshing = false,
+            onRefresh = {},
             selectedTabIndex = 1,
             myJudgementFilterIndex = 0,
             myVerdictFilterIndex = 0,

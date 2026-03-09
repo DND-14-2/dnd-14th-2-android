@@ -164,6 +164,7 @@ class VerdictViewModel @Inject constructor(
             getJurorVerdictsUseCase()
                 .onSuccess { jurorVerdicts ->
                     allJurorVerdicts = jurorVerdicts.map { it.toUiModel() }
+                        .sortedByDescending { it.id }
                     _uiState.update { it.applyFilters() }
                 }
                 .onFailure { e ->
@@ -174,6 +175,7 @@ class VerdictViewModel @Inject constructor(
             getMyVerdictsUseCase()
                 .onSuccess { myVerdicts ->
                     allMyVerdicts = myVerdicts.map { it.toUiModel() }
+                        .sortedByDescending { it.id }
                     _uiState.update { it.applyFilters() }
                 }
                 .onFailure { e ->

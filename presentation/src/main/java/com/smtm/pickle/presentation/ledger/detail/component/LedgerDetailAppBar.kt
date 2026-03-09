@@ -36,7 +36,7 @@ fun LedgerDetailAppBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         PickleIconButton(
-            painter = painterResource(R.drawable.ic_appbar_back),
+            painter = painterResource(R.drawable.ic_app_bar_back),
             onClick = onBackClick,
             buttonSize = 48.dp,
         )

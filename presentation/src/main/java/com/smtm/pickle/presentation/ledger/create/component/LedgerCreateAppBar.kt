@@ -32,7 +32,7 @@ fun LedgerCreateAppBar(
     ) {
         PickleIconButton(
             modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(R.drawable.ic_appbar_back),
+            painter = painterResource(R.drawable.ic_app_bar_back),
             onClick = onNavigationClick,
             buttonSize = 48.dp,
             contentDescription = "back"

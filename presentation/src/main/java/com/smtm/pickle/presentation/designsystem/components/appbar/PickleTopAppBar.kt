@@ -145,7 +145,7 @@ private fun NavigationIcon(item: NavigationItem) {
     when (item) {
         is NavigationItem.Back -> {
             PickleIconButtonWithTouchCustom(
-                iconRes = R.drawable.ic_appbar_back,
+                iconRes = R.drawable.ic_app_bar_back,
                 contentDescription = "뒤로가기",
                 onClick = item.onClick
             )

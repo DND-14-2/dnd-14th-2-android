@@ -33,6 +33,8 @@ object Dimensions {
 
     // 앱바
     val appbarHeight = 56.dp
+    val appBarHorizontalSpacing = 12.dp
+    val appBarActionsSpacing = 4.dp
 
     // 칩
     /** 바텀시트, 다이얼로그 등 내부 칩 */

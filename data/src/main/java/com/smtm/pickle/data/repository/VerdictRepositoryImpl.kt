@@ -10,6 +10,7 @@ import com.smtm.pickle.domain.model.verdict.MyVerdict
 import com.smtm.pickle.domain.model.verdict.VerdictType
 import com.smtm.pickle.domain.repository.VerdictRepository
 import javax.inject.Inject
+import com.smtm.pickle.data.common.utils.apiCall
 
 class VerdictRepositoryImpl @Inject constructor(
     private val verdictApi: VerdictApi,
@@ -23,7 +24,7 @@ class VerdictRepositoryImpl @Inject constructor(
         return verdictApi.getMyVerdicts().verdicts.map { it.toDomain() }
     }
 
-    override suspend fun requestVerdict(ledgerEntryId: Long) {
+    override suspend fun requestVerdict(ledgerEntryId: Long) = apiCall {
         verdictApi.requestVerdict(VerdictCreateRequest(ledgerEntryId))
     }
 

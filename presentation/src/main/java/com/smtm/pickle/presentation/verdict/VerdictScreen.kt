@@ -1,20 +1,30 @@
 package com.smtm.pickle.presentation.verdict
 
+import android.R.attr.contentDescription
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,6 +44,7 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnack
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.verdict.components.EmptyVerdictContent
 import com.smtm.pickle.presentation.verdict.components.JudgementDialog
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
@@ -172,9 +183,24 @@ private fun VerdictContent(
     onAssignedVerdictItemClick: (AssignedVerdictUiModel) -> Unit,
     onRequestedVerdictItemClick: (RequestedVerdictUiModel) -> Unit,
 ) {
+    val pullToRefreshState = rememberPullToRefreshState()
+
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
+        state = pullToRefreshState,
+        indicator = {
+            PullToRefreshDefaults.Indicator(
+                state = pullToRefreshState,
+                isRefreshing = isRefreshing,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .size(Dimensions.pullToRefreshIndicatorSize),
+                color = PickleTheme.colors.primary300,
+                containerColor = PickleTheme.colors.primary50,
+                maxDistance = Dimensions.pullToRefreshDistance
+            )
+        }
     ) {
         Scaffold(
             topBar = {

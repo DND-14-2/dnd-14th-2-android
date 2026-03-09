@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.VerdictTab
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
@@ -184,30 +183,6 @@ private fun PickleAppBarType5Preview() {
                     onClick = {},
                 )
             }
-        )
-    }
-}
-
-@Preview(
-    name = "PickleAppBarType6",
-    showBackground = true,
-    widthDp = 360,
-)
-@Composable
-private fun PickleAppBarType6Preview() {
-    PickleTheme {
-        PickleAppBarV2(
-            navigationIcon = {
-                PickleAppBarBackButton(
-                    onClick = {},
-                )
-            },
-            centerContent = {
-                PickleAppBarVerdictTabs(
-                    selectedTab = VerdictTab.Trial,
-                    onTabSelect = {},
-                )
-            },
         )
     }
 }

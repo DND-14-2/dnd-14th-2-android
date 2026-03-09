@@ -14,9 +14,7 @@ fun PickleAppBarTextAction(
 ) {
     Text(
         text = text,
-        modifier = Modifier.clickable(
-            onClick = onClick
-        ),
+        modifier = Modifier.clickable(onClick = onClick),
         style = PickleTheme.typography.body2Medium,
         color = PickleTheme.colors.gray700,
     )

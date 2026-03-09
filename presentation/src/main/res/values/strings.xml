@@ -50,6 +50,7 @@
     <string name="common_negative">아니요</string>
     <string name="common_positive">네</string>
     <string name="common_typo">함께하는 똑똑한 소비, 피클</string>
+    <string name="common_cancel">취소</string>
 
     <!-- Error -->
     <string name="login_error_general">로그인에 실패했습니다. 잠시 후 다시 시도해주세요.</string>

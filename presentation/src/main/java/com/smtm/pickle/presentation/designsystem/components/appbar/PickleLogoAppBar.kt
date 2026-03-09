@@ -1,0 +1,88 @@
+package com.smtm.pickle.presentation.designsystem.components.appbar
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.AppBarAction
+import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+
+@Composable
+fun PickleLogoAppBar(
+    actions: List<AppBarAction> = emptyList(),
+) {
+    PickleAppBarLayout(
+        start = { PickleAppBarLogo() },
+        end = {
+            actions.forEach { action ->
+                when (action) {
+                    is AppBarAction.Icon -> PickleAppBarActionIcon(
+                        iconRes = action.icon,
+                        contentDescription = action.contentDescription,
+                        onClick = action.onClick
+                    )
+
+                    is AppBarAction.Text -> PickleAppBarTextAction(
+                        text = action.label,
+                        onClick = action.onClick
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Preview(
+    name = "PickleLogoAppBar - 액션 없음",
+    showBackground = true,
+    widthDp = 360,
+)
+@Composable
+private fun PickleLogoAppBarNoActionsPreview() {
+    PickleTheme {
+        PickleLogoAppBar()
+    }
+}
+
+@Preview(
+    name = "PickleLogoAppBar - 아이콘 액션",
+    showBackground = true,
+    widthDp = 360,
+)
+@Composable
+private fun PickleLogoAppBarIconActionsPreview() {
+    PickleTheme {
+        PickleLogoAppBar(
+            actions = listOf(
+                AppBarAction.Icon(
+                    icon = R.drawable.ic_appbar_statistics,
+                    contentDescription = "통계",
+                    onClick = {},
+                ),
+                AppBarAction.Icon(
+                    icon = R.drawable.ic_app_bar_search,
+                    contentDescription = "검색",
+                    onClick = {},
+                ),
+            ),
+        )
+    }
+}
+
+@Preview(
+    name = "PickleLogoAppBar - 텍스트 액션",
+    showBackground = true,
+    widthDp = 360,
+)
+@Composable
+private fun PickleLogoAppBarTextActionPreview() {
+    PickleTheme {
+        PickleLogoAppBar(
+            actions = listOf(
+                AppBarAction.Text(
+                    label = "편집",
+                    onClick = {},
+                ),
+            ),
+        )
+    }
+}

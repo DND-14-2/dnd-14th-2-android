@@ -39,10 +39,9 @@ import com.smtm.pickle.presentation.verdict.components.JudgementDialog
 import com.smtm.pickle.presentation.verdict.components.VerdictListItem
 import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheetContent
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
-import com.smtm.pickle.presentation.verdict.model.JurorVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.LedgerEntryUiModel
-import com.smtm.pickle.presentation.verdict.model.MateUiModel
-import com.smtm.pickle.presentation.verdict.model.MyVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.RequestedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 
 private val defaultPadding: Dp = 16.dp
@@ -72,7 +71,6 @@ fun VerdictScreen(
             viewModel.effect.collect { effect ->
                 when (effect) {
                     VerdictEffect.NavigateToRequest -> onNavigateVerdictRequest()
-                    VerdictEffect.NavigateToJurorList -> onNavigateJurorList()
                     is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
                     is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
                     is VerdictEffect.NavigateToCompleted -> onNavigateVerdictCompleted(effect.defendantNickname)
@@ -86,9 +84,9 @@ fun VerdictScreen(
         }
     }
 
-    // 배심원 심판 BottomSheet (완료된 것 클릭 시)
-    val selectedJurorVerdict = uiState.selectedJurorVerdict
-    if (selectedJurorVerdict != null) {
+    // 내 판결 BottomSheet (완료된 것 클릭 시)
+    val selectedAssignedVerdict = uiState.selectedAssignedVerdict
+    if (selectedAssignedVerdict != null) {
         PickleBottomSheet(
             sheetState = sheetState,
             onDismiss = viewModel::onDismissBottomSheet,
@@ -96,19 +94,19 @@ fun VerdictScreen(
             VerdictPendingBottomSheetContent(
                 modifier = Modifier,
                 jurorNickname = uiState.userNickname,
-                defendantNickname = selectedJurorVerdict.defendant.nickname,
-                title = selectedJurorVerdict.ledgerEntry.description,
-                category = selectedJurorVerdict.ledgerEntry.category,
-                amount = selectedJurorVerdict.ledgerEntry.amount,
-                paymentMethod = selectedJurorVerdict.ledgerEntry.paymentMethod,
-                verdictType = selectedJurorVerdict.verdictType,
+                defendantNickname = selectedAssignedVerdict.defendant.nickname,
+                title = selectedAssignedVerdict.ledgerEntry.description,
+                category = selectedAssignedVerdict.ledgerEntry.category,
+                amount = selectedAssignedVerdict.ledgerEntry.amount,
+                paymentMethod = selectedAssignedVerdict.ledgerEntry.paymentMethod,
+                verdictType = selectedAssignedVerdict.verdictType,
             )
         }
     }
 
     // 내 심판 BottomSheet
-    val selectedMyVerdict = uiState.selectedMyVerdict
-    if (selectedMyVerdict != null) {
+    val selectedRequestedVerdict = uiState.selectedRequestedVerdict
+    if (selectedRequestedVerdict != null) {
         PickleBottomSheet(
             sheetState = sheetState,
             onDismiss = viewModel::onDismissBottomSheet,
@@ -118,17 +116,17 @@ fun VerdictScreen(
                 // TODO: 서버에서 jurorNickname 추가 후 변경
                 jurorNickname = "익명 배심원",
                 defendantNickname = uiState.userNickname,
-                title = selectedMyVerdict.ledgerEntry.description,
-                category = selectedMyVerdict.ledgerEntry.category,
-                amount = selectedMyVerdict.ledgerEntry.amount,
-                paymentMethod = selectedMyVerdict.ledgerEntry.paymentMethod,
-                verdictType = selectedMyVerdict.verdictType,
+                title = selectedRequestedVerdict.ledgerEntry.description,
+                category = selectedRequestedVerdict.ledgerEntry.category,
+                amount = selectedRequestedVerdict.ledgerEntry.amount,
+                paymentMethod = selectedRequestedVerdict.ledgerEntry.paymentMethod,
+                verdictType = selectedRequestedVerdict.verdictType,
             )
         }
     }
 
     // 판결 다이얼로그
-    val selectedVerdictForJudgement = uiState.selectedJurorVerdictForJudgement
+    val selectedVerdictForJudgement = uiState.selectedAssignedVerdictForJudgement
     if (selectedVerdictForJudgement != null) {
         JudgementDialog(
             onDismiss = viewModel::onJudgementDialogDismiss,
@@ -141,17 +139,17 @@ fun VerdictScreen(
         isRefreshing = uiState.isRefreshing,
         onRefresh = viewModel::loadVerdicts,
         selectedTabIndex = uiState.selectedTabIndex,
-        myJudgementFilterIndex = uiState.judgements.filterIndex,
-        myVerdictFilterIndex = uiState.verdicts.filterIndex,
-        myJudgementCounts = uiState.judgements.counts,
-        myVerdictCounts = uiState.verdicts.counts,
-        jurorVerdictItems = uiState.judgements.items,
-        myVerdictItems = uiState.verdicts.items,
-        onJurorListClick = viewModel::navigateToJurorList,
+        requestedFilterIndex = uiState.requestedVerdicts.filterIndex,
+        assignedFilterIndex = uiState.assignedVerdicts.filterIndex,
+        requestedCounts = uiState.requestedVerdicts.counts,
+        assignedCounts = uiState.assignedVerdicts.counts,
+        requestedVerdictItems = uiState.requestedVerdicts.items,
+        assignedVerdictItems = uiState.assignedVerdicts.items,
+        onJurorListClick = onNavigateJurorList,
         onTabSelected = viewModel::onTabSelected,
         onFilterSelected = viewModel::onFilterSelected,
-        onJurorVerdictItemClick = viewModel::onJurorVerdictItemClick,
-        onMyVerdictItemClick = viewModel::onMyVerdictItemClick,
+        onAssignedVerdictItemClick = viewModel::onAssignedVerdictItemClick,
+        onRequestedVerdictItemClick = viewModel::onRequestedVerdictItemClick,
     )
 
     SnackbarHost(snackbarState)
@@ -162,98 +160,102 @@ private fun VerdictContent(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     selectedTabIndex: Int,
-    myJudgementFilterIndex: Int,
-    myVerdictFilterIndex: Int,
-    myJudgementCounts: VerdictCounts,
-    myVerdictCounts: VerdictCounts,
-    jurorVerdictItems: List<JurorVerdictUiModel>,
-    myVerdictItems: List<MyVerdictUiModel>,
+    requestedFilterIndex: Int,
+    assignedFilterIndex: Int,
+    requestedCounts: VerdictCounts,
+    assignedCounts: VerdictCounts,
+    requestedVerdictItems: List<RequestedVerdictUiModel>,
+    assignedVerdictItems: List<AssignedVerdictUiModel>,
     onJurorListClick: () -> Unit,
     onTabSelected: (Int) -> Unit,
     onFilterSelected: (Int) -> Unit,
-    onJurorVerdictItemClick: (JurorVerdictUiModel) -> Unit,
-    onMyVerdictItemClick: (MyVerdictUiModel) -> Unit,
+    onAssignedVerdictItemClick: (AssignedVerdictUiModel) -> Unit,
+    onRequestedVerdictItemClick: (RequestedVerdictUiModel) -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            PickleAppBar(title = "심판") {
-                PickleIconButtonWithTouchCustom(
-                    iconRes = R.drawable.ic_verdict_juror,
-                    onClick = onJurorListClick
-                )
-            }
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-        ) {
-            item { Spacer(modifier = Modifier.height(16.dp)) }
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
     ) {
-
-            item("tabs") {
-                VerdictTabs(
-                    selectedTabIndex = selectedTabIndex,
-                    myJudgementFilterIndex = myJudgementFilterIndex,
-                    myVerdictFilterIndex = myVerdictFilterIndex,
-                    myJudgementCounts = myJudgementCounts,
-                    myVerdictCounts = myVerdictCounts,
-                    onTabSelected = onTabSelected,
-                    onFilterSelected = onFilterSelected,
-                    modifier = Modifier.padding(horizontal = defaultPadding)
-                )
-            }
-
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-
-            if (selectedTabIndex == TabIndex.JUDGEMENTS) {
-                if (jurorVerdictItems.isEmpty()) {
-                    item { EmptyVerdictContent(selectedTabIndex = selectedTabIndex) }
-                } else {
-                    itemsIndexed(
-                        items = jurorVerdictItems,
-                        key = { _, item -> item.id }
-                    ) { index, item ->
-                        VerdictListItem(
-                            amount = item.ledgerEntry.amount,
-                            description = item.ledgerEntry.description,
-                            categoryIconResId = item.ledgerEntry.category.iconResId,
-                            paymentMethodIconResId = item.ledgerEntry.paymentMethod.iconResId,
-                            verdictType = item.verdictType,
-                            onItemClick = { onJurorVerdictItemClick(item) },
-                            modifier = Modifier.padding(horizontal = defaultPadding)
-                        )
-                        if (index < jurorVerdictItems.lastIndex)
-                            Spacer(modifier = Modifier.height(12.dp))
-                        else
-                            Spacer(modifier = Modifier.height(80.dp))
-                    }
+        Scaffold(
+            topBar = {
+                PickleAppBar(title = "심판") {
+                    PickleIconButtonWithTouchCustom(
+                        iconRes = R.drawable.ic_verdict_juror,
+                        onClick = onJurorListClick
+                    )
                 }
-            } else {
-                if (myVerdictItems.isEmpty()) {
-                    item { EmptyVerdictContent(selectedTabIndex = selectedTabIndex) }
-                } else {
-                    itemsIndexed(
-                        items = myVerdictItems,
-                        key = { _, item -> item.id }
-                    ) { index, item ->
-                        VerdictListItem(
-                            amount = item.ledgerEntry.amount,
-                            description = item.ledgerEntry.description,
-                            categoryIconResId = item.ledgerEntry.category.iconResId,
-                            paymentMethodIconResId = item.ledgerEntry.paymentMethod.iconResId,
-                            verdictType = item.verdictType,
-                            onItemClick = { onMyVerdictItemClick(item) },
-                            modifier = Modifier.padding(horizontal = defaultPadding)
-                        )
-                        if (index < myVerdictItems.lastIndex)
-                            Spacer(modifier = Modifier.height(12.dp))
-                        else
-                            Spacer(modifier = Modifier.height(80.dp))
+            }
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+            ) {
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                item("tabs") {
+                    VerdictTabs(
+                        selectedTabIndex = selectedTabIndex,
+                        requestedFilterIndex = requestedFilterIndex,
+                        assignedFilterIndex = assignedFilterIndex,
+                        requestedCounts = requestedCounts,
+                        assignedCounts = assignedCounts,
+                        onTabSelected = onTabSelected,
+                        onFilterSelected = onFilterSelected,
+                        modifier = Modifier.padding(horizontal = defaultPadding)
+                    )
+                }
+
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                when (selectedTabIndex) {
+                    TabIndex.REQUESTED -> {
+                        if (requestedVerdictItems.isEmpty()) {
+                            item { EmptyVerdictContent(selectedTabIndex = selectedTabIndex) }
+                        } else {
+                            itemsIndexed(
+                                items = requestedVerdictItems,
+                                key = { _, item -> item.id }
+                            ) { index, item ->
+                                VerdictListItem(
+                                    amount = item.ledgerEntry.amount,
+                                    description = item.ledgerEntry.description,
+                                    categoryIconResId = item.ledgerEntry.category.iconResId,
+                                    paymentMethodIconResId = item.ledgerEntry.paymentMethod.iconResId,
+                                    verdictType = item.verdictType,
+                                    onItemClick = { onRequestedVerdictItemClick(item) },
+                                    modifier = Modifier.padding(horizontal = defaultPadding)
+                                )
+                                if (index < requestedVerdictItems.lastIndex)
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                else
+                                    Spacer(modifier = Modifier.height(80.dp))
+                            }
+                        }
+                    }
+
+                    TabIndex.ASSIGNED -> {
+                        if (assignedVerdictItems.isEmpty()) {
+                            item { EmptyVerdictContent(selectedTabIndex = selectedTabIndex) }
+                        } else {
+                            itemsIndexed(
+                                items = assignedVerdictItems,
+                                key = { _, item -> item.id }
+                            ) { index, item ->
+                                VerdictListItem(
+                                    amount = item.ledgerEntry.amount,
+                                    description = item.ledgerEntry.description,
+                                    categoryIconResId = item.ledgerEntry.category.iconResId,
+                                    paymentMethodIconResId = item.ledgerEntry.paymentMethod.iconResId,
+                                    verdictType = item.verdictType,
+                                    onItemClick = { onAssignedVerdictItemClick(item) },
+                                    modifier = Modifier.padding(horizontal = defaultPadding)
+                                )
+                                if (index < assignedVerdictItems.lastIndex)
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                else
+                                    Spacer(modifier = Modifier.height(80.dp))
+                            }
                         }
                     }
                 }
@@ -272,22 +274,19 @@ private fun VerdictContentPreview() {
         paymentMethod = PaymentMethodUiModel.Cash,
         description = "가계부 15자 입력"
     )
-    val mockJudgementItems = listOf(
-        JurorVerdictUiModel(
+    val mockRequestedItems = listOf(
+        RequestedVerdictUiModel(
             id = 1,
-            defendant = MateUiModel(201, "홍길동", level = 1, invitationCode = "AAAAAA"),
             ledgerEntry = mockLedgerEntry,
             verdictType = VerdictType.Pending,
         ),
-        JurorVerdictUiModel(
+        RequestedVerdictUiModel(
             id = 2,
-            defendant = MateUiModel(202, "김철수", level = 2, invitationCode = "BBBBBB"),
             ledgerEntry = mockLedgerEntry.copy(id = 102L, amount = 5000L, description = "커피 한잔"),
             verdictType = VerdictType.Guilty,
         ),
-        JurorVerdictUiModel(
+        RequestedVerdictUiModel(
             id = 3,
-            defendant = MateUiModel(203, "이영희", level = 3, invitationCode = "CCCCCC"),
             ledgerEntry = mockLedgerEntry.copy(id = 103L, amount = 25000L, description = "야식 치킨"),
             verdictType = VerdictType.NotGuilty,
         )
@@ -297,61 +296,63 @@ private fun VerdictContentPreview() {
             isRefreshing = false,
             onRefresh = {},
             selectedTabIndex = 0,
-            myJudgementFilterIndex = 0,
-            myVerdictFilterIndex = 0,
-            myJudgementCounts = VerdictCounts(10, 5, 5),
-            myVerdictCounts = VerdictCounts(5, 3, 2),
-            jurorVerdictItems = mockJudgementItems,
-            myVerdictItems = emptyList(),
+            requestedFilterIndex = 0,
+            assignedFilterIndex = 0,
+            requestedCounts = VerdictCounts(10, 5, 5),
+            assignedCounts = VerdictCounts(5, 3, 2),
+            requestedVerdictItems = mockRequestedItems,
+            assignedVerdictItems = emptyList(),
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-            onJurorVerdictItemClick = {},
-            onMyVerdictItemClick = {},
+            onAssignedVerdictItemClick = {},
+            onRequestedVerdictItemClick = {},
         )
     }
 }
 
-@Preview(name = "Empty Judgement")
+@Preview(name = "Empty Requested")
 @Composable
-private fun VerdictContentEmptyJudgementPreview() {
+private fun VerdictContentEmptyRequestedPreview() {
     PickleTheme {
         VerdictContent(
+            isRefreshing = false,
+            onRefresh = {},
             selectedTabIndex = 0,
-            myJudgementFilterIndex = 0,
-            myVerdictFilterIndex = 0,
-            myJudgementCounts = VerdictCounts(0, 0, 0),
-            myVerdictCounts = VerdictCounts(0, 0, 0),
-            jurorVerdictItems = emptyList(),
-            myVerdictItems = emptyList(),
+            requestedFilterIndex = 0,
+            assignedFilterIndex = 0,
+            requestedCounts = VerdictCounts(0, 0, 0),
+            assignedCounts = VerdictCounts(0, 0, 0),
+            requestedVerdictItems = emptyList(),
+            assignedVerdictItems = emptyList(),
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-            onJurorVerdictItemClick = {},
-            onMyVerdictItemClick = {},
+            onAssignedVerdictItemClick = {},
+            onRequestedVerdictItemClick = {},
         )
     }
 }
 
-@Preview(name = "Empty Verdict")
+@Preview(name = "Empty Assigned")
 @Composable
-private fun VerdictContentEmptyVerdictPreview() {
+private fun VerdictContentEmptyAssignedPreview() {
     PickleTheme {
         VerdictContent(
             isRefreshing = false,
             onRefresh = {},
             selectedTabIndex = 1,
-            myJudgementFilterIndex = 0,
-            myVerdictFilterIndex = 0,
-            myJudgementCounts = VerdictCounts(0, 0, 0),
-            myVerdictCounts = VerdictCounts(0, 0, 0),
-            jurorVerdictItems = emptyList(),
-            myVerdictItems = emptyList(),
+            requestedFilterIndex = 0,
+            assignedFilterIndex = 0,
+            requestedCounts = VerdictCounts(0, 0, 0),
+            assignedCounts = VerdictCounts(0, 0, 0),
+            requestedVerdictItems = emptyList(),
+            assignedVerdictItems = emptyList(),
             onJurorListClick = {},
             onTabSelected = {},
             onFilterSelected = {},
-            onJurorVerdictItemClick = {},
-            onMyVerdictItemClick = {},
+            onAssignedVerdictItemClick = {},
+            onRequestedVerdictItemClick = {},
         )
     }
 }

@@ -33,10 +33,10 @@ import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 fun VerdictTabs(
     modifier: Modifier = Modifier,
     selectedTabIndex: Int,
-    myJudgementFilterIndex: Int,
-    myVerdictFilterIndex: Int,
-    myJudgementCounts: VerdictCounts,
-    myVerdictCounts: VerdictCounts,
+    requestedFilterIndex: Int,
+    assignedFilterIndex: Int,
+    requestedCounts: VerdictCounts,
+    assignedCounts: VerdictCounts,
     onTabSelected: (Int) -> Unit,
     onFilterSelected: (Int) -> Unit,
 ) {
@@ -44,19 +44,19 @@ fun VerdictTabs(
 
     val filters = if (selectedTabIndex == 0) {
         listOf(
-            "전체 ${myJudgementCounts.total}",
-            "대기 ${myJudgementCounts.pending}",
-            "완료 ${myJudgementCounts.completed}"
+            "전체 ${requestedCounts.total}",
+            "대기 ${requestedCounts.pending}",
+            "완료 ${requestedCounts.completed}"
         )
     } else {
         listOf(
-            "전체 ${myVerdictCounts.total}",
-            "보류 ${myVerdictCounts.pending}",
-            "완료 ${myVerdictCounts.completed}"
+            "전체 ${assignedCounts.total}",
+            "보류 ${assignedCounts.pending}",
+            "완료 ${assignedCounts.completed}"
         )
     }
 
-    val currentFilterIndex = if (selectedTabIndex == 0) myJudgementFilterIndex else myVerdictFilterIndex
+    val currentFilterIndex = if (selectedTabIndex == 0) requestedFilterIndex else assignedFilterIndex
 
     Column(modifier = modifier) {
         CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -144,10 +144,10 @@ private fun VerdictTabsPreview() {
     PickleTheme {
         VerdictTabs(
             selectedTabIndex = 0,
-            myJudgementFilterIndex = 0,
-            myVerdictFilterIndex = 0,
-            myJudgementCounts = VerdictCounts(10, 5, 5),
-            myVerdictCounts = VerdictCounts(5, 3, 2),
+            requestedFilterIndex = 0,
+            assignedFilterIndex = 0,
+            requestedCounts = VerdictCounts(10, 5, 5),
+            assignedCounts = VerdictCounts(5, 3, 2),
             onTabSelected = {},
             onFilterSelected = {}
         )

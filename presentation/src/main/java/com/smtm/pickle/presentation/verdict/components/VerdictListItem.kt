@@ -37,7 +37,7 @@ import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
-import com.smtm.pickle.presentation.verdict.model.JurorVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.LedgerEntryUiModel
 
 @Composable
@@ -173,7 +173,7 @@ private fun StatusChip(
 @Composable
 private fun VerdictListItemPreview() {
     PickleTheme {
-        val item = JurorVerdictUiModel(
+        val item = AssignedVerdictUiModel(
             id = 1,
             defendant = MateUiModel(1, "홍길동", level = 1, invitationCode = "AAAAAA"),
             ledgerEntry = LedgerEntryUiModel(

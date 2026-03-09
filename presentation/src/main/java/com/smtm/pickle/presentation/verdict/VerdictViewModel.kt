@@ -7,8 +7,8 @@ import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetJurorVerdictsUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetMyVerdictsUseCase
 import com.smtm.pickle.domain.usecase.verdict.JudgeVerdictUseCase
-import com.smtm.pickle.presentation.verdict.model.JurorVerdictUiModel
-import com.smtm.pickle.presentation.verdict.model.MyVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.RequestedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,8 +48,8 @@ class VerdictViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<VerdictEffect>(replay = 0)
     val effect: SharedFlow<VerdictEffect> = _effect.asSharedFlow()
 
-    private var allJurorVerdicts: List<JurorVerdictUiModel> = emptyList()
-    private var allMyVerdicts: List<MyVerdictUiModel> = emptyList()
+    private var allRequestedVerdicts: List<RequestedVerdictUiModel> = emptyList()
+    private var allAssignedVerdicts: List<AssignedVerdictUiModel> = emptyList()
 
     init {
         loadVerdicts()
@@ -63,10 +63,10 @@ class VerdictViewModel @Inject constructor(
 
     fun onFilterSelected(index: Int) {
         _uiState.update { state ->
-            val updated = if (state.selectedTabIndex == TabIndex.JUDGEMENTS) {
-                state.copy(judgements = state.judgements.copy(filterIndex = index))
+            val updated = if (state.selectedTabIndex == TabIndex.REQUESTED) {
+                state.copy(requestedVerdicts = state.requestedVerdicts.copy(filterIndex = index))
             } else {
-                state.copy(verdicts = state.verdicts.copy(filterIndex = index))
+                state.copy(assignedVerdicts = state.assignedVerdicts.copy(filterIndex = index))
             }
             updated.applyFilters()
         }
@@ -74,24 +74,24 @@ class VerdictViewModel @Inject constructor(
 
     private fun VerdictUiState.applyFilters(): VerdictUiState {
         return copy(
-            judgements = judgements.copy(
-                items = filterJurorVerdicts(allJurorVerdicts, judgements.filterIndex),
-                counts = calculateJurorCounts(allJurorVerdicts)
+            requestedVerdicts = requestedVerdicts.copy(
+                items = filterRequestedVerdicts(allRequestedVerdicts, requestedVerdicts.filterIndex),
+                counts = calculateRequestedCounts(allRequestedVerdicts)
             ),
-            verdicts = verdicts.copy(
-                items = filterMyVerdicts(allMyVerdicts, verdicts.filterIndex),
-                counts = calculateMyCounts(allMyVerdicts)
+            assignedVerdicts = assignedVerdicts.copy(
+                items = filterAssignedVerdicts(allAssignedVerdicts, assignedVerdicts.filterIndex),
+                counts = calculateAssignedCounts(allAssignedVerdicts)
             )
         )
     }
 
-    fun onJurorVerdictItemClick(verdict: JurorVerdictUiModel) {
+    fun onAssignedVerdictItemClick(verdict: AssignedVerdictUiModel) {
         when (verdict.verdictType) {
             VerdictType.Pending -> {
                 _uiState.update {
                     it.copy(
-                        selectedJurorVerdictForJudgement = verdict,
-                        selectedMyVerdict = null,
+                        selectedAssignedVerdictForJudgement = verdict,
+                        selectedRequestedVerdict = null,
                     )
                 }
             }
@@ -99,34 +99,34 @@ class VerdictViewModel @Inject constructor(
             VerdictType.Guilty, VerdictType.NotGuilty -> {
                 _uiState.update {
                     it.copy(
-                        selectedJurorVerdict = verdict,
-                        selectedMyVerdict = null,
+                        selectedAssignedVerdict = verdict,
+                        selectedRequestedVerdict = null,
                     )
                 }
             }
         }
     }
 
-    fun onMyVerdictItemClick(verdict: MyVerdictUiModel) {
+    fun onRequestedVerdictItemClick(verdict: RequestedVerdictUiModel) {
         _uiState.update {
             it.copy(
-                selectedMyVerdict = verdict,
-                selectedJurorVerdict = null,
-                selectedJurorVerdictForJudgement = null,
+                selectedRequestedVerdict = verdict,
+                selectedAssignedVerdict = null,
+                selectedAssignedVerdictForJudgement = null,
             )
         }
     }
 
     fun onJudgementDialogDismiss() {
-        _uiState.update { it.copy(selectedJurorVerdictForJudgement = null) }
+        _uiState.update { it.copy(selectedAssignedVerdictForJudgement = null) }
     }
 
     fun onSubmitJudgement(isGuilty: Boolean) {
-        val verdict = _uiState.value.selectedJurorVerdictForJudgement ?: return
+        val verdict = _uiState.value.selectedAssignedVerdictForJudgement ?: return
         val verdictType = if (isGuilty) VerdictType.Guilty else VerdictType.NotGuilty
 
         viewModelScope.launch {
-            _uiState.update { it.copy(selectedJurorVerdictForJudgement = null) }
+            _uiState.update { it.copy(selectedAssignedVerdictForJudgement = null) }
 
             judgeVerdictUseCase(verdict.id, verdictType)
                 .onSuccess {
@@ -147,44 +147,38 @@ class VerdictViewModel @Inject constructor(
     fun onDismissBottomSheet() {
         _uiState.update {
             it.copy(
-                selectedJurorVerdict = null,
-                selectedMyVerdict = null,
+                selectedAssignedVerdict = null,
+                selectedRequestedVerdict = null,
             )
         }
     }
 
-    fun navigateToJurorList() {
-        viewModelScope.launch {
-            _effect.emit(VerdictEffect.NavigateToJurorList)
-        }
-    }
-
-    private fun loadVerdicts() {
+    fun loadVerdicts() {
         viewModelScope.launch {
             getJurorVerdictsUseCase()
-                .onSuccess { jurorVerdicts ->
-                    allJurorVerdicts = jurorVerdicts.map { it.toUiModel() }
+                .onSuccess { assignedVerdicts ->
+                    allAssignedVerdicts = assignedVerdicts.map { it.toUiModel() }
                         .sortedByDescending { it.id }
                     _uiState.update { it.applyFilters() }
                 }
                 .onFailure { e ->
-                    Timber.e(e, "배심원 평결 로드 실패")
+                    Timber.e(e, "내 판결 로드 실패")
                 }
         }
         viewModelScope.launch {
             getMyVerdictsUseCase()
-                .onSuccess { myVerdicts ->
-                    allMyVerdicts = myVerdicts.map { it.toUiModel() }
+                .onSuccess { requestedVerdicts ->
+                    allRequestedVerdicts = requestedVerdicts.map { it.toUiModel() }
                         .sortedByDescending { it.id }
                     _uiState.update { it.applyFilters() }
                 }
                 .onFailure { e ->
-                    Timber.e(e, "내 평가 로드 실패")
+                    Timber.e(e, "내 심판 로드 실패")
                 }
         }
     }
 
-    private fun calculateJurorCounts(verdicts: List<JurorVerdictUiModel>): VerdictCounts {
+    private fun calculateAssignedCounts(verdicts: List<AssignedVerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
             pending = verdicts.count { it.verdictType == VerdictType.Pending },
@@ -192,7 +186,7 @@ class VerdictViewModel @Inject constructor(
         )
     }
 
-    private fun calculateMyCounts(verdicts: List<MyVerdictUiModel>): VerdictCounts {
+    private fun calculateRequestedCounts(verdicts: List<RequestedVerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
             pending = verdicts.count { it.verdictType == VerdictType.Pending },
@@ -200,10 +194,10 @@ class VerdictViewModel @Inject constructor(
         )
     }
 
-    private fun filterJurorVerdicts(
-        verdicts: List<JurorVerdictUiModel>,
+    private fun filterAssignedVerdicts(
+        verdicts: List<AssignedVerdictUiModel>,
         filterIndex: Int,
-    ): List<JurorVerdictUiModel> {
+    ): List<AssignedVerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
             1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
@@ -212,10 +206,10 @@ class VerdictViewModel @Inject constructor(
         }
     }
 
-    private fun filterMyVerdicts(
-        verdicts: List<MyVerdictUiModel>,
+    private fun filterRequestedVerdicts(
+        verdicts: List<RequestedVerdictUiModel>,
         filterIndex: Int,
-    ): List<MyVerdictUiModel> {
+    ): List<RequestedVerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
             1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
@@ -226,36 +220,35 @@ class VerdictViewModel @Inject constructor(
 }
 
 object TabIndex {
-    const val JUDGEMENTS = 0
-    const val VERDICTS = 1
+    const val REQUESTED = 0
+    const val ASSIGNED = 1
 }
 
 data class VerdictUiState(
-    val selectedTabIndex: Int = TabIndex.JUDGEMENTS,
+    val selectedTabIndex: Int = TabIndex.REQUESTED,
     val userNickname: String = "유저 닉네임",
-    val selectedJurorVerdict: JurorVerdictUiModel? = null,
-    val selectedMyVerdict: MyVerdictUiModel? = null,
-    val selectedJurorVerdictForJudgement: JurorVerdictUiModel? = null,
-    val judgements: JurorVerdictListState = JurorVerdictListState(),
-    val verdicts: MyVerdictListState = MyVerdictListState(),
     val isRefreshing: Boolean = false,
+    val selectedAssignedVerdict: AssignedVerdictUiModel? = null,
+    val selectedRequestedVerdict: RequestedVerdictUiModel? = null,
+    val selectedAssignedVerdictForJudgement: AssignedVerdictUiModel? = null,
+    val requestedVerdicts: RequestedVerdictListState = RequestedVerdictListState(),
+    val assignedVerdicts: AssignedVerdictListState = AssignedVerdictListState(),
 )
 
-data class JurorVerdictListState(
+data class RequestedVerdictListState(
     val filterIndex: Int = 0,
-    val items: List<JurorVerdictUiModel> = emptyList(),
+    val items: List<RequestedVerdictUiModel> = emptyList(),
     val counts: VerdictCounts = VerdictCounts(),
 )
 
-data class MyVerdictListState(
+data class AssignedVerdictListState(
     val filterIndex: Int = 0,
-    val items: List<MyVerdictUiModel> = emptyList(),
+    val items: List<AssignedVerdictUiModel> = emptyList(),
     val counts: VerdictCounts = VerdictCounts(),
 )
 
 sealed interface VerdictEffect {
     data object NavigateToRequest : VerdictEffect
-    data object NavigateToJurorList : VerdictEffect
     data class NavigateToResult(val id: Long) : VerdictEffect
     data class NavigateToJurorDetail(val id: Long) : VerdictEffect
     data class NavigateToCompleted(val defendantNickname: String) : VerdictEffect

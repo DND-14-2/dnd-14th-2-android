@@ -9,7 +9,7 @@ import javax.inject.Inject
 class UpdateMateRequestStatusUseCase @Inject constructor(
     private val mateRepository: MateRepository,
 ) {
-    suspend operator fun invoke(mateId: MateId, status: MateStatus): Result<Unit> = runSuspendCatching {
+    suspend operator fun invoke(mateId: MateId, status: MateStatus): Result<MateId> = runSuspendCatching {
         mateRepository.updateMateRequestStatus(mateId, status)
     }
 }

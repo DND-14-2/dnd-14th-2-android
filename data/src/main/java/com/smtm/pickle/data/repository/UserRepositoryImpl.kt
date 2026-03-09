@@ -3,10 +3,14 @@ package com.smtm.pickle.data.repository
 import com.smtm.pickle.data.source.local.datastore.PreferencesDataStore
 import com.smtm.pickle.data.source.local.datastore.ProfileDataStore
 import com.smtm.pickle.data.source.remote.api.UserApi
+import com.smtm.pickle.data.source.remote.model.user.NicknameRequest
 import com.smtm.pickle.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserRepositoryImpl @Inject constructor(
     private val userApi: UserApi,
     private val preferencesDataStore: PreferencesDataStore,
@@ -30,13 +34,24 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getInvitationCode(): String {
-        var invitationCode = profileDataStore.getInvitationCode()
-        if (invitationCode == null) {
-            val profile = userApi.getProfile()
-            profileDataStore.setInvitationCode(profile.invitationCode)
-            invitationCode = profile.invitationCode
+        return profileDataStore.getInvitationCode() ?: run {
+            val newCode = userApi.getProfile().invitationCode
+            profileDataStore.setInvitationCode(newCode)
+            newCode
         }
-
-        return invitationCode
     }
+
+    override suspend fun saveNickname(nickname: String) {
+        val changedNickname = userApi.changeNickname(NicknameRequest(nickname)).nickname
+        profileDataStore.changeNickname(changedNickname)
+    }
+
+    override suspend fun getNickname(): String {
+        val profile = userApi.getProfile()
+        profileDataStore.changeNickname(profile.nickname)
+        profileDataStore.setInvitationCode(profile.invitationCode)
+        return profile.nickname
+    }
+
+    override fun observeNickname(): Flow<String?> = profileDataStore.observeNickname()
 }

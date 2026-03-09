@@ -12,5 +12,7 @@ interface AuthRepository {
 
     suspend fun loginWithGoogle(): AuthToken
 
+    suspend fun logout()
+
     suspend fun withdrawAccount()
 }

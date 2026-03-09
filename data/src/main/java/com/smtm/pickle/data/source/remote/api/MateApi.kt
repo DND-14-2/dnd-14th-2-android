@@ -3,6 +3,7 @@ package com.smtm.pickle.data.source.remote.api
 import com.smtm.pickle.data.source.remote.model.mate.InviteMateRequest
 import com.smtm.pickle.data.source.remote.model.mate.MateRequestResponse
 import com.smtm.pickle.data.source.remote.model.mate.MateStatusUpdateRequest
+import com.smtm.pickle.data.source.remote.model.mate.MateStatusUpdateResponse
 import com.smtm.pickle.data.source.remote.model.mate.RemoteMate
 import com.smtm.pickle.data.source.remote.model.mate.RemoteMateRequest
 import retrofit2.http.Body
@@ -28,5 +29,5 @@ interface MateApi {
     suspend fun updateMateRequestStatus(
         @Path("mateId") mateId: Long,
         @Body request: MateStatusUpdateRequest,
-    )
+    ): MateStatusUpdateResponse
 }

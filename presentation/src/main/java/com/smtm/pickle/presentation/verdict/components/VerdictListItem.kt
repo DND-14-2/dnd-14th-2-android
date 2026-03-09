@@ -30,18 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.VerdictStatus
+import com.smtm.pickle.domain.model.verdict.VerdictType
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
-import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
-import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
 import com.smtm.pickle.presentation.common.utils.toMoneyFormat
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 import com.smtm.pickle.presentation.verdict.model.MateUiModel
-import com.smtm.pickle.presentation.verdict.model.VerdictUiModel
-import java.time.LocalDate
-import java.time.LocalDateTime
+import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
+import com.smtm.pickle.presentation.verdict.model.LedgerEntryUiModel
 
 @Composable
 fun VerdictListItem(
@@ -49,7 +46,7 @@ fun VerdictListItem(
     description: String,
     @DrawableRes categoryIconResId: Int,
     @DrawableRes paymentMethodIconResId: Int,
-    status: VerdictStatus,
+    verdictType: VerdictType,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -128,8 +125,8 @@ fun VerdictListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            when (status) {
-                VerdictStatus.PENDING -> {
+            when (verdictType) {
+                VerdictType.Pending -> {
                     StatusChip(
                         state = "미완료",
                         containerColor = PickleTheme.colors.background100,
@@ -137,7 +134,7 @@ fun VerdictListItem(
                     )
                 }
 
-                VerdictStatus.COMPLETED -> {
+                VerdictType.Guilty, VerdictType.NotGuilty -> {
                     StatusChip(
                         state = "완료",
                         containerColor = PickleTheme.colors.primary50,
@@ -176,28 +173,24 @@ private fun StatusChip(
 @Composable
 private fun VerdictListItemPreview() {
     PickleTheme {
-        val item = VerdictUiModel(
+        val item = AssignedVerdictUiModel(
             id = 1,
-            ledger = LedgerUiModel(
+            defendant = MateUiModel(1, "홍길동", level = 1, invitationCode = "AAAAAA"),
+            ledgerEntry = LedgerEntryUiModel(
                 id = 1L,
-                type = LedgerTypeUiModel.Expense,
                 amount = 15000,
                 category = CategoryUiModel.Food,
-                description = "가계부 15자 입력",
-                occurredOn = LocalDate.now(),
                 paymentMethod = PaymentMethodUiModel.Cash,
-                memo = null
+                description = "가계부 15자 입력",
             ),
-            defendant = MateUiModel(1, "홍길동"),
-            status = VerdictStatus.PENDING,
-            createdAt = LocalDateTime.now()
+            verdictType = VerdictType.Pending,
         )
         VerdictListItem(
-            amount = item.ledger.amount,
-            description = item.ledger.description,
-            categoryIconResId = item.ledger.category.iconResId,
-            paymentMethodIconResId = item.ledger.paymentMethod.iconResId,
-            status = item.status,
+            amount = item.ledgerEntry.amount,
+            description = item.ledgerEntry.description,
+            categoryIconResId = item.ledgerEntry.category.iconResId,
+            paymentMethodIconResId = item.ledgerEntry.paymentMethod.iconResId,
+            verdictType = item.verdictType,
             onItemClick = {}
         )
     }

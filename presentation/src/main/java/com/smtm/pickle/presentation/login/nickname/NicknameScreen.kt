@@ -28,7 +28,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.common.extension.sendSms
-import com.smtm.pickle.presentation.common.utils.rememberCopyToClipboard
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
@@ -95,18 +94,14 @@ fun NicknameScreen(
 
         is NicknameDialogState.ShareInvitationCode -> {
             val context = LocalContext.current
-            val copyToClipboard = rememberCopyToClipboard()
             val inviteCode = dialogState.invitationCode
-            val smsMessage = stringResource(R.string.share_invitation_sms_body, inviteCode)
+            val smsMessage = stringResource(R.string.share_invitation_sms_body, inviteCode, context.packageName)
 
             ShareInvitationCodeDialog(
-                inviteCode = inviteCode,
-                onShareToSms = {
+                invitationCode = inviteCode,
+                onPrimaryClick = {
                     context.sendSms(smsMessage)
                     viewModel.showWelcomeDialog()
-                },
-                onInviteCodeClick = {
-                    copyToClipboard(inviteCode)
                 },
                 onDismiss = viewModel::showWelcomeDialog,
             )

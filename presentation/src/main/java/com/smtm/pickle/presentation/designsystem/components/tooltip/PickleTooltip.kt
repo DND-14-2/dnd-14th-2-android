@@ -50,8 +50,8 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 @Composable
 fun PickleTooltip(
     message: String,
-    subText: String? = null,
     modifier: Modifier = Modifier,
+    subText: String? = null,
     tailPosition: TailPosition = TailPosition.BOTTOM,
     isVisible: Boolean = false,
 ) {
@@ -297,8 +297,8 @@ private fun DrawScope.drawRightTail(color: Color) {
 fun PicklePopupTooltip(
     popupButton: @Composable () -> Unit,
     message: String,
-    subText: String? = null,
     modifier: Modifier = Modifier,
+    subText: String? = null,
     tailPosition: TailPosition = TailPosition.BOTTOM,
 ) {
     var isVisible by remember { mutableStateOf(false) }

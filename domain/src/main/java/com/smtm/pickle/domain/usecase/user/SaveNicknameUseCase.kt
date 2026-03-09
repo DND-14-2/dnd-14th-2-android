@@ -1,4 +1,4 @@
-package com.smtm.pickle.domain.usecase.nickname
+package com.smtm.pickle.domain.usecase.user
 
 import com.smtm.pickle.domain.common.utils.runSuspendCatching
 import com.smtm.pickle.domain.repository.UserRepository

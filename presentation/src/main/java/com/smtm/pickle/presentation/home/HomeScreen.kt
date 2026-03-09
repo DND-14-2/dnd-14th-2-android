@@ -19,14 +19,16 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.domain.model.ledger.LedgerId
+import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleLogoAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.AppBarAction
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
-import com.smtm.pickle.presentation.home.component.HomeTopBar
 import com.smtm.pickle.presentation.home.component.LedgerCalendar
 import com.smtm.pickle.presentation.home.component.dailyLedgerInfoSection
 import java.time.LocalDate
@@ -100,7 +102,15 @@ private fun HomeContent(
 ) {
     Scaffold(
         topBar = {
-            HomeTopBar(onStatisticsClick = onNavigateToMyPage)
+            PickleLogoAppBar(
+                actions = listOf(
+                    AppBarAction.Icon(
+                        icon = R.drawable.ic_appbar_statistics,
+                        contentDescription = "통계",
+                        onClick = onNavigateToMyPage
+                    )
+                )
+            )
         }
     ) { innerPadding ->
         LazyColumn(

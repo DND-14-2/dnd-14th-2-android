@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ internal fun PickleAppBarLayout(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = Dimensions.appBarHorizontalSpacing)
             .background(PickleTheme.colors.base0)
             .statusBarsPadding()
             .requiredHeight(Dimensions.appbarHeight)

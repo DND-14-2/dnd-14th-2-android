@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetNicknameUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(): Result<String> = runSuspendCatching {
+    suspend operator fun invoke(): Result<String?> = runSuspendCatching {
         userRepository.getNickname()
     }
 }

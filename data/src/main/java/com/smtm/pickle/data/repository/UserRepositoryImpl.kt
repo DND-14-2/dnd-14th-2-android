@@ -8,9 +8,7 @@ import com.smtm.pickle.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class UserRepositoryImpl @Inject constructor(
     private val userApi: UserApi,
     private val preferencesDataStore: PreferencesDataStore,
@@ -39,9 +37,9 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNickname(): String {
-        val profile = userApi.getProfile()
-        profileDataStore.changeNickname(profile.nickname)
-        return profile.nickname
+        val nickname = userApi.getProfile().nickname
+        profileDataStore.changeNickname(nickname)
+        return nickname
     }
 
     override fun observeNickname(): Flow<String?> = profileDataStore.observeNickname()

@@ -14,7 +14,7 @@ interface UserRepository {
 
     suspend fun saveNickname(nickname: String)
 
-    suspend fun getNickname(): String
+    suspend fun getNickname(): String?
 
     fun observeNickname(): Flow<String?>
 }

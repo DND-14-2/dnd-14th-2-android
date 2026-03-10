@@ -6,7 +6,7 @@ import com.smtm.pickle.domain.model.ledger.summarize
 import com.smtm.pickle.domain.usecase.ledger.EnsureLedgersSyncedUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByDayUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByMonthUseCase
-import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.ObserveNicknameUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.home.model.LedgerCalendarDay

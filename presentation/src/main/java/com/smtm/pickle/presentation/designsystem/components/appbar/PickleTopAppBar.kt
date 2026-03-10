@@ -29,6 +29,16 @@ import com.smtm.pickle.presentation.designsystem.components.textfield.PickleText
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
+@Deprecated(
+    message = """
+         레거시 슬롯 API입니다. 사용 패턴에 따라 Named Preset으로 교체해주세요:
+           • title + back  → PickleTitleAppBar(title, onBack)
+           • title only    → PickleTitleAppBar(title)
+           • back only     → PickleBackAppBar(onBack)
+           • logo          → PickleLogoAppBar()
+     """,
+    level = DeprecationLevel.WARNING
+)
 @Composable
 fun PickleAppBar(
     modifier: Modifier = Modifier,

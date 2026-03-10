@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.designsystem.components.appbar
+package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Text
@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
-fun PickleAppBarTextAction(
+internal fun PickleAppBarTextAction(
     text: String,
     onClick: () -> Unit,
 ) {

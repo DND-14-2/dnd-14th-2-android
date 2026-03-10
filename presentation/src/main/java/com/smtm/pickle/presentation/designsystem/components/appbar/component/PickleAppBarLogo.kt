@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.designsystem.components.appbar
+package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable

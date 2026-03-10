@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.designsystem.components.appbar
+package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -10,7 +10,7 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
-fun PickleAppBarSearchField(
+internal fun PickleAppBarSearchField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,

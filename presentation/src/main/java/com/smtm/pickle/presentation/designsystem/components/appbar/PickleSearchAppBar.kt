@@ -5,6 +5,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarLayout
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarSearchField
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarTextAction
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable

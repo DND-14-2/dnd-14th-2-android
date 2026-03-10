@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.designsystem.components.appbar
+package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +9,7 @@ import com.smtm.pickle.presentation.designsystem.components.button.PickleIconBut
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
-fun PickleAppBarBackButton(
+internal fun PickleAppBarBackButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     contentDescription: String = "뒤로가기",

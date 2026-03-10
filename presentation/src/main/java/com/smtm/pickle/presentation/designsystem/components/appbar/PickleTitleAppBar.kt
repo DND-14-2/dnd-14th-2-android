@@ -4,6 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarActionIcon
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarBackButton
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarLayout
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarTextAction
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarTitle
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 

@@ -1,4 +1,4 @@
-package com.smtm.pickle.presentation.designsystem.components.appbar
+package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -10,7 +10,7 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
-fun PickleAppBarActionIcon(
+internal fun PickleAppBarActionIcon(
     @DrawableRes iconRes: Int,
     onClick: () -> Unit,
     contentDescription: String? = null,

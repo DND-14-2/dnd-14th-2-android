@@ -1,10 +1,10 @@
-package com.smtm.pickle.domain.usecase.nickname
+package com.smtm.pickle.domain.usecase.user
 
 import com.smtm.pickle.domain.common.utils.runSuspendCatching
 import com.smtm.pickle.domain.repository.UserRepository
 import javax.inject.Inject
 
-class GetNicknameUseCase @Inject constructor(
+class SyncUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): Result<String> = runSuspendCatching {

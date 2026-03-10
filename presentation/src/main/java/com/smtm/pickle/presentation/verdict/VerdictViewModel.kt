@@ -3,7 +3,7 @@ package com.smtm.pickle.presentation.verdict
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.model.verdict.VerdictType
-import com.smtm.pickle.domain.usecase.nickname.ObserveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.ObserveNicknameUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetJurorVerdictsUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetMyVerdictsUseCase
 import com.smtm.pickle.domain.usecase.verdict.JudgeVerdictUseCase

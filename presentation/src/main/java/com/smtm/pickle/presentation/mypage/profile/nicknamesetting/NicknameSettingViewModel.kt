@@ -2,8 +2,8 @@ package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
-import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.GetNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SaveNicknameUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation
 import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel

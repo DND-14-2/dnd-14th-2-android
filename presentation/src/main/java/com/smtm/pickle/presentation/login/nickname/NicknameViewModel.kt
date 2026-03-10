@@ -3,7 +3,7 @@ package com.smtm.pickle.presentation.login.nickname
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
-import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SaveNicknameUseCase
 import com.smtm.pickle.domain.usecase.user.GetInvitationCodeUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation.MAX_NICKNAME_LENGTH
 import com.smtm.pickle.presentation.common.utils.InputStateUtils

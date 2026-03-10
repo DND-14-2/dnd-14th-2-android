@@ -22,7 +22,7 @@ import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
 import com.smtm.pickle.presentation.designsystem.components.appbar.PickleLogoAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.AppBarAction
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
@@ -104,7 +104,7 @@ private fun HomeContent(
         topBar = {
             PickleLogoAppBar(
                 actions = listOf(
-                    AppBarAction.Icon(
+                    PickleAppBarAction.Icon(
                         icon = R.drawable.ic_appbar_statistics,
                         contentDescription = "통계",
                         onClick = onNavigateToMyPage

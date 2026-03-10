@@ -20,7 +20,7 @@ PickleTitleAppBar(title = title, onBack = onBack, actions = listOf(...))
 
 ## 레이어 구조
 
-```
+```text
 Layer 0: PickleAppBarLayout (internal) — 3-zone 레이아웃, statusBarsPadding 내부 처리
 Layer 1: component/ Building blocks   — 디자인 시스템 승인 컴포넌트, Named Preset 내부에서만 사용
 Layer 2: Named Presets (public)       — 화면이 유일하게 접촉하는 API
@@ -66,7 +66,7 @@ sealed interface PickleAppBarAction {
 PickleTitleAppBar(
     title = "타이틀",
     onBack = onBack,
-    actions = listOf(PickleAppBarAction.Icon(R.drawable.ic_option, onOption, "옵션"))
+    actions = listOf(PickleAppBarAction.Icon(R.drawable.ic_app_bar_option, onOption, "옵션"))
 )
 ```
 

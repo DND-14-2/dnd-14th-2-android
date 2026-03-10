@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -105,8 +106,8 @@ private fun HomeContent(
             PickleLogoAppBar(
                 actions = listOf(
                     PickleAppBarAction.Icon(
-                        icon = R.drawable.ic_appbar_statistics,
-                        contentDescription = "통계",
+                        icon = R.drawable.ic_app_bar_statistics,
+                        contentDescription = stringResource(R.string.home_action_statistics),
                         onClick = onNavigateToMyPage
                     )
                 )

@@ -61,7 +61,7 @@ private fun PickleLogoAppBarIconActionsPreview() {
         PickleLogoAppBar(
             actions = listOf(
                 PickleAppBarAction.Icon(
-                    icon = R.drawable.ic_appbar_statistics,
+                    icon = R.drawable.ic_app_bar_statistics,
                     contentDescription = "통계",
                     onClick = {},
                 ),

@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -111,7 +111,7 @@ private fun LedgerCreateContent(
         modifier = Modifier
             .fillMaxSize()
             .background(PickleTheme.colors.base0)
-            .systemBarsPadding()
+            .navigationBarsPadding()
             .clearFocusOnBackgroundTab(focusManager),
     ) {
         PickleTitleAppBar(

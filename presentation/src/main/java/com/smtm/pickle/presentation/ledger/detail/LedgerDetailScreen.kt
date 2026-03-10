@@ -110,10 +110,12 @@ private fun LedgerDetailContent(
                 PickleAppBarAction.Icon(
                     icon = R.drawable.ic_ledger_detail_edit_pen,
                     onClick = onEditClick,
+                    contentDescription = stringResource(R.string.ledger_detail_action_edit),
                 ),
                 PickleAppBarAction.Icon(
                     icon = R.drawable.ic_ledger_detail_trashcan,
                     onClick = onDeleteButtonClick,
+                    contentDescription = stringResource(R.string.ledger_detail_action_delete),
                 )
             ),
             containerColor = PickleTheme.colors.transparent

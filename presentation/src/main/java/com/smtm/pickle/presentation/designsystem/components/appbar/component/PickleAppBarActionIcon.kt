@@ -49,7 +49,7 @@ private fun PickleAppBarActionIconOptionPreview() {
         PickleAppBarActionIcon(
             iconRes = R.drawable.ic_app_bar_option,
             onClick = {},
-            contentDescription = "검색",
+            contentDescription = "옵션",
         )
     }
 }
@@ -64,7 +64,7 @@ private fun PickleAppBarActionIconClosePreview() {
         PickleAppBarActionIcon(
             iconRes = R.drawable.ic_app_bar_close,
             onClick = {},
-            contentDescription = "검색",
+            contentDescription = "닫기",
         )
     }
 }

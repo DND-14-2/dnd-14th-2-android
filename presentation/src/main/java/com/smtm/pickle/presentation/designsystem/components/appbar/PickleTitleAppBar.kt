@@ -42,6 +42,34 @@ fun PickleTitleAppBar(
     )
 }
 
+@Composable
+fun PickleTitleAppBar(
+    title: String,
+    actions: List<PickleAppBarAction> = emptyList(),
+    containerColor: Color = PickleTheme.colors.base0,
+) {
+    PickleAppBarLayout(
+        containerColor = containerColor,
+        center = { PickleAppBarTitle(text = title) },
+        end = {
+            actions.forEach { action ->
+                when (action) {
+                    is PickleAppBarAction.Icon -> PickleAppBarActionIcon(
+                        iconRes = action.icon,
+                        contentDescription = action.contentDescription,
+                        onClick = action.onClick
+                    )
+
+                    is PickleAppBarAction.Text -> PickleAppBarTextAction(
+                        text = action.label,
+                        onClick = action.onClick
+                    )
+                }
+            }
+        }
+    )
+}
+
 @Preview(
     name = "PickleTitleAppBar - 액션 없음",
     showBackground = true,
@@ -93,6 +121,27 @@ private fun PickleTitleAppBarTextActionPreview() {
             actions = listOf(
                 PickleAppBarAction.Text(
                     label = "완료",
+                    onClick = {},
+                ),
+            ),
+        )
+    }
+}
+
+@Preview(
+    name = "PickleTitleAppBar - back 없음 + 아이콘 액션",
+    showBackground = true,
+    widthDp = 360,
+)
+@Composable
+private fun PickleTitleAppBarNoBackWithIconActionPreview() {
+    PickleTheme {
+        PickleTitleAppBar(
+            title = "타이틀",
+            actions = listOf(
+                PickleAppBarAction.Icon(
+                    icon = R.drawable.ic_app_bar_setting,
+                    contentDescription = "설정",
                     onClick = {},
                 ),
             ),

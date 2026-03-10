@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
-fun PickleAppBarTitle(
+internal fun PickleAppBarTitle(
     text: String,
     style: TextStyle = PickleTheme.typography.head4SemiBold,
     color: Color = PickleTheme.colors.gray800,

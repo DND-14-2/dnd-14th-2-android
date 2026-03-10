@@ -1,6 +1,7 @@
 package com.smtm.pickle.presentation.designsystem.components.appbar
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
@@ -12,8 +13,10 @@ fun PickleSearchAppBar(
     onValueChange: (String) -> Unit,
     onCancel: () -> Unit,
     hint: String = "",
+    containerColor: Color = PickleTheme.colors.base0,
 ) {
     PickleAppBarLayout(
+        containerColor = containerColor,
         center = {
             PickleAppBarSearchField(
                 value = value,

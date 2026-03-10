@@ -13,7 +13,7 @@ import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 fun PickleAppBarActionIcon(
     @DrawableRes iconRes: Int,
     onClick: () -> Unit,
-    contentDescription: String,
+    contentDescription: String? = null,
 ) {
     PickleIconButton(
         painter = painterResource(iconRes),

@@ -1,30 +1,33 @@
 package com.smtm.pickle.presentation.designsystem.components.appbar
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.AppBarAction
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
 fun PickleTitleAppBar(
     title: String,
     onBack: () -> Unit,
-    actions: List<AppBarAction> = emptyList(),
+    actions: List<PickleAppBarAction> = emptyList(),
+    containerColor: Color = PickleTheme.colors.base0,
 ) {
     PickleAppBarLayout(
+        containerColor = containerColor,
         start = { PickleAppBarBackButton(onClick = onBack) },
         center = { PickleAppBarTitle(text = title) },
         end = {
             actions.forEach { action ->
                 when (action) {
-                    is AppBarAction.Icon -> PickleAppBarActionIcon(
+                    is PickleAppBarAction.Icon -> PickleAppBarActionIcon(
                         iconRes = action.icon,
                         contentDescription = action.contentDescription,
                         onClick = action.onClick
                     )
 
-                    is AppBarAction.Text -> PickleAppBarTextAction(
+                    is PickleAppBarAction.Text -> PickleAppBarTextAction(
                         text = action.label,
                         onClick = action.onClick
                     )
@@ -61,7 +64,7 @@ private fun PickleTitleAppBarIconActionsPreview() {
             title = "타이틀",
             onBack = {},
             actions = listOf(
-                AppBarAction.Icon(
+                PickleAppBarAction.Icon(
                     icon = R.drawable.ic_app_bar_option,
                     contentDescription = "옵션",
                     onClick = {},
@@ -83,7 +86,7 @@ private fun PickleTitleAppBarTextActionPreview() {
             title = "타이틀",
             onBack = {},
             actions = listOf(
-                AppBarAction.Text(
+                PickleAppBarAction.Text(
                     label = "완료",
                     onClick = {},
                 ),

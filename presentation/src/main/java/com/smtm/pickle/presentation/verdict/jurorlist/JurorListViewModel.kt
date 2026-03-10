@@ -44,6 +44,7 @@ class JurorListViewModel @Inject constructor(
 
 
     fun onResume() {
+        loadMates()
         checkHasReceivedRequests()
     }
 

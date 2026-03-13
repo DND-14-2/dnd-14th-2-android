@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarActionIcon
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarActions
 import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarLayout
 import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarLogo
-import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarTextAction
 import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
@@ -19,22 +18,7 @@ fun PickleLogoAppBar(
     PickleAppBarLayout(
         containerColor = containerColor,
         start = { PickleAppBarLogo() },
-        end = {
-            actions.forEach { action ->
-                when (action) {
-                    is PickleAppBarAction.Icon -> PickleAppBarActionIcon(
-                        iconRes = action.icon,
-                        contentDescription = action.contentDescription,
-                        onClick = action.onClick
-                    )
-
-                    is PickleAppBarAction.Text -> PickleAppBarTextAction(
-                        text = action.label,
-                        onClick = action.onClick
-                    )
-                }
-            }
-        }
+        end = { PickleAppBarActions(actions) }
     )
 }
 

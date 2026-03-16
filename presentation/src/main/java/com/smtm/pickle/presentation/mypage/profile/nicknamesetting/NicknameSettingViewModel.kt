@@ -43,7 +43,7 @@ class NicknameSettingViewModel @Inject constructor(
                     savedNickname = nickname
 
                     _uiState.update {
-                        it.copy(editingNickname = nickname)
+                        it.copy(editingNickname = nickname ?: "유저 닉네임")
                     }
                 }.onFailure { e ->
                     Timber.e(e, "닉네임 초기화 실패")

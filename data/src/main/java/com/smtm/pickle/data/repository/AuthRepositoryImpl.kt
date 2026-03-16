@@ -10,9 +10,7 @@ import com.smtm.pickle.domain.model.auth.SocialLoginType
 import com.smtm.pickle.domain.provider.TokenProvider
 import com.smtm.pickle.domain.repository.AuthRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val userApi: UserApi,

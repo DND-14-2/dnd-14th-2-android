@@ -31,7 +31,7 @@ class MyPageViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MyPageUiState())
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
-    private val _effect : Channel<MyPageEffect> = Channel(Channel.BUFFERED)
+    private val _effect: Channel<MyPageEffect> = Channel(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
     init {

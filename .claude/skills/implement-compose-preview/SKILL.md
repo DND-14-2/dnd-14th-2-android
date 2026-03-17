@@ -40,10 +40,10 @@ version: 0.1.0
 각 대상 Composable 함수의 파라미터를 다음 기준으로 분석한다.
 
 - **enum / sealed class 타입**: 해당 타입의 모든 entry를 파악하여 각 variant별 Preview를 별도 생성한다.
-- **Boolean 파라미터** (`enabled`, `selected`, `isLoading` 등): `true` / `false` 두 가지 상태 각각의 Preview를 생성한다. 단, enum으로 이미 표현되는 상태와 중복되면 생략한다.
+- **Boolean 파라미터** (`enabled`, `selected`, `isLoading` 등): 각 Boolean 파라미터를 **독립적으로** 처리한다. 파라미터마다 `true` / `false` 두 Preview를 생성하되, 해당 파라미터 외의 Boolean은 기본값(기본값 없으면 `false`)으로 고정한다. 단, enum으로 이미 표현되는 상태와 중복되면 생략한다.
 - **lambda 파라미터** (`onClick`, `onDismiss` 등): `{}` 빈 람다로 채운다.
 - **String 파라미터**: 의미 있는 한국어 샘플 텍스트를 사용한다 (예: `"타이틀"`, `"닉네임"`, `"확인"`).
-- **List / Map 파라미터**: `emptyList()`, `emptyMap()` 을 기본으로 사용하되, 비어있으면 Preview가 의미없을 경우 샘플 데이터를 직접 구성한다.
+- **List / Map 파라미터**: 기본적으로 1~3개의 더미 아이템을 포함하는 샘플 데이터를 구성한다. 단, 함수명에 `Empty` / `Placeholder`가 포함되거나 파라미터명이 빈 상태를 명시하는 경우(예: `emptyItems`, `placeholderData`)에는 `emptyList()` / `emptyMap()`을 사용한다.
 - **Modifier 파라미터**: 기본값이 있으면 생략한다.
 
 ### Step 3: Preview 함수 작성

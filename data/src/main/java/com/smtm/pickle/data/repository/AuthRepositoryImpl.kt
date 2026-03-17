@@ -49,8 +49,11 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logout() {
-        authService.logout()
-        tokenProvider.clearToken()
+        try {
+            authService.logout()
+        } finally {
+            tokenProvider.clearToken()
+        }
     }
 
     override suspend fun withdrawAccount() {

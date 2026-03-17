@@ -8,7 +8,7 @@ suspend inline fun <T> apiCall(crossinline block: suspend () -> T): T {
         block()
     } catch (e: HttpException) {
         val errorBody = e.response()?.errorBody()?.string()
-        val message = parseMessageFromJson(errorBody)
+        val message = parseMessageFromJson(errorBody) ?: "알 수 없는 오류가 발생했습니다."
         throw Exception(message, e)
     }
 }

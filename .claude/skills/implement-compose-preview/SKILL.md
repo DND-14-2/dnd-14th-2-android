@@ -1,13 +1,13 @@
 ---
 name: implement-compose-preview
 description: |
-This skill should be used when the user asks to "Preview 만들어줘", "Preview 추가해줘",
-"composable preview 생성", "@Preview 함수 만들어줘", "compose preview 붙여줘", or wants
-to generate @Preview functions for a Composable file or function.
-Takes a file path or composable function name as $ARGUMENTS.
+  This skill should be used when the user asks to "Preview 만들어줘", "Preview 추가해줘",
+  "composable preview 생성", "@Preview 함수 만들어줘", "compose preview 붙여줘", or wants
+  to generate @Preview functions for a Composable file or function.
+  Takes a file path or composable function name as $ARGUMENTS.
 argument-hint: <파일경로 또는 Composable함수명>
 version: 0.1.0
- ---
+---
 
 # implement-compose-preview
 
@@ -22,7 +22,7 @@ version: 0.1.0
 
 | 인자 유형 | 판별 기준 | 처리 방법 |
 |-----------|-----------|-----------|
-| 파일 경로 | `.kt` 확장자 포함 또는 `/` 포함 | 파일 내 모든 `@Composable` public 함수를 대상으로 Preview 생성 |
+| 파일 경로 | `.kt` 확장자 포함 또는 경로 구분자(`/` 또는 `\`)` 포함 | 파일 내 모든 `@Composable` public 함수를 대상으로 Preview 생성 |
 | 함수명 | `.kt`, `/` 미포함 | 해당 이름의 `@Composable` 함수를 찾아 해당 함수만 Preview 생성 |
 | 없음 | `$ARGUMENTS`가 비어있음 | 사용자에게 대상 파일 또는 함수명을 질문 |
 
@@ -33,7 +33,7 @@ version: 0.1.0
 `$ARGUMENTS`를 파싱하여 대상 파일 경로와 Composable 함수를 식별한다.
 
 - 파일 경로인 경우: 해당 파일을 읽어 `@Composable` 어노테이션이 붙은 모든 public 함수 목록을 파악한다.
-- 함수명인 경우: 프로젝트 내에서 해당 함수를 검색하여 파일 위치와 시그니처를 파악한다.
+- 함수명인 경우: 프로젝트 내에서 해당 함수를 검색하여 파일 위치와 시그니처를 파악한다. 동일 이름 함수가 여러 개면(오버로드/다른 파일) 후보를 나열하고 사용자에게 대상 함수를 선택받는다.
 
 ### Step 2: Composable 함수 시그니처 분석
 
@@ -57,17 +57,17 @@ version: 0.1.0
 
 ```kotlin
 @Preview(
-name = "[ComponentName]",
-showBackground = true,
-widthDp = 360
+    name = "[ComponentName]",
+    showBackground = true,
+    widthDp = 360
 )
 @Composable
 private fun [ComponentName]Preview() {
-PickleTheme {
-[ComponentName](
-// 파라미터
-)
-}
+    PickleTheme {
+        [ComponentName](
+            // 파라미터
+        )
+    }
 }
 ```
 
@@ -75,31 +75,31 @@ PickleTheme {
 
 ```kotlin
 @Preview(
-name = "[ComponentName] - [Variant1]",
-showBackground = true,
-widthDp = 360
+    name = "[ComponentName] - [Variant1]",
+    showBackground = true,
+    widthDp = 360
 )
 @Composable
 private fun [ComponentName][Variant1]Preview() {
-PickleTheme {
-[ComponentName](
-type = [EnumType].[Variant1],
-)
-}
+    PickleTheme {
+        [ComponentName](
+            type = [EnumType].[Variant1],
+        )
+    }
 }
 
 @Preview(
-name = "[ComponentName] - [Variant2]",
-showBackground = true,
-widthDp = 360
+    name = "[ComponentName] - [Variant2]",
+    showBackground = true,
+    widthDp = 360
 )
 @Composable
 private fun [ComponentName][Variant2]Preview() {
-PickleTheme {
-[ComponentName](
-type = [EnumType].[Variant2],
-)
-}
+    PickleTheme {
+        [ComponentName](
+            type = [EnumType].[Variant2],
+        )
+    }
 }
 ```
 

@@ -12,6 +12,8 @@ import com.smtm.pickle.presentation.verdict.model.RequestedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -154,27 +156,33 @@ class VerdictViewModel @Inject constructor(
     }
 
     fun loadVerdicts() {
+        _uiState.update { it.copy(isRefreshing = true) }
+
         viewModelScope.launch {
-            getJurorVerdictsUseCase()
-                .onSuccess { assignedVerdicts ->
-                    allAssignedVerdicts = assignedVerdicts.map { it.toUiModel() }
-                        .sortedByDescending { it.id }
-                    _uiState.update { it.applyFilters() }
-                }
-                .onFailure { e ->
-                    Timber.e(e, "내 판결 로드 실패")
-                }
-        }
-        viewModelScope.launch {
-            getMyVerdictsUseCase()
-                .onSuccess { requestedVerdicts ->
-                    allRequestedVerdicts = requestedVerdicts.map { it.toUiModel() }
-                        .sortedByDescending { it.id }
-                    _uiState.update { it.applyFilters() }
-                }
-                .onFailure { e ->
-                    Timber.e(e, "내 심판 로드 실패")
-                }
+            val jurorVerdictsAsync = async {
+                getJurorVerdictsUseCase()
+                    .onSuccess { assignedVerdicts ->
+                        allAssignedVerdicts = assignedVerdicts.map { it.toUiModel() }
+                            .sortedByDescending { it.id }
+                        _uiState.update { it.applyFilters() }
+                    }
+                    .onFailure { e ->
+                        Timber.e(e, "내 판결 로드 실패")
+                    }
+            }
+            val myVerdictsAsync = async {
+                getMyVerdictsUseCase()
+                    .onSuccess { requestedVerdicts ->
+                        allRequestedVerdicts = requestedVerdicts.map { it.toUiModel() }
+                            .sortedByDescending { it.id }
+                        _uiState.update { it.applyFilters() }
+                    }
+                    .onFailure { e ->
+                        Timber.e(e, "내 심판 로드 실패")
+                    }
+            }
+            awaitAll(jurorVerdictsAsync, myVerdictsAsync)
+            _uiState.update { it.copy(isRefreshing = false) }
         }
     }
 

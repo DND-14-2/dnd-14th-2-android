@@ -20,6 +20,7 @@ import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleD
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.common.utils.InputStateUtils
 
 @Composable
 fun InputInvitationCodeDialog(
@@ -33,8 +34,6 @@ fun InputInvitationCodeDialog(
     var inputErrorMessage by remember { mutableStateOf<String?>(null) }
     var userHasEdited by remember { mutableStateOf(false) }
     val displayError = inputErrorMessage ?: invitationCodeErrorMessage?.takeIf { !userHasEdited }
-    val lengthErrorMessage = stringResource(R.string.input_invitation_code_error_length)
-    val uppercaseErrorMessage = stringResource(R.string.input_invitation_code_error_uppercase)
 
     PickleDialog(
         modifier = modifier,
@@ -43,14 +42,9 @@ fun InputInvitationCodeDialog(
             confirmText = stringResource(R.string.common_complete),
             cancelText = stringResource(R.string.common_cancel),
             onConfirmClick = {
-                val errorMessage = when {
-                    invitationCode.length < 6 -> lengthErrorMessage
-                    invitationCode.any { !it.isLetter() || !it.isUpperCase() } -> uppercaseErrorMessage
-                    else -> null
-                }
-
-                if (errorMessage != null) {
-                    inputErrorMessage = errorMessage
+                val validationState = InputStateUtils.validateInviteCodeFormat(invitationCode)
+                if (validationState is InputState.Error) {
+                    inputErrorMessage = validationState.message
                 } else {
                     inputErrorMessage = null
                     userHasEdited = false

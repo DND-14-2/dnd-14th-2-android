@@ -66,14 +66,21 @@ class MateRequestViewModel @Inject constructor(
 
     private fun updateStatus(mateId: Long, status: MateStatus, successMsg: String) {
         viewModelScope.launch {
+            if (_uiState.value.isLoading) return@launch
+            _uiState.update { it.copy(isLoading = true) }
+
             updateMateRequestStatusUseCase(MateId(mateId), status)
                 .onSuccess { processedMateId ->
                     _uiState.update { state ->
-                        state.copy(requests = state.requests.filter { it.id != processedMateId.value })
+                        state.copy(
+                            isLoading = false,
+                            requests = state.requests.filter { it.id != processedMateId.value }
+                        )
                     }
                     _effect.emit(MateRequestEffect.ShowSnackBar(successMsg))
                 }
                 .onFailure {
+                    _uiState.update { it.copy(isLoading = false) }
                     _effect.emit(MateRequestEffect.ShowSnackBar("처리 중 오류가 발생했습니다"))
                 }
         }

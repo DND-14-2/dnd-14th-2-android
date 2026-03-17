@@ -92,8 +92,7 @@ private fun ActionButton(
     ) {
         Text(
             text = text,
-            style = PickleTheme.typography.body4Medium,
-            color = contentColor
+            style = PickleTheme.typography.body4Medium
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.smtm.pickle.data.repository
 
+import com.smtm.pickle.data.common.utils.apiCall
 import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.mapper.toRemote
 import com.smtm.pickle.data.source.remote.api.MateApi
@@ -16,9 +17,9 @@ class MateRepositoryImpl @Inject constructor(
     private val mateApi: MateApi,
 ) : MateRepository {
 
-    override suspend fun inviteMate(invitationCode: String): MateId {
+    override suspend fun inviteMate(invitationCode: String): MateId = apiCall {
         val response = mateApi.inviteMate(InviteMateRequest(invitationCode))
-        return MateId(response.mateId)
+        MateId(response.mateId)
     }
 
     override suspend fun getMates(): List<Mate> {

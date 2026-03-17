@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smtm.pickle.domain.model.verdict.VerdictType
+import com.smtm.pickle.presentation.verdict.model.VerdictTypeUiModel
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
@@ -40,7 +40,7 @@ fun VerdictPendingBottomSheetContent(
     amount: Long,
     paymentMethod: PaymentMethodUiModel,
     modifier: Modifier = Modifier,
-    verdictType: VerdictType = VerdictType.Pending,
+    verdictType: VerdictTypeUiModel = VerdictTypeUiModel.Pending,
 ) {
     Column(
         modifier = modifier
@@ -76,7 +76,7 @@ fun VerdictPendingBottomSheetContent(
             )
 
             when (verdictType) {
-                VerdictType.Guilty -> {
+                VerdictTypeUiModel.Guilty -> {
                     JudgmentResultChip(
                         resultText = stringResource(R.string.verdict_guilty),
                         containerColor = PickleTheme.semantic.guiltyBackground,
@@ -84,7 +84,7 @@ fun VerdictPendingBottomSheetContent(
                     )
                 }
 
-                VerdictType.NotGuilty -> {
+                VerdictTypeUiModel.NotGuilty -> {
                     JudgmentResultChip(
                         resultText = stringResource(R.string.verdict_innocent),
                         containerColor = PickleTheme.semantic.innocentBackground,
@@ -92,7 +92,7 @@ fun VerdictPendingBottomSheetContent(
                     )
                 }
 
-                VerdictType.Pending -> {
+                VerdictTypeUiModel.Pending -> {
                     JudgmentResultChip(
                         resultText = stringResource(R.string.verdict_incomplete),
                         containerColor = PickleTheme.colors.gray100,
@@ -209,7 +209,7 @@ private fun VerdictPendingBottomSheetContentGuiltyPreview() {
             category = CategoryUiModel.Food,
             amount = 15000L,
             paymentMethod = PaymentMethodUiModel.Cash,
-            verdictType = VerdictType.Guilty
+            verdictType = VerdictTypeUiModel.Guilty
         )
     }
 }
@@ -228,7 +228,7 @@ private fun VerdictPendingBottomSheetContentInnocentPreview() {
             category = CategoryUiModel.Food,
             amount = 15000L,
             paymentMethod = PaymentMethodUiModel.Cash,
-            verdictType = VerdictType.NotGuilty
+            verdictType = VerdictTypeUiModel.NotGuilty
         )
     }
 }

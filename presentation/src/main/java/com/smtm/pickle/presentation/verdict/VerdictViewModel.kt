@@ -2,7 +2,6 @@ package com.smtm.pickle.presentation.verdict
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.model.verdict.VerdictType
 import com.smtm.pickle.domain.usecase.user.ObserveNicknameUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetJurorVerdictsUseCase
 import com.smtm.pickle.domain.usecase.verdict.GetMyVerdictsUseCase
@@ -10,6 +9,8 @@ import com.smtm.pickle.domain.usecase.verdict.JudgeVerdictUseCase
 import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.RequestedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
+import com.smtm.pickle.presentation.verdict.model.VerdictTypeUiModel
+import com.smtm.pickle.presentation.verdict.model.toDomain
 import com.smtm.pickle.presentation.verdict.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -89,7 +90,7 @@ class VerdictViewModel @Inject constructor(
 
     fun onAssignedVerdictItemClick(verdict: AssignedVerdictUiModel) {
         when (verdict.verdictType) {
-            VerdictType.Pending -> {
+            VerdictTypeUiModel.Pending -> {
                 _uiState.update {
                     it.copy(
                         selectedAssignedVerdictForJudgement = verdict,
@@ -98,7 +99,7 @@ class VerdictViewModel @Inject constructor(
                 }
             }
 
-            VerdictType.Guilty, VerdictType.NotGuilty -> {
+            VerdictTypeUiModel.Guilty, VerdictTypeUiModel.NotGuilty -> {
                 _uiState.update {
                     it.copy(
                         selectedAssignedVerdict = verdict,
@@ -125,12 +126,12 @@ class VerdictViewModel @Inject constructor(
 
     fun onSubmitJudgement(isGuilty: Boolean) {
         val verdict = _uiState.value.selectedAssignedVerdictForJudgement ?: return
-        val verdictType = if (isGuilty) VerdictType.Guilty else VerdictType.NotGuilty
+        val verdictType = if (isGuilty) VerdictTypeUiModel.Guilty else VerdictTypeUiModel.NotGuilty
 
         viewModelScope.launch {
             _uiState.update { it.copy(selectedAssignedVerdictForJudgement = null) }
 
-            judgeVerdictUseCase(verdict.id, verdictType)
+            judgeVerdictUseCase(verdict.id, verdictType.toDomain())
                 .onSuccess {
                     _effect.emit(VerdictEffect.NavigateToCompleted(verdict.defendant.nickname))
                     loadVerdicts()
@@ -189,16 +190,16 @@ class VerdictViewModel @Inject constructor(
     private fun calculateAssignedCounts(verdicts: List<AssignedVerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
-            pending = verdicts.count { it.verdictType == VerdictType.Pending },
-            completed = verdicts.count { it.verdictType != VerdictType.Pending }
+            pending = verdicts.count { it.verdictType == VerdictTypeUiModel.Pending },
+            completed = verdicts.count { it.verdictType != VerdictTypeUiModel.Pending }
         )
     }
 
     private fun calculateRequestedCounts(verdicts: List<RequestedVerdictUiModel>): VerdictCounts {
         return VerdictCounts(
             total = verdicts.size,
-            pending = verdicts.count { it.verdictType == VerdictType.Pending },
-            completed = verdicts.count { it.verdictType != VerdictType.Pending }
+            pending = verdicts.count { it.verdictType == VerdictTypeUiModel.Pending },
+            completed = verdicts.count { it.verdictType != VerdictTypeUiModel.Pending }
         )
     }
 
@@ -208,8 +209,8 @@ class VerdictViewModel @Inject constructor(
     ): List<AssignedVerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
-            1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
-            2 -> verdicts.filter { it.verdictType != VerdictType.Pending }
+            1 -> verdicts.filter { it.verdictType == VerdictTypeUiModel.Pending }
+            2 -> verdicts.filter { it.verdictType != VerdictTypeUiModel.Pending }
             else -> verdicts
         }
     }
@@ -220,8 +221,8 @@ class VerdictViewModel @Inject constructor(
     ): List<RequestedVerdictUiModel> {
         return when (filterIndex) {
             0 -> verdicts
-            1 -> verdicts.filter { it.verdictType == VerdictType.Pending }
-            2 -> verdicts.filter { it.verdictType != VerdictType.Pending }
+            1 -> verdicts.filter { it.verdictType == VerdictTypeUiModel.Pending }
+            2 -> verdicts.filter { it.verdictType != VerdictTypeUiModel.Pending }
             else -> verdicts
         }
     }

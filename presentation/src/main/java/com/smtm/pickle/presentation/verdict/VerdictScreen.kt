@@ -27,7 +27,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.smtm.pickle.domain.model.verdict.VerdictType
+import com.smtm.pickle.presentation.verdict.model.VerdictTypeUiModel
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
@@ -298,17 +298,17 @@ private fun VerdictContentPreview() {
         RequestedVerdictUiModel(
             id = 1,
             ledgerEntry = mockLedgerEntry,
-            verdictType = VerdictType.Pending,
+            verdictType = VerdictTypeUiModel.Pending,
         ),
         RequestedVerdictUiModel(
             id = 2,
             ledgerEntry = mockLedgerEntry.copy(id = 102L, amount = 5000L, description = "커피 한잔"),
-            verdictType = VerdictType.Guilty,
+            verdictType = VerdictTypeUiModel.Guilty,
         ),
         RequestedVerdictUiModel(
             id = 3,
             ledgerEntry = mockLedgerEntry.copy(id = 103L, amount = 25000L, description = "야식 치킨"),
-            verdictType = VerdictType.NotGuilty,
+            verdictType = VerdictTypeUiModel.NotGuilty,
         )
     )
     PickleTheme {

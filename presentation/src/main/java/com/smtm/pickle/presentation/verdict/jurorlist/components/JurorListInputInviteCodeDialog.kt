@@ -30,7 +30,7 @@ fun JurorListInputInviteCodeDialog(
         title = stringResource(id = R.string.juror_list_input_invite_code_title),
         buttonLayout = PickleDialogButtonLayout.Horizontal(
             confirmText = stringResource(id = R.string.juror_list_confirm),
-            cancelText = stringResource(id = R.string.dialog_cancel),
+            cancelText = stringResource(id = R.string.common_cancel),
             onConfirmClick = onConfirm,
             onCancelClick = onDismiss,
         ),

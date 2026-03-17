@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -53,14 +54,14 @@ fun JudgementDialog(
             Spacer(modifier = Modifier.height(Dimensions.dialogImageTitleSpacing))
 
             Text(
-                text = "소비의 판결을 내려주세요",
+                text = stringResource(R.string.verdict_dialog_title),
                 style = PickleTheme.typography.head3Bold,
                 color = PickleTheme.colors.gray800,
             )
             Spacer(modifier = Modifier.height(Dimensions.dialogTitleSubtitleSpacing))
 
             Text(
-                text = "친구에게 판결을 전달하게요",
+                text = stringResource(R.string.verdict_dialog_subtitle),
                 style = PickleTheme.typography.body2Medium,
                 color = PickleTheme.colors.gray600,
             )
@@ -79,7 +80,7 @@ fun JudgementDialog(
                     )
                 ) {
                     Text(
-                        text = "무죄",
+                        text = stringResource(R.string.verdict_innocent),
                         style = PickleTheme.typography.body4Medium,
                     )
                 }
@@ -96,7 +97,7 @@ fun JudgementDialog(
                     )
                 ) {
                     Text(
-                        text = "유죄",
+                        text = stringResource(R.string.verdict_guilty),
                         style = PickleTheme.typography.body4Medium,
                     )
                 }

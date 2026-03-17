@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.domain.model.verdict.VerdictType
@@ -48,7 +49,7 @@ fun VerdictPendingBottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "소비 심판 내용",
+            text = stringResource(R.string.verdict_pending_title),
             style = PickleTheme.typography.head3Bold,
             modifier = Modifier.fillMaxWidth()
         )
@@ -77,7 +78,7 @@ fun VerdictPendingBottomSheetContent(
             when (verdictType) {
                 VerdictType.Guilty -> {
                     JudgmentResultChip(
-                        resultText = "유죄",
+                        resultText = stringResource(R.string.verdict_guilty),
                         containerColor = PickleTheme.semantic.guiltyBackground,
                         contentColor = PickleTheme.semantic.guilty
                     )
@@ -85,7 +86,7 @@ fun VerdictPendingBottomSheetContent(
 
                 VerdictType.NotGuilty -> {
                     JudgmentResultChip(
-                        resultText = "무죄",
+                        resultText = stringResource(R.string.verdict_innocent),
                         containerColor = PickleTheme.semantic.innocentBackground,
                         contentColor = PickleTheme.semantic.innocent
                     )
@@ -93,7 +94,7 @@ fun VerdictPendingBottomSheetContent(
 
                 VerdictType.Pending -> {
                     JudgmentResultChip(
-                        resultText = "미완료",
+                        resultText = stringResource(R.string.verdict_incomplete),
                         containerColor = PickleTheme.colors.gray100,
                         contentColor = PickleTheme.colors.gray700
                     )

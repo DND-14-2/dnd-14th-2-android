@@ -21,7 +21,7 @@ fun LedgerDetailJudgmentRequestDialog(
         subtitle = stringResource(id = R.string.ledger_detail_request_dialog_subtitle),
         buttonLayout = PickleDialogButtonLayout.Horizontal(
             confirmText = stringResource(id = R.string.ledger_detail_request_dialog_confirm),
-            cancelText = stringResource(id = R.string.dialog_cancel),
+            cancelText = stringResource(id = R.string.common_cancel),
             onConfirmClick = onConfirmClick,
             onCancelClick = onCancelClick,
         ),

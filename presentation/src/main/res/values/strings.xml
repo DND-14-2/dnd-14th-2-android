@@ -62,7 +62,6 @@
 
     <!-- Other -->
     <string name="back_pressed_message">뒤로가기를 한 번 더 누르면 종료됩니다.</string>
-    <string name="dialog_cancel">취소</string>
 
     <!-- Ledger -->
     <string name="ledger_empty_notice">가계부 내역을 작성해주세요</string>
@@ -179,4 +178,26 @@
     <string name="share_invitation_code_dialog_share_sms">문자로 공유하기</string>
     <string name="share_invitation_code_dialog_dismiss">괜찮아요</string>
     <string name="share_invitation_sms_body">피클의 초대장이 도착했어요\n앱 설치 후, [심판 &gt; 메이트 추가]에서 초대코드를 입력하세요.\n친구의 초대코드: %1$s\n\n서로의 소비를 판결하고, 함께 소비습관을 개선할 수 있어요.\n지금 바로 시작해보세요 ✨\n\n◆ pickle 다운로드\nhttps://play.google.com/store/apps/details?id=%2$s</string>
+
+    <!-- Verdict -->
+    <string name="empty_verdict_no_consumption">아직 내 소비 심판이 없어요</string>
+    <string name="empty_verdict_no_judgement">아직 내 소비 판결이 없어요</string>
+    <string name="verdict_incomplete">미완료</string>
+    <string name="verdict_complete">완료</string>
+    <string name="verdict_innocent">무죄</string>
+    <string name="verdict_guilty">유죄</string>
+
+    <!-- JudgementDialog -->
+    <string name="verdict_dialog_title">소비의 판결을 내려주세요</string>
+    <string name="verdict_dialog_subtitle">친구에게 판결을 전달하세요</string>
+
+    <!-- VerdictPendingBottomSheet -->
+    <string name="verdict_pending_title">소비 심판 내용</string>
+
+    <!-- InviteIntroduction -->
+    <string name="invite_introduction_title">함께 소비를 개선할\n친구를 초대할까요?</string>
+    <string name="invite_introduction_action">초대하기</string>
+    <string name="invite_introduction_ghost">괜찮아요</string>
+    <string name="invite_introduction_already">이미 초대코드를 받았어요</string>
+
 </resources>

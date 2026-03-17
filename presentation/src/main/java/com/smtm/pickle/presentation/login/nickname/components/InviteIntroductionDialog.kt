@@ -2,6 +2,7 @@ package com.smtm.pickle.presentation.login.nickname.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
@@ -17,14 +18,14 @@ fun InviteIntroductionDialog(
     onDismiss: () -> Unit,
 ) {
     PickleDialog(
-        title = "함께 소비를 개선할\n친구를 초대할까요?",
+        title = stringResource(R.string.invite_introduction_title),
         buttonLayout = PickleDialogButtonLayout.Vertical(
-            primaryText = "초대하기",
-            ghostText = "괜찮아요",
+            primaryText = stringResource(R.string.invite_introduction_action),
+            ghostText = stringResource(R.string.invite_introduction_ghost),
             onPrimaryClick = onPrimaryButtonClick,
             onGhostClick = onGhostButtonClick,
             action = PickleDialogButtonLayout.Action(
-                text = "이미 초대코드를 받았어요",
+                text = stringResource(R.string.invite_introduction_already),
                 onClick = onAlreadyReceivedTextClick
             )
         ),

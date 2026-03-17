@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
@@ -21,7 +22,10 @@ import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 @Composable
 fun EmptyVerdictContent(modifier: Modifier = Modifier, selectedTabIndex: Int) {
     val iconRes = if (selectedTabIndex == 0) R.drawable.illust_verdict_balances else R.drawable.illust_verdict_gavel
-    val text = if (selectedTabIndex == 0) "아직 내 소비 심판이 없어요" else "아직 내 소비 판결이 없어요"
+    val text = stringResource(
+        if (selectedTabIndex == 0) R.string.empty_verdict_no_consumption
+        else R.string.empty_verdict_no_judgement
+    )
 
     Column(
         modifier = modifier

@@ -24,8 +24,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleBackAppBar
 import com.smtm.pickle.presentation.designsystem.components.dialog.PickleDialog
 import com.smtm.pickle.presentation.designsystem.components.dialog.model.PickleDialogButtonLayout
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
@@ -165,9 +164,9 @@ private fun SettingContent(
     Scaffold(
         containerColor = PickleTheme.colors.background50,
         topBar = {
-            PickleAppBar(
-                color = PickleTheme.colors.transparent,
-                navigationItem = NavigationItem.Back(onClick = onBackClick)
+            PickleBackAppBar(
+                onBack = onBackClick,
+                containerColor = PickleTheme.colors.transparent
             )
         }
     ) { innerPadding ->

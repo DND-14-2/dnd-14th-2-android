@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,7 +36,6 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnack
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailAppBar
 import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailDeleteDialog
 import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailJudgmentRequestDialog
 import com.smtm.pickle.presentation.ledger.detail.component.LedgerDetailReceipt
@@ -46,7 +44,6 @@ import java.time.LocalDate
 private val GradTop = Color(0xFFECFAF9)
 private val GradBottom = Color(0xFFC4EEEB)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LedgerDetailScreen(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
@@ -129,10 +126,22 @@ private fun LedgerDetailContent(
                 )
             ),
     ) {
-        LedgerDetailAppBar(
-            onBackClick = onNavigateBack,
-            onEditClick = onEditClick,
-            onDeleteClick = onDeleteButtonClick
+        PickleTitleAppBar(
+            title = stringResource(R.string.ledger_detail_title),
+            onBack = onNavigateBack,
+            actions = listOf(
+                PickleAppBarAction.Icon(
+                    icon = R.drawable.ic_ledger_detail_edit_pen,
+                    onClick = onEditClick,
+                    contentDescription = stringResource(R.string.ledger_detail_action_edit),
+                ),
+                PickleAppBarAction.Icon(
+                    icon = R.drawable.ic_ledger_detail_trashcan,
+                    onClick = onDeleteButtonClick,
+                    contentDescription = stringResource(R.string.ledger_detail_action_delete),
+                )
+            ),
+            containerColor = PickleTheme.colors.transparent
         )
 
         Spacer(modifier = Modifier.height(60.dp))

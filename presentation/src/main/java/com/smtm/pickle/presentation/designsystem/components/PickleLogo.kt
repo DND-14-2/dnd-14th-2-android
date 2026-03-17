@@ -23,7 +23,6 @@ fun PickleLogo(
 @Preview(
     name = "Pickle Logo",
     showBackground = true,
-    widthDp = 360,
 )
 @Composable
 private fun PickleLogoPreview() {

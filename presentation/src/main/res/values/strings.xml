@@ -108,6 +108,8 @@
 
     <!-- Ledger Detail -->
     <string name="ledger_detail_title">가계부 내역</string>
+    <string name="ledger_detail_action_edit">편집</string>
+    <string name="ledger_detail_action_delete">삭제</string>
     <string name="ledger_detail_receipt_payment_method_title">유형</string>
     <string name="ledger_detail_delete_dialog_title">가계부 내역을 삭제하시겠어요?</string>
     <string name="ledger_detail_delete_dialog_description">삭제하면 되돌릴 수 없어요.</string>
@@ -128,6 +130,7 @@
     <string name="my_ledger_month">%d월</string>
 
     <!-- Home -->
+    <string name="home_action_statistics">통계</string>
     <string name="home_fab_create_ledger">가계부 작성하기</string>
 
     <!-- Setting -->

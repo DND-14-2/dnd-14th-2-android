@@ -12,14 +12,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
@@ -76,16 +75,14 @@ private fun MyPageContent(
 ) {
     Scaffold(
         topBar = {
-            PickleAppBar(
+            PickleTitleAppBar(
                 title = "마이페이지",
-                actions = {
-                    PickleIconButtonWithTouchCustom(
-                        iconRes = R.drawable.ic_appbar_setting,
-                        contentDescription = "설정",
+                actions = listOf(
+                    PickleAppBarAction.Icon(
+                        icon = R.drawable.ic_app_bar_setting,
                         onClick = onNavigateSetting,
-                        iconSize = 48.dp,
                     )
-                },
+                ),
             )
         }
     ) { innerPadding ->

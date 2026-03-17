@@ -27,9 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.common.extension.sendSms
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
 import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.components.textfield.PickleTextFieldWithSupporting
 import com.smtm.pickle.presentation.designsystem.components.textfield.model.InputState
@@ -129,9 +128,9 @@ fun NicknameContent(
     Scaffold(
         modifier = Modifier.clearFocusOnBackgroundTab(focusManager),
         topBar = {
-            PickleAppBar(
+            PickleTitleAppBar(
                 title = stringResource(R.string.nickname_title),
-                navigationItem = NavigationItem.Back(onBackClick),
+                onBack = onBackClick,
             )
         },
         bottomBar = {

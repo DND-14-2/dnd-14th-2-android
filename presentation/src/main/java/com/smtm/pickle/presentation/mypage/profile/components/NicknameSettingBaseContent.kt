@@ -16,8 +16,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.designsystem.components.profile.PickleProfile
 import com.smtm.pickle.presentation.designsystem.components.profile.model.ProfileType
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -36,9 +35,9 @@ fun NicknameSettingBaseContent(
     Scaffold(
         modifier = Modifier.clearFocusOnBackgroundTab(focusManager),
         topBar = {
-            PickleAppBar(
+            PickleTitleAppBar(
                 title = title,
-                navigationItem = NavigationItem.Back(onClick = onBackClick),
+                onBack = onBackClick,
             )
         },
         bottomBar = bottomBar

@@ -39,7 +39,10 @@ version: 0.1.0
 
 각 대상 Composable 함수의 파라미터를 다음 기준으로 분석한다.
 
-- **enum / sealed class 타입**: 해당 타입의 모든 entry를 파악하여 각 variant별 Preview를 별도 생성한다.
+- **enum 타입**: 모든 entry에 대해 각각 Preview를 별도 생성한다.
+- **sealed class 타입**: 모든 하위 타입에 대해 각각 Preview를 별도 생성하되, 하위 타입 형태에 따라 인스턴스화 방식을 다르게 적용한다.
+  - `object` 하위 타입: 해당 object를 그대로 사용한다.
+  - `data class` 하위 타입: 파라미터를 이 분석 규칙에 따라 재귀적으로 처리하여 인스턴스를 생성한다 (String → 한국어 샘플, Boolean → `true` 고정, List → 1~3개 더미 아이템 등).
 - **Boolean 파라미터** (`enabled`, `selected`, `isLoading` 등): 각 Boolean 파라미터를 **독립적으로** 처리한다. 파라미터마다 `true` / `false` 두 Preview를 생성하되, 해당 파라미터 외의 Boolean은 기본값(기본값 없으면 `false`)으로 고정한다. 단, enum으로 이미 표현되는 상태와 중복되면 생략한다.
 - **lambda 파라미터** (`onClick`, `onDismiss` 등): `{}` 빈 람다로 채운다.
 - **String 파라미터**: 의미 있는 한국어 샘플 텍스트를 사용한다 (예: `"타이틀"`, `"닉네임"`, `"확인"`).

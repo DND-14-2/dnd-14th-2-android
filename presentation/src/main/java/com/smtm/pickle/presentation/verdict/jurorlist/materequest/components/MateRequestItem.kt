@@ -64,7 +64,7 @@ fun MateRequestItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             ActionButton(
-                text = stringResource(id = R.string.juror_list_reject),
+                text = stringResource(id = R.string.juror_list_delete_confirm),
                 containerColor = PickleTheme.semantic.guiltyBackground,
                 contentColor = PickleTheme.semantic.guilty,
                 onClick = onRejectClick,

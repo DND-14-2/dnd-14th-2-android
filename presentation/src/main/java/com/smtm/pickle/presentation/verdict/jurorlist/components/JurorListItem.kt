@@ -79,14 +79,14 @@ fun JurorListItem(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun JurorListItemPreview() {
     PickleTheme {
         JurorListItem(
-            nickname = "juror_nickname",
+            nickname = "지인 닉네임",
             togetherVerdictCount = 3,
-            code = "#1234",
+            code = "ABCDEF",
             onClick = {},
         )
     }

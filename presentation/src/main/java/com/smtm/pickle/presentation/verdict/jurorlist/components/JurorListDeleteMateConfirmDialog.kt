@@ -17,7 +17,7 @@ fun JurorListDeleteMateConfirmDialog(
         title = stringResource(id = R.string.juror_list_delete_mate_title),
         subtitle = stringResource(id = R.string.juror_list_delete_mate_subtitle),
         buttonLayout = PickleDialogButtonLayout.Horizontal(
-            confirmText = stringResource(id = R.string.juror_list_reject),
+            confirmText = stringResource(id = R.string.juror_list_delete_confirm),
             cancelText = stringResource(id = R.string.common_cancel),
             onConfirmClick = onConfirmClick,
             onCancelClick = onDismiss

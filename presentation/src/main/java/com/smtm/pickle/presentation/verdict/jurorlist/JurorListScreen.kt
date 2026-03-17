@@ -213,7 +213,7 @@ private fun JurorListContent(
                             JurorListItem(
                                 nickname = juror.nickname,
                                 onClick = { onJurorClick(juror.id) },
-                                enabled = false,
+                                enabled = false, // TODO: 지인 상세 기능 구현 후 지우기
                                 togetherVerdictCount = juror.verdictCount,
                                 code = juror.invitationCode,
                                 modifier = Modifier.weight(1f)

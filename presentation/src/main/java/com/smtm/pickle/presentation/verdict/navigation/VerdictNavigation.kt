@@ -31,7 +31,9 @@ fun NavGraphBuilder.verdictDestinations(navController: NavController) {
     }
     composable<JurorListRoute> {
         JurorListScreen(
-            onNavigateBack = { navController.popBackStack() },
+            onNavigateBack = {
+                navController.popBackStack()
+            },
             onNavigateToMateRequest = {
                 navController.navigate(MateRequestRoute)
             }
@@ -42,7 +44,9 @@ fun NavGraphBuilder.verdictDestinations(navController: NavController) {
     }
     composable<MateRequestRoute> {
         MateRequestScreen(
-            onNavigateBack = { navController.popBackStack() }
+            onNavigateBack = {
+                navController.popBackStack()
+            }
         )
     }
     composable<VerdictCompletedRoute> { backStackEntry ->

@@ -1,13 +1,8 @@
 package com.smtm.pickle.presentation.designsystem.components.appbar.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,12 +19,7 @@ internal fun PickleAppBarLayout(
     end: @Composable () -> Unit = {}
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(containerColor)
-            .padding(horizontal = Dimensions.appBarHorizontalSpacing)
-            .statusBarsPadding()
-            .requiredHeight(Dimensions.appbarHeight)
+        modifier = modifier.appBarContainerModifier(containerColor)
     ) {
         Box(Modifier.align(Alignment.CenterStart)) { start() }
         Box(

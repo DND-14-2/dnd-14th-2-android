@@ -35,6 +35,7 @@ object Dimensions {
     val appbarHeight = 56.dp
     val appBarHorizontalSpacing = 12.dp
     val appBarActionsSpacing = 4.dp
+    val appBarSearchSpacing = 6.dp
     val appBarLogoWidth = 84.dp
     val appBarLogoHeight = 32.dp
 

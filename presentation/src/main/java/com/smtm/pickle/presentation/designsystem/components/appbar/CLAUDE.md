@@ -21,9 +21,10 @@ PickleTitleAppBar(title = title, onBack = onBack, actions = listOf(...))
 ## 레이어 구조
 
 ```text
-Layer 0: PickleAppBarLayout (internal) — 3-zone 레이아웃, statusBarsPadding 내부 처리
-Layer 1: component/ Building blocks   — 디자인 시스템 승인 컴포넌트, Named Preset 내부에서만 사용
-Layer 2: Named Presets (public)       — 화면이 유일하게 접촉하는 API
+Layer 0: appBarContainerModifier (internal)  — 공통 컨테이너 스타일링 (background, padding, statusBarsPadding, height)
+         PickleAppBarLayout (internal)        — 3-zone 레이아웃 (start·center·end), appBarContainerModifier 사용
+Layer 1: component/ Building blocks          — 디자인 시스템 승인 컴포넌트, Named Preset 내부에서만 사용
+Layer 2: Named Presets (public)              — 화면이 유일하게 접촉하는 API
 ```
 
 화면은 Named Preset만 본다. 내부 구현(레이아웃, 빌딩 블록)은 접근 불가.
@@ -37,7 +38,7 @@ Layer 2: Named Presets (public)       — 화면이 유일하게 접촉하는 AP
 | `PickleAppBarLayout`이 `internal` | 화면이 레이아웃 프리미티브에 직접 접근하는 것을 구조적으로 차단 |
 | 타이틀 정렬 파라미터 없음 (항상 중앙 고정) | 정렬 선택지가 생기면 의사결정 부담 + 일관성 파괴 |
 | `PickleAppBarAction`이 sealed | action은 유한(아이콘 or 텍스트)이므로 sealed가 맞음; 람다 슬롯으로 바꾸면 안 됨 |
-| `statusBarsPadding()`을 내부에서 처리 | 호출자가 신경 쓸 필요 없음; Scaffold 내에서도 이중 적용 문제 없음 |
+| `statusBarsPadding()`을 `appBarContainerModifier` 내부에서 처리 | 호출자가 신경 쓸 필요 없음; Scaffold 내에서도 이중 적용 문제 없음 |
 
 ---
 
@@ -75,7 +76,9 @@ PickleTitleAppBar(
 ## 새 프리셋 추가 규칙
 
 1. appbar 패키지에 `PickleXxxAppBar.kt` 신규 파일 생성
-2. `PickleAppBarLayout` + `component/` Building blocks 조합
+2. 구조에 따라 두 패턴 중 하나를 선택:
+   - **타이틀형** (start·center고정·end): `PickleAppBarLayout` + `component/` Building blocks
+   - **검색형** (입력 필드가 남은 공간을 전부 차지): `Modifier.appBarContainerModifier` + `Row(weight)` + `component/` Building blocks
 3. **`PickleTopAppBar.kt`에는 절대 추가하지 말 것** — 레거시 V1 파일, 삭제 예정
 
 ---

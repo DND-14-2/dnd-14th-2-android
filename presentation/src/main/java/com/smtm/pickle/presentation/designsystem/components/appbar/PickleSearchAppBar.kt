@@ -1,14 +1,19 @@
 package com.smtm.pickle.presentation.designsystem.components.appbar
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarLayout
 import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarSearchField
 import com.smtm.pickle.presentation.designsystem.components.appbar.component.PickleAppBarTextAction
+import com.smtm.pickle.presentation.designsystem.components.appbar.component.appBarContainerModifier
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.designsystem.theme.dimension.Dimensions
 
 @Composable
 fun PickleSearchAppBar(
@@ -18,22 +23,22 @@ fun PickleSearchAppBar(
     hint: String = "",
     containerColor: Color = PickleTheme.colors.base0,
 ) {
-    PickleAppBarLayout(
-        containerColor = containerColor,
-        center = {
-            PickleAppBarSearchField(
-                value = value,
-                onValueChange = onValueChange,
-                hint = hint,
-            )
-        },
-        end = {
-            PickleAppBarTextAction(
-                text = stringResource(R.string.common_cancel),
-                onClick = onCancel
-            )
-        }
-    )
+    Row(
+        modifier = Modifier.appBarContainerModifier(containerColor),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Dimensions.appBarSearchSpacing),
+    ) {
+        PickleAppBarSearchField(
+            modifier = Modifier.weight(1f),
+            value = value,
+            onValueChange = onValueChange,
+            hint = hint,
+        )
+        PickleAppBarTextAction(
+            text = stringResource(R.string.common_cancel),
+            onClick = onCancel,
+        )
+    }
 }
 
 @Preview(

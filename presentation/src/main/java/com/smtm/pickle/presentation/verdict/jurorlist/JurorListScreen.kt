@@ -30,8 +30,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.extension.sendSms
 import com.smtm.pickle.presentation.designsystem.components.PickleBottomSheet
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.components.button.PickleIconButtonWithTouchCustom
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
@@ -155,16 +155,16 @@ private fun JurorListContent(
 ) {
     Scaffold(
         topBar = {
-            PickleAppBar(
+            PickleTitleAppBar(
                 title = stringResource(id = R.string.juror_list_title),
-                navigationItem = NavigationItem.Back(onNavigateBack),
-            ) {
-                PickleIconButtonWithTouchCustom(
-                    iconRes = R.drawable.ic_verdict_mate_request,
-                    onClick = onAddJuryClick,
-                    tint = PickleTheme.colors.gray700,
+                onBack = onNavigateBack,
+                actions = listOf(
+                    PickleAppBarAction.Icon(
+                        icon = R.drawable.ic_verdict_mate_request,
+                        onClick = onAddJuryClick,
+                    )
                 )
-            }
+            )
         },
     ) { paddingValues ->
         Column(

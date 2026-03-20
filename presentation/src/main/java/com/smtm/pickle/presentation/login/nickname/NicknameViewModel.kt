@@ -84,6 +84,10 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun inviteMate(invitationCode: String) {
+        _uiState.update {
+            it.copy(dialogState = NicknameDialogState.InputInvitationCode(errorMessage = null))
+        }
+
         viewModelScope.launch {
             inviteMateUseCase(invitationCode)
                 .onSuccess {

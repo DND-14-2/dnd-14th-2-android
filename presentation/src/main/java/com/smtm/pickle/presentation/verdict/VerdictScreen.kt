@@ -58,8 +58,8 @@ fun VerdictScreen(
     viewModel: VerdictViewModel = hiltViewModel(),
     onNavigateJurorList: () -> Unit,
     onNavigateVerdictRequest: () -> Unit,
-    onNavigateVerdictResult: (Long) -> Unit,
-    onNavigateJurorDetail: (Long) -> Unit,
+    onNavigateVerdictResult: () -> Unit,
+    onNavigateJurorDetail: () -> Unit,
     onNavigateVerdictCompleted: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -77,8 +77,8 @@ fun VerdictScreen(
             viewModel.effect.collect { effect ->
                 when (effect) {
                     VerdictEffect.NavigateToRequest -> onNavigateVerdictRequest()
-                    is VerdictEffect.NavigateToResult -> onNavigateVerdictResult(effect.id)
-                    is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail(effect.id)
+                    is VerdictEffect.NavigateToResult -> onNavigateVerdictResult()
+                    is VerdictEffect.NavigateToJurorDetail -> onNavigateJurorDetail()
                     is VerdictEffect.NavigateToCompleted -> onNavigateVerdictCompleted(effect.defendantNickname)
                     is VerdictEffect.ShowSnackBar -> {
                         snackbarState.show(

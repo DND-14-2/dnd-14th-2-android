@@ -258,8 +258,8 @@ data class AssignedVerdictListState(
 
 sealed interface VerdictEffect {
     data object NavigateToRequest : VerdictEffect
-    data class NavigateToResult(val id: Long) : VerdictEffect
-    data class NavigateToJurorDetail(val id: Long) : VerdictEffect
+    data object NavigateToResult : VerdictEffect
+    data object NavigateToJurorDetail : VerdictEffect
     data class NavigateToCompleted(val defendantNickname: String) : VerdictEffect
     data class ShowSnackBar(val message: String) : VerdictEffect
 }

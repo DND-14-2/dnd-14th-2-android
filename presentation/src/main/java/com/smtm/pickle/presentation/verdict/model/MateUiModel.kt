@@ -2,7 +2,7 @@ package com.smtm.pickle.presentation.verdict.model
 
 import com.smtm.pickle.domain.model.mate.Mate
 import com.smtm.pickle.domain.model.mate.MateRequest
-import com.smtm.pickle.domain.model.verdict.DefendantInfo
+import com.smtm.pickle.domain.model.verdict.MateInfo
 
 data class MateUiModel(
     val id: Long,
@@ -19,7 +19,7 @@ fun Mate.toUiModel(): MateUiModel = MateUiModel(
     verdictCount = verdictCount
 )
 
-fun DefendantInfo.toUiModel() = MateUiModel(
+fun MateInfo.toUiModel() = MateUiModel(
     id = id,
     nickname = nickname,
     level = level,

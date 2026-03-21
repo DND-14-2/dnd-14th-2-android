@@ -46,6 +46,7 @@ import com.smtm.pickle.presentation.verdict.components.VerdictPendingBottomSheet
 import com.smtm.pickle.presentation.verdict.components.VerdictTabs
 import com.smtm.pickle.presentation.verdict.model.AssignedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.LedgerEntryUiModel
+import com.smtm.pickle.presentation.verdict.model.MateUiModel
 import com.smtm.pickle.presentation.verdict.model.RequestedVerdictUiModel
 import com.smtm.pickle.presentation.verdict.model.VerdictCounts
 
@@ -118,8 +119,7 @@ fun VerdictScreen(
         ) {
             VerdictPendingBottomSheetContent(
                 modifier = Modifier,
-                // TODO: 서버에서 jurorNickname 추가 후 변경
-                jurorNickname = "익명 배심원",
+                jurorNickname = selectedRequestedVerdict.juror.nickname,
                 defendantNickname = uiState.userNickname,
                 title = selectedRequestedVerdict.ledgerEntry.description,
                 category = selectedRequestedVerdict.ledgerEntry.category,
@@ -198,12 +198,16 @@ private fun VerdictContent(
     ) {
         Scaffold(
             topBar = {
-                PickleAppBar(title = "심판") {
-                    PickleIconButtonWithTouchCustom(
-                        iconRes = R.drawable.ic_verdict_juror,
-                        onClick = onJurorListClick
-                    )
-                }
+                PickleTitleAppBar(
+                    title = "심판",
+                    actions = listOf(
+                        PickleAppBarAction.Icon(
+                            icon = R.drawable.ic_verdict_juror,
+                            contentDescription = "배심원 목록",
+                            onClick = onJurorListClick,
+                        )
+                    ),
+                )
             }
         ) { innerPadding ->
             LazyColumn(
@@ -294,19 +298,23 @@ private fun VerdictContentPreview() {
         paymentMethod = PaymentMethodUiModel.Cash,
         description = "가계부 15자 입력"
     )
+    val mockJuror = MateUiModel(id = 1L, nickname = "배심원 닉네임")
     val mockRequestedItems = listOf(
         RequestedVerdictUiModel(
             id = 1,
+            juror = mockJuror,
             ledgerEntry = mockLedgerEntry,
             verdictType = VerdictTypeUiModel.Pending,
         ),
         RequestedVerdictUiModel(
             id = 2,
+            juror = mockJuror,
             ledgerEntry = mockLedgerEntry.copy(id = 102L, amount = 5000L, description = "커피 한잔"),
             verdictType = VerdictTypeUiModel.Guilty,
         ),
         RequestedVerdictUiModel(
             id = 3,
+            juror = mockJuror,
             ledgerEntry = mockLedgerEntry.copy(id = 103L, amount = 25000L, description = "야식 치킨"),
             verdictType = VerdictTypeUiModel.NotGuilty,
         )

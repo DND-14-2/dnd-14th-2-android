@@ -1,13 +1,13 @@
 package com.smtm.pickle.data.mapper
 
-import com.smtm.pickle.data.source.remote.model.verdict.RemoteDefendantInfo
 import com.smtm.pickle.data.source.remote.model.verdict.RemoteJurorVerdict
 import com.smtm.pickle.data.source.remote.model.verdict.RemoteLedgerEntryInfo
+import com.smtm.pickle.data.source.remote.model.verdict.RemoteMate
 import com.smtm.pickle.data.source.remote.model.verdict.RemoteMyVerdict
 import com.smtm.pickle.data.source.remote.model.verdict.RemoteVerdictType
-import com.smtm.pickle.domain.model.verdict.DefendantInfo
 import com.smtm.pickle.domain.model.verdict.JurorVerdict
 import com.smtm.pickle.domain.model.verdict.LedgerEntryInfo
+import com.smtm.pickle.domain.model.verdict.MateInfo
 import com.smtm.pickle.domain.model.verdict.MyVerdict
 import com.smtm.pickle.domain.model.verdict.VerdictId
 import com.smtm.pickle.domain.model.verdict.VerdictType
@@ -24,7 +24,7 @@ fun VerdictType.toRemote(): RemoteVerdictType = when (this) {
     VerdictType.Pending -> RemoteVerdictType.Pending
 }
 
-fun RemoteDefendantInfo.toDomain() = DefendantInfo(
+fun RemoteMate.toDomain() = MateInfo(
     id = id,
     nickname = nickname,
     level = level,
@@ -49,5 +49,6 @@ fun RemoteJurorVerdict.toDomain() = JurorVerdict(
 fun RemoteMyVerdict.toDomain() = MyVerdict(
     id = VerdictId(id),
     ledgerEntryInfo = ledgerEntryInfo.toDomain(),
+    jurorInfo = juror.toDomain(),
     verdictType = verdictType.toDomain(),
 )

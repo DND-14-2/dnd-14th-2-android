@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class RemoteMyVerdict(
     val id: Long,
     val ledgerEntryInfo: RemoteLedgerEntryInfo,
+    val juror: RemoteMate,
     val verdictType: RemoteVerdictType,
 )

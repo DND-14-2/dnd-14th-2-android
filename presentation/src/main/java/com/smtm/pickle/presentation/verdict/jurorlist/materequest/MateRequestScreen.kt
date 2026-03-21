@@ -21,8 +21,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
@@ -70,9 +69,9 @@ private fun MateRequestContent(
 ) {
     Scaffold(
         topBar = {
-            PickleAppBar(
+            PickleTitleAppBar(
                 title = stringResource(id = R.string.juror_list_mate_request_title),
-                navigationItem = NavigationItem.Back(onBackClick)
+                onBack = onBackClick,
             )
         }
     ) { paddingValues ->

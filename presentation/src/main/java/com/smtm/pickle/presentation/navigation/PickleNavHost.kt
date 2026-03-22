@@ -45,7 +45,10 @@ fun PickleNavHost(
             // 심판하기
             verdictDestinations(navController)
             // 마이페이지
-            myPageDestinations(navController)
+            myPageDestinations(
+                navController = navController,
+                onGlobalNavEvent = onGlobalNavEvent
+            )
         }
     )
 }

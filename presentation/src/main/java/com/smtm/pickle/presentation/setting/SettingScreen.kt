@@ -31,6 +31,7 @@ import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnack
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
+import com.smtm.pickle.presentation.navigation.GlobalNavEvent
 import com.smtm.pickle.presentation.setting.components.SettingGroup
 import com.smtm.pickle.presentation.setting.model.SettingItem
 import com.smtm.pickle.presentation.setting.model.SettingSection
@@ -40,7 +41,7 @@ import com.smtm.pickle.presentation.setting.model.SettingTrailingType
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
     onNavigateToPrivacyPolicy: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onGlobalNavEvent: (GlobalNavEvent) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -57,7 +58,7 @@ fun SettingScreen(
                     }
 
                     SettingEffect.NavigateToLogin -> {
-                        onNavigateToLogin()
+                        onGlobalNavEvent(GlobalNavEvent.Logout)
                     }
 
                     SettingEffect.NavigateBack -> {

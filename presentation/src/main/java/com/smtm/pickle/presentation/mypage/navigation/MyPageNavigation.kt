@@ -12,7 +12,7 @@ import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSetti
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
-import com.smtm.pickle.presentation.navigation.route.LoginRoute
+import com.smtm.pickle.presentation.navigation.GlobalNavEvent
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.NicknameSettingRoute
@@ -22,7 +22,10 @@ import com.smtm.pickle.presentation.setting.alarmsetting.AlarmSettingScreen
 
 private const val PrivacyPolicyUrl = "https://www.notion.so/303e42cd9924802abd39eabb3685ca3b"
 
-fun NavGraphBuilder.myPageDestinations(navController: NavController) {
+fun NavGraphBuilder.myPageDestinations(
+    navController: NavController,
+    onGlobalNavEvent: (GlobalNavEvent) -> Unit,
+) {
     composable<MyLedgerRoute> {
         MyLedgerScreen(
             onNavigateToLedgerDetail = { ledgerId ->
@@ -45,14 +48,7 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
                     context.startActivity(intent)
                 }
             },
-            onNavigateToLogin = {
-                navController.navigate(LoginRoute) {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            },
+            onGlobalNavEvent = onGlobalNavEvent,
             onNavigateBack = {
                 navController.popBackStack()
             },

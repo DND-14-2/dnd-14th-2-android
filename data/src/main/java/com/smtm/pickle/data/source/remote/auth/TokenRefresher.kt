@@ -2,6 +2,7 @@ package com.smtm.pickle.data.source.remote.auth
 
 import com.smtm.pickle.data.source.remote.api.RefreshTokenApi
 import com.smtm.pickle.data.source.remote.model.auth.RefreshTokenRequest
+import com.smtm.pickle.domain.event.SessionEventBus
 import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.provider.TokenProvider
 import kotlinx.coroutines.CancellationException
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 class TokenRefresher @Inject constructor(
     private val tokenProvider: TokenProvider,
     private val refreshApi: RefreshTokenApi,
+    private val sessionEventBus: SessionEventBus,
 ) {
     private val refreshLock = Mutex()
 
@@ -45,6 +47,7 @@ class TokenRefresher @Inject constructor(
                 // 리프레시 토큰 만료 또는 무효일 때만 로그아웃 처리
                 if (e is HttpException && (e.code() == 401 || e.code() == 400)) {
                     tokenProvider.clearToken()
+                    sessionEventBus.emitSessionExpired()
                 }
                 return@withLock null
             }

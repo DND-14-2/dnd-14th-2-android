@@ -1,6 +1,8 @@
 package com.smtm.pickle.data.di
 
+import com.smtm.pickle.data.event.SessionEventBusImpl
 import com.smtm.pickle.data.source.local.provider.TokenProviderImpl
+import com.smtm.pickle.domain.event.SessionEventBus
 import com.smtm.pickle.domain.provider.TokenProvider
 import dagger.Binds
 import dagger.Module
@@ -15,5 +17,10 @@ abstract class DataModule {
     abstract fun bindTokenProvider(
         tokenProviderImpl: TokenProviderImpl
     ): TokenProvider
+
+    @Binds
+    abstract fun bindSessionEventBus(
+        sessionEventBusImpl: SessionEventBusImpl
+    ): SessionEventBus
 
 }

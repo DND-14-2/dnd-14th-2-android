@@ -9,9 +9,9 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionEventBusImpl @Inject constructor() : SessionEventBus {
-    private val _channel = Channel<Unit>(Channel.BUFFERED)
+    private val _channel = Channel<Unit>(Channel.CONFLATED)
     override val sessionExpired: Flow<Unit> = _channel.receiveAsFlow()
     override suspend fun emitSessionExpired() {
-        _channel.send(Unit)
+        _channel.trySend(Unit)
     }
 }

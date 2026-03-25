@@ -1,9 +1,12 @@
 package com.smtm.pickle.data.source.local.provider
 
 import com.smtm.pickle.data.source.local.datastore.TokenDataStore
+import com.smtm.pickle.domain.model.auth.AuthState
 import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.provider.TokenProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,6 +17,8 @@ class TokenProviderImpl @Inject constructor(
 
     @Volatile
     private var cachedToken: AuthToken? = null
+
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Authenticated)
 
     override suspend fun init() {
         cachedToken = tokenDataStore.getToken()
@@ -34,6 +39,13 @@ class TokenProviderImpl @Inject constructor(
     override suspend fun clearToken() {
         cachedToken = null
         tokenDataStore.clearToken()
+        _authState.value = AuthState.Unauthenticated
+    }
+
+    override suspend fun expireSession() {
+        cachedToken = null
+        tokenDataStore.clearToken()
+        _authState.value = AuthState.SessionExpired
     }
 
     override fun getCachedToken(): AuthToken? = cachedToken
@@ -43,5 +55,8 @@ class TokenProviderImpl @Inject constructor(
 
     override fun getAccessTokenFlow(): Flow<String?> =
         tokenDataStore.getAccessTokenFlow()
+
+    override fun getAuthStateFlow(): Flow<AuthState> =
+        _authState.asStateFlow()
 
 }

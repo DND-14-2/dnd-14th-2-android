@@ -44,7 +44,7 @@ class TokenRefresher @Inject constructor(
                 if (e is CancellationException) throw e
                 // 리프레시 토큰 만료 또는 무효일 때만 로그아웃 처리
                 if (e is HttpException && (e.code() == 401 || e.code() == 400)) {
-                    tokenProvider.clearToken()
+                    tokenProvider.expireSession()
                 }
                 return@withLock null
             }

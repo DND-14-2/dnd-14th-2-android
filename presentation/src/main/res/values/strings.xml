@@ -142,4 +142,7 @@
     <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
     <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
 
+    <!-- Global -->
+    <string name="global_session_expired">세션이 만료되었습니다. 다시 로그인해주세요.</string>
+
 </resources>

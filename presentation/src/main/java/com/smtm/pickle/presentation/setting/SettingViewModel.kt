@@ -61,7 +61,6 @@ class SettingViewModel @Inject constructor(
             logoutUseCase()
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
-                    _effect.emit(SettingEffect.NavigateToLogin)
                 }
                 .onFailure {
                     _uiState.update { it.copy(isLoading = false) }
@@ -79,7 +78,6 @@ class SettingViewModel @Inject constructor(
             withdrawAccountUseCase()
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
-                    _effect.emit(SettingEffect.NavigateToLogin)
                 }
                 .onFailure {
                     _uiState.update { it.copy(isLoading = false) }
@@ -115,7 +113,6 @@ data class SettingUiState(
 
 sealed interface SettingEffect {
     data object NavigateToPrivacyPolicy : SettingEffect
-    data object NavigateToLogin : SettingEffect
     data object NavigateBack : SettingEffect
     data object OpenGooglePlay : SettingEffect
     data class ShowSnackBar(val msg: String) : SettingEffect

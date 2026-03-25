@@ -12,7 +12,6 @@ import com.smtm.pickle.presentation.mypage.profile.nicknamesetting.NicknameSetti
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerCreateRoute
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
-import com.smtm.pickle.presentation.navigation.route.LoginRoute
 import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.NicknameSettingRoute
@@ -43,14 +42,6 @@ fun NavGraphBuilder.myPageDestinations(navController: NavController) {
                 runCatching {
                     val intent = Intent(Intent.ACTION_VIEW, PrivacyPolicyUrl.toUri())
                     context.startActivity(intent)
-                }
-            },
-            onNavigateToLogin = {
-                navController.navigate(LoginRoute) {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
                 }
             },
             onNavigateBack = {

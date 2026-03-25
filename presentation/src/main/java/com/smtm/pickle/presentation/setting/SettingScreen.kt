@@ -40,7 +40,6 @@ import com.smtm.pickle.presentation.setting.model.SettingTrailingType
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
     onNavigateToPrivacyPolicy: () -> Unit,
-    onNavigateToLogin: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -54,10 +53,6 @@ fun SettingScreen(
                 when (effect) {
                     SettingEffect.NavigateToPrivacyPolicy -> {
                         onNavigateToPrivacyPolicy()
-                    }
-
-                    SettingEffect.NavigateToLogin -> {
-                        onNavigateToLogin()
                     }
 
                     SettingEffect.NavigateBack -> {

@@ -2,8 +2,8 @@ package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.user.GetNicknameUseCase
 import com.smtm.pickle.domain.usecase.user.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SyncUserUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation
 import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NicknameSettingViewModel @Inject constructor(
     private val saveNicknameUseCase: SaveNicknameUseCase,
-    private val getNicknameUseCase: GetNicknameUseCase
+    private val syncUserUseCase: SyncUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NicknameSettingUiState())
@@ -38,7 +38,7 @@ class NicknameSettingViewModel @Inject constructor(
 
     private fun initializeNickname() {
         viewModelScope.launch {
-            getNicknameUseCase()
+            syncUserUseCase()
                 .onSuccess { nickname ->
                     savedNickname = nickname
 

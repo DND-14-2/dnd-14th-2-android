@@ -6,8 +6,8 @@ import com.smtm.pickle.domain.model.ledger.PaymentMethod
 @JvmInline
 value class VerdictId(val value: Long)
 
-/** 지인 정보 - 배심원, 피고인, 지인 정보에 공통 사용 */
-data class MateInfo(
+/** 심판에 참여하는 피고인, 배심원 정보 */
+data class VerdictMate(
     val id: Long,
     val nickname: String,
     val level: Int,
@@ -26,7 +26,7 @@ data class LedgerEntryInfo(
 /** 배심원으로서 판결해야 할 심판 */
 data class JurorVerdict(
     val id: VerdictId,
-    val defendantInfo: MateInfo,
+    val defendantInfo: VerdictMate,
     val ledgerEntryInfo: LedgerEntryInfo,
     val verdictType: VerdictType,
 )
@@ -35,7 +35,7 @@ data class JurorVerdict(
 data class MyVerdict(
     val id: VerdictId,
     val ledgerEntryInfo: LedgerEntryInfo,
-    val jurorInfo: MateInfo,
+    val jurorInfo: VerdictMate,
     val verdictType: VerdictType,
 )
 

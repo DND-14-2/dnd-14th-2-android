@@ -27,7 +27,7 @@ import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleA
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 
 @Composable
-fun VerdictCompletedContent(
+fun VerdictCompletedScreen(
     defendantNickname: String,
     onDismiss: () -> Unit
 ) {
@@ -89,9 +89,9 @@ fun VerdictCompletedContent(
 
 @Preview
 @Composable
-private fun VerdictCompletedContentPreview() {
+private fun VerdictCompletedScreenPreview() {
     PickleTheme {
-        VerdictCompletedContent(
+        VerdictCompletedScreen(
             defendantNickname = "김철수",
             onDismiss = {}
         )

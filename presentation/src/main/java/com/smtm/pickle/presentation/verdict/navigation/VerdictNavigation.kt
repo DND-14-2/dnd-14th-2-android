@@ -8,11 +8,16 @@ import com.smtm.pickle.presentation.navigation.route.JurorListRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictCreateRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictResultRoute
+import com.smtm.pickle.presentation.navigation.route.VerdictCompletedRoute
+import androidx.navigation.toRoute
+import com.smtm.pickle.presentation.verdict.complete.VerdictCompletedScreen
 import com.smtm.pickle.presentation.verdict.create.VerdictCreateScreen
 import com.smtm.pickle.presentation.verdict.jurordetail.JurorDetailScreen
 import com.smtm.pickle.presentation.verdict.jurorlist.JurorListScreen
+import com.smtm.pickle.presentation.verdict.jurorlist.materequest.MateRequestScreen
 import com.smtm.pickle.presentation.verdict.request.VerdictRequestScreen
 import com.smtm.pickle.presentation.verdict.result.VerdictResultScreen
+import com.smtm.pickle.presentation.navigation.route.MateRequestRoute
 
 fun NavGraphBuilder.verdictDestinations(navController: NavController) {
     composable<VerdictCreateRoute> {
@@ -25,9 +30,30 @@ fun NavGraphBuilder.verdictDestinations(navController: NavController) {
         VerdictResultScreen()
     }
     composable<JurorListRoute> {
-        JurorListScreen()
+        JurorListScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateToMateRequest = {
+                navController.navigate(MateRequestRoute)
+            }
+        )
     }
     composable<JurorDetailRoute> {
         JurorDetailScreen()
+    }
+    composable<MateRequestRoute> {
+        MateRequestScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            }
+        )
+    }
+    composable<VerdictCompletedRoute> { backStackEntry ->
+        val args = backStackEntry.toRoute<VerdictCompletedRoute>()
+        VerdictCompletedScreen(
+            defendantNickname = args.defendantNickname,
+            onDismiss = { navController.popBackStack() }
+        )
     }
 }

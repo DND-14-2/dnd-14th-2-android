@@ -55,14 +55,8 @@ fun PickleBottomSheet(
                 }
             }
         },
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 14.dp),
-            content = content
-        )
-    }
+        content = content
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,13 +72,18 @@ private fun PickleBottomSheetPreview() {
             onDismiss = {},
             hasDragHandle = true
         ) {
-            Text("즐겨찾는 내역")
-            Spacer(modifier = Modifier.height(12.dp))
-            PickleButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "삭제하기",
-                onClick = {},
-            )
+            Column(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text("즐겨찾는 내역")
+                Spacer(modifier = Modifier.height(12.dp))
+                PickleButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "삭제하기",
+                    onClick = {},
+                )
+
+            }
         }
     }
 }

@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -21,7 +19,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
@@ -72,16 +71,14 @@ private fun OnboardingContent(
 
     Scaffold(
         topBar = {
-            PickleAppBar(
-                actions = {
-                    TextButton(onClick = onSkipOrFinish) {
-                        Text(
-                            text = stringResource(R.string.onboarding_skip),
-                            style = PickleTheme.typography.body1Bold,
-                            color = PickleTheme.colors.primary500
-                        )
-                    }
-                }
+            PickleTitleAppBar(
+                title = "",
+                actions = listOf(
+                    PickleAppBarAction.Text(
+                        label = stringResource(R.string.onboarding_skip),
+                        onClick = onSkipOrFinish,
+                    )
+                ),
             )
         },
         bottomBar = {

@@ -4,8 +4,10 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.smtm.pickle.data.BuildConfig
 import com.smtm.pickle.data.source.remote.api.AuthService
 import com.smtm.pickle.data.source.remote.api.LedgerApi
+import com.smtm.pickle.data.source.remote.api.MateApi
 import com.smtm.pickle.data.source.remote.api.RefreshTokenApi
 import com.smtm.pickle.data.source.remote.api.UserApi
+import com.smtm.pickle.data.source.remote.api.VerdictApi
 import com.smtm.pickle.data.source.remote.auth.TokenAuthenticator
 import com.smtm.pickle.domain.provider.TokenProvider
 import dagger.Module
@@ -152,5 +154,17 @@ object NetworkModule {
     @Singleton
     fun provideUserApi(retrofit: Retrofit): UserApi {
         return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMateApi(retrofit: Retrofit): MateApi {
+        return retrofit.create(MateApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVerdictApi(retrofit: Retrofit): VerdictApi {
+        return retrofit.create(VerdictApi::class.java)
     }
 }

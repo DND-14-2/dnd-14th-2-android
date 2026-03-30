@@ -134,7 +134,7 @@ class JurorListViewModel @Inject constructor(
             val jurorId = currentState.jurorId
             viewModelScope.launch {
                 _uiState.update { it.copy(isLoading = true, dialogState = JurorListDialogState.None) }
-                // TODO: Juror 삭제 API 호출
+                // TODO: [친구 삭제] Juror 삭제 API 호출
 
                 // mock
                 _uiState.update { state ->

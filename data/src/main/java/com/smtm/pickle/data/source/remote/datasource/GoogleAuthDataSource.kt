@@ -45,7 +45,7 @@ class GoogleAuthDataSource @Inject constructor(
         // 서버 전송용 구글 고유 식별자(사용자 검증용)
         googleIdTokenCredential.idToken
 
-    } catch (e: GetCredentialCancellationException) { // TODO: 추후 도메인 오류들로 변경
+    } catch (e: GetCredentialCancellationException) {
         Timber.e(e, "구글 로그인 - 사용자 취소")
         throw e
     } catch (e: GetCredentialException) {

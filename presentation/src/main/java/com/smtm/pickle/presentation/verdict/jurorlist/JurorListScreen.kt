@@ -213,19 +213,21 @@ private fun JurorListContent(
                             JurorListItem(
                                 nickname = juror.nickname,
                                 onClick = { onJurorClick(juror.id) },
-                                enabled = false, // TODO: 지인 상세 기능 구현 후 지우기
+                                enabled = false, // TODO: [친구 삭제] 지인 상세 기능 구현 후 지우기
                                 togetherVerdictCount = juror.verdictCount,
                                 code = juror.invitationCode,
                                 modifier = Modifier.weight(1f)
                             )
 
-                            PickleIconButtonWithTouchCustom(
-                                iconRes = R.drawable.ic_appbar_dot_menu,
-                                onClick = { onJurorMoreClick(juror.id) },
-                                tint = PickleTheme.colors.gray500,
-                                iconSize = 20.dp,
-                                touchSize = 32.dp,
-                            )
+                            // TODO: [친구 삭제] 삭제 도트 메뉴 기능 연결 후 활성화
+//                            PickleIconButtonWithTouchCustom(
+//                                modifier = Modifier.padding(end = 16.dp),
+//                                iconRes = R.drawable.ic_appbar_dot_menu,
+//                                onClick = { onJurorMoreClick(juror.id) },
+//                                tint = PickleTheme.colors.gray500,
+//                                iconSize = 20.dp,
+//                                touchSize = 32.dp,
+//                            )
                         }
                     }
                 }

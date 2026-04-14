@@ -11,7 +11,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,6 +30,7 @@ fun ButtonSection(
     uiState: LoginUiState,
     onKakaoLogin: () -> Unit,
     onGoogleLogin: () -> Unit,
+    onDemoLogin: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
         Button(
@@ -80,6 +83,20 @@ fun ButtonSection(
                 text = stringResource(R.string.login_google_start),
                 style = PickleTheme.typography.body4Medium,
                 color = PickleTheme.colors.gray700
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextButton(
+            onClick = onDemoLogin,
+            enabled = uiState !is LoginUiState.Loading,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(
+                text = stringResource(R.string.login_demo_start),
+                style = PickleTheme.typography.body4Medium,
+                color = PickleTheme.colors.gray500
             )
         }
     }

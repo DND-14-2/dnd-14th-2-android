@@ -60,7 +60,8 @@ object NetworkModule {
         return Interceptor { chain ->
             val originalRequest = chain.request()
 
-            if (originalRequest.url.encodedPath.contains("oauth/login")) {
+            val unauthenticatedPaths = listOf("oauth/login", "oauth/demo")
+            if (unauthenticatedPaths.any { originalRequest.url.encodedPath.contains(it) }) {
                 return@Interceptor chain.proceed(originalRequest)
             }
 

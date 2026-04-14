@@ -96,7 +96,8 @@ fun LoginScreen(
                     viewModel.handleLoginError(message)
                 }
             )
-        }
+        },
+        onDemoLogin = viewModel::loginWithDemo,
     )
 
     SnackbarHost(snackbarState)
@@ -108,6 +109,7 @@ fun LoginContent(
     uiState: LoginUiState,
     onGoogleLogin: () -> Unit,
     onKakaoLogin: () -> Unit,
+    onDemoLogin: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -135,6 +137,7 @@ fun LoginContent(
                 uiState = uiState,
                 onGoogleLogin = onGoogleLogin,
                 onKakaoLogin = onKakaoLogin,
+                onDemoLogin = onDemoLogin,
             )
             Spacer(modifier = Modifier.height(40.dp))
         }
@@ -149,6 +152,7 @@ private fun LoginContentPreview() {
             uiState = LoginUiState.Idle,
             onGoogleLogin = {},
             onKakaoLogin = {},
+            onDemoLogin = {},
         )
     }
 }

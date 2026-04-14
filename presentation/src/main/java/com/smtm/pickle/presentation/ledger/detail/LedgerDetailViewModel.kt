@@ -8,6 +8,7 @@ import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.domain.usecase.ledger.DeleteLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgerUseCase
 import com.smtm.pickle.domain.usecase.ledger.SyncLedgerUseCase
+import com.smtm.pickle.domain.usecase.verdict.RequestVerdictUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.navigation.route.LedgerDetailRoute
@@ -32,6 +33,7 @@ class LedgerDetailViewModel @Inject constructor(
     private val observeLedgerUseCase: ObserveLedgerUseCase,
     private val syncLedgerUseCase: SyncLedgerUseCase,
     private val deleteLedgerUseCase: DeleteLedgerUseCase,
+    private val requestVerdictUseCase: RequestVerdictUseCase,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<LedgerDetailRoute>()
@@ -43,8 +45,8 @@ class LedgerDetailViewModel @Inject constructor(
     private val _effect: MutableSharedFlow<LedgerDetailEffect> = MutableSharedFlow(replay = 0)
     val effect: SharedFlow<LedgerDetailEffect> = _effect.asSharedFlow()
 
-    private val _showDeleteDialog = MutableStateFlow(false)
-    val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
+    private val _dialogState = MutableStateFlow<LedgerDetailDialogState>(LedgerDetailDialogState.None)
+    val dialogState: StateFlow<LedgerDetailDialogState> = _dialogState.asStateFlow()
 
     init {
         observeLedger()
@@ -82,24 +84,45 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
-    fun showDeleteDialog() {
-        _showDeleteDialog.update { true }
+    fun onDeleteClick() {
+        _dialogState.update { LedgerDetailDialogState.DeleteConfirm }
     }
 
-    fun dismissDeleteDialog() {
-        _showDeleteDialog.update { false }
+    fun onJudgmentRequestClick() {
+        _dialogState.update { LedgerDetailDialogState.JudgmentRequest }
+    }
+
+    fun dismissDialog() {
+        _dialogState.update { LedgerDetailDialogState.None }
     }
 
     fun deleteLedger() {
         viewModelScope.launch {
-            dismissDeleteDialog()
+            dismissDialog()
             deleteLedgerUseCase(ledgerId)
                 .onSuccess {
                     _effect.emit(LedgerDetailEffect.NavigateBack)
                 }
                 .onFailure { e ->
                     Timber.e(e, "Failed to delete ledger: id=${ledgerId.value}")
-                    _effect.emit(LedgerDetailEffect.ShowSnackBar("네트워크 상태를 확인해주세요"))
+                    _effect.emit(LedgerDetailEffect.ShowSnackBar(e.message ?: "네트워크 상태를 확인해주세요"))
+                }
+        }
+    }
+
+    fun confirmJudgmentRequest() {
+        viewModelScope.launch {
+            dismissDialog()
+            val ledgerState = _uiState.value
+            if (ledgerState !is LedgerDetailUiState.Success) return@launch
+
+            requestVerdictUseCase(ledgerState.ledger.id)
+                .onSuccess {
+                    _effect.emit(LedgerDetailEffect.ShowSnackBar("내 배심원에게 심판 요청을 보냈어요"))
+                }
+                .onFailure { e ->
+                    Timber.e(e, "심판 요청 실패: ledgerId=${ledgerState.ledger.id}")
+                    _effect.emit(LedgerDetailEffect.ShowSnackBar(e.message ?: "오류가 발생했어요 잠시후 다시 시도해주세요"))
                 }
         }
     }
@@ -115,6 +138,12 @@ class LedgerDetailViewModel @Inject constructor(
             _effect.emit(LedgerDetailEffect.NavigateToEdit)
         }
     }
+}
+
+sealed interface LedgerDetailDialogState {
+    data object None : LedgerDetailDialogState
+    data object DeleteConfirm : LedgerDetailDialogState
+    data object JudgmentRequest : LedgerDetailDialogState
 }
 
 sealed interface LedgerDetailUiState {

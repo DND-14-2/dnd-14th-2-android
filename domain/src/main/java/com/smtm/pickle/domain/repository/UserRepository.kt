@@ -12,6 +12,8 @@ interface UserRepository {
 
     suspend fun getFirstLogin(): Boolean
 
+    suspend fun getInvitationCode(): String
+
     suspend fun saveNickname(nickname: String)
 
     suspend fun getNickname(): String?

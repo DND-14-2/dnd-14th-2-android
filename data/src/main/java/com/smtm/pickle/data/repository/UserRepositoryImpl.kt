@@ -31,6 +31,14 @@ class UserRepositoryImpl @Inject constructor(
         return preferencesDataStore.isFirstLogin().first()
     }
 
+    override suspend fun getInvitationCode(): String {
+        return profileDataStore.getInvitationCode() ?: run {
+            val newCode = userApi.getProfile().invitationCode
+            profileDataStore.setInvitationCode(newCode)
+            newCode
+        }
+    }
+
     override suspend fun saveNickname(nickname: String) {
         val changedNickname = userApi.changeNickname(NicknameRequest(nickname)).nickname
         profileDataStore.changeNickname(changedNickname)

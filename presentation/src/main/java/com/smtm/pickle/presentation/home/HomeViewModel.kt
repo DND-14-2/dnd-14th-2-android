@@ -7,6 +7,7 @@ import com.smtm.pickle.domain.usecase.ledger.EnsureLedgersSyncedUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByDayUseCase
 import com.smtm.pickle.domain.usecase.ledger.ObserveLedgersByMonthUseCase
 import com.smtm.pickle.domain.usecase.user.ObserveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SyncUserUseCase
 import com.smtm.pickle.presentation.common.model.ledger.LedgerUiModel
 import com.smtm.pickle.presentation.common.model.ledger.toUiModel
 import com.smtm.pickle.presentation.home.model.LedgerCalendarDay
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
@@ -37,6 +39,7 @@ class HomeViewModel @Inject constructor(
     private val observeLedgersByDayUseCase: ObserveLedgersByDayUseCase,
     private val ensureLedgersSyncedUseCase: EnsureLedgersSyncedUseCase,
     private val observeNicknameUseCase: ObserveNicknameUseCase,
+    private val syncUserUseCase: SyncUserUseCase,
 ) : ViewModel() {
 
     private val selectedYearMonth = MutableStateFlow(YearMonth.now())
@@ -66,6 +69,7 @@ class HomeViewModel @Inject constructor(
     val effect: SharedFlow<HomeEffect> = _effect.asSharedFlow()
 
     init {
+        syncUser()
         observeNickname()
         observeMonthLedgers()
         observeSelectedDateLedgers()
@@ -161,6 +165,15 @@ class HomeViewModel @Inject constructor(
                 Timber.e(it, "observeNicknameUseCase() failed")
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun syncUser() {
+        viewModelScope.launch {
+            syncUserUseCase()
+                .onFailure { e ->
+                    Timber.e(e, "syncUser() failed")
+                }
+        }
     }
 }
 

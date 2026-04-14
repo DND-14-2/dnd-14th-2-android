@@ -40,7 +40,7 @@ import com.smtm.pickle.presentation.navigation.route.MyLedgerRoute
 import com.smtm.pickle.presentation.navigation.route.MyPageTabRoute
 import com.smtm.pickle.presentation.navigation.route.MyProfileRoute
 import com.smtm.pickle.presentation.navigation.route.SettingRoute
-import com.smtm.pickle.presentation.navigation.route.VerdictCreateRoute
+import com.smtm.pickle.presentation.navigation.route.VerdictCompletedRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictRequestRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictResultRoute
 import com.smtm.pickle.presentation.navigation.route.VerdictTabRoute
@@ -92,7 +92,7 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(
-                        bottom = bottomBarHeight + 9.dp,
+                        bottom = bottomBarHeight + 10.dp,
                         end = 16.dp
                     )
             ) {
@@ -162,9 +162,6 @@ private fun MainContent(
 
                 composable<VerdictTabRoute> {
                     VerdictScreen(
-                        onNavigateVerdictCreate = {
-                            rootNavController.navigate(VerdictCreateRoute)
-                        },
                         onNavigateVerdictRequest = {
                             rootNavController.navigate(VerdictRequestRoute)
                         },
@@ -176,6 +173,9 @@ private fun MainContent(
                         },
                         onNavigateJurorDetail = {
                             rootNavController.navigate(JurorDetailRoute)
+                        },
+                        onNavigateVerdictCompleted = { nickname ->
+                            rootNavController.navigate(VerdictCompletedRoute(nickname))
                         }
                     )
                 }

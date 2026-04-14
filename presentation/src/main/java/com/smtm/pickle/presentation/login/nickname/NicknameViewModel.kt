@@ -2,9 +2,11 @@ package com.smtm.pickle.presentation.login.nickname
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smtm.pickle.domain.usecase.mate.InviteMateUseCase
 import com.smtm.pickle.domain.usecase.user.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.GetInvitationCodeUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation.MAX_NICKNAME_LENGTH
-import com.smtm.pickle.presentation.common.utils.NicknameUtils
+import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NicknameViewModel @Inject constructor(
-    private val saveNicknameUseCase: SaveNicknameUseCase
+    private val saveNicknameUseCase: SaveNicknameUseCase,
+    private val inviteMateUseCase: InviteMateUseCase,
+    private val getInvitationCodeUseCase: GetInvitationCodeUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NicknameUiState())
@@ -36,7 +40,7 @@ class NicknameViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 nickname = correctNickname,
-                inputState = NicknameUtils.validateNicknameFormat(correctNickname),
+                inputState = InputStateUtils.validateNicknameFormat(correctNickname),
             )
         }
     }
@@ -45,7 +49,7 @@ class NicknameViewModel @Inject constructor(
         viewModelScope.launch {
             saveNicknameUseCase(_uiState.value.nickname)
                 .onSuccess {
-                    _effect.emit(NicknameEffect.NavigateToMain)
+                    _uiState.update { it.copy(dialogState = NicknameDialogState.InviteIntroduction) }
                 }
                 .onFailure { e ->
                     Timber.e(e, "닉네임 저장 실패")
@@ -54,6 +58,60 @@ class NicknameViewModel @Inject constructor(
     }
 
     fun onBackClick() {
+        emitNavigateToMainEffect()
+    }
+
+    fun showInputInvitationCodeDialog() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.InputInvitationCode()) }
+    }
+
+    fun showShareInvitationCodeDialog() {
+        viewModelScope.launch {
+            getInvitationCodeUseCase()
+                .onSuccess { code ->
+                    _uiState.update {
+                        it.copy(dialogState = NicknameDialogState.ShareInvitationCode(code))
+                    }
+                }
+                .onFailure { e ->
+                    Timber.e(e, "초대코드 받기 실패")
+                }
+        }
+    }
+
+    fun showWelcomeDialog() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.Welcome) }
+    }
+
+    fun inviteMate(invitationCode: String) {
+        _uiState.update {
+            it.copy(dialogState = NicknameDialogState.InputInvitationCode(errorMessage = null))
+        }
+
+        viewModelScope.launch {
+            inviteMateUseCase(invitationCode)
+                .onSuccess {
+                    showWelcomeDialog()
+                }
+                .onFailure { e ->
+                    Timber.e(e)
+                    _uiState.update {
+                        it.copy(
+                            dialogState = NicknameDialogState.InputInvitationCode(
+                                errorMessage = "초대코드를 확인해주세요"
+                            )
+                        )
+                    }
+                }
+        }
+    }
+
+    fun onCompleteWelcome() {
+        _uiState.update { it.copy(dialogState = NicknameDialogState.None) }
+        emitNavigateToMainEffect()
+    }
+
+    private fun emitNavigateToMainEffect() {
         viewModelScope.launch {
             _effect.emit(NicknameEffect.NavigateToMain)
         }

@@ -11,6 +11,7 @@
     <string name="login_tooltip_fast">3초만에 로그인하기!</string>
 
     <!-- Nickname -->
+    <string name="welcome_dialog_title">피클에 오신 것을 환영해요</string>
     <string name="profile_title">내 프로필</string>
     <string name="nickname_label">닉네임</string>
     <string name="nickname_title">닉네임 입력</string>
@@ -50,6 +51,8 @@
     <string name="common_negative">아니요</string>
     <string name="common_positive">네</string>
     <string name="common_typo">함께하는 똑똑한 소비, 피클</string>
+    <string name="common_start">시작하기</string>
+    <string name="common_complete">완료</string>
     <string name="common_cancel">취소</string>
 
     <!-- Error -->
@@ -110,6 +113,10 @@
     <string name="ledger_detail_receipt_payment_method_title">유형</string>
     <string name="ledger_detail_delete_dialog_title">가계부 내역을 삭제하시겠어요?</string>
     <string name="ledger_detail_delete_dialog_description">삭제하면 되돌릴 수 없어요.</string>
+    <string name="ledger_detail_judgement_request">심판 요청하기</string>
+    <string name="ledger_detail_request_dialog_title">심판을 요청할까요?</string>
+    <string name="ledger_detail_request_dialog_subtitle">내 배심원들이 판결할 수 있어요</string>
+    <string name="ledger_detail_request_dialog_confirm">요청하기</string>
 
     <!-- Ledger Edit -->
     <string name="ledger_edit_exit_dialog_title">수정을 취소하시겠어요?</string>
@@ -141,6 +148,60 @@
     <string name="setting_dialog_withdraw_title">정말 떠나실건가요?..</string>
     <string name="setting_dialog_withdraw_description">탈퇴하면 이전 기록이 모두 삭제돼요.\n그래도 괜찮으신가요?</string>
     <string name="setting_dialog_withdraw_confirm">탈퇴하기</string>
+
+    <!-- Juror List -->
+    <string name="juror_list_title">내 배심원</string>
+    <string name="juror_list_search_hint">닉네임을 검색하세요</string>
+    <string name="juror_list_empty">아직 추가한 친구가 없어요</string>
+    <string name="juror_list_invite_mate">친구 초대하기</string>
+    <string name="juror_list_delete_mate">친구 삭제하기</string>
+    <string name="juror_list_accept">추가</string>
+    <string name="juror_list_together_verdict_count">함께한 심판 %1$d회</string>
+    <string name="juror_list_mate_request_title">메이트 요청</string>
+    <string name="juror_list_mate_request">새로운 메이트 요청이 있어요</string>
+    <string name="juror_list_delete_mate_title">친구를 삭제할까요?</string>
+    <string name="juror_list_delete_mate_subtitle">삭제 후에는 복구할 수 없어요</string>
+    <string name="juror_list_delete_confirm">삭제</string>
+    <string name="juror_list_confirm">확인</string>
+    <string name="juror_list_input_invite_code_title">친구의 코드를 입력해주세요.</string>
+    <string name="juror_list_input_invite_code_hint">내용을 입력하세요</string>
+
+    <!-- Verdict Request -->
+    <string name="verdict_request_send">님에게\n판결을 보냈어요!</string>
+
+    <!-- InputInvitationCode -->
+    <string name="input_invitation_code_dialog_title">초대코드를 입력해주세요</string>
+    <string name="input_invitation_code_dialog_hint">내용을 입력하세요</string>
+    <string name="input_invitation_code_error_length">6자로 입력해주세요</string>
+    <string name="input_invitation_code_error_uppercase">영어 대문자로 입력해주세요</string>
+    <string name="input_invitation_code_error_expired">만료된 초대코드입니다</string>
+
+    <!-- ShareInvitationCode -->
+    <string name="share_invitation_code_dialog_title">내 초대코드를\n친구에게 공유해보세요</string>
+    <string name="share_invitation_code_dialog_share_sms">문자로 공유하기</string>
+    <string name="share_invitation_code_dialog_dismiss">괜찮아요</string>
+    <string name="share_invitation_sms_body">피클의 초대장이 도착했어요\n앱 설치 후, [심판 &gt; 메이트 추가]에서 초대코드를 입력하세요.\n친구의 초대코드: %1$s\n\n서로의 소비를 판결하고, 함께 소비습관을 개선할 수 있어요.\n지금 바로 시작해보세요 ✨\n\n◆ pickle 다운로드\nhttps://play.google.com/store/apps/details?id=%2$s</string>
+
+    <!-- Verdict -->
+    <string name="empty_verdict_no_consumption">아직 내 소비 심판이 없어요</string>
+    <string name="empty_verdict_no_judgement">아직 내 소비 판결이 없어요</string>
+    <string name="verdict_incomplete">미완료</string>
+    <string name="verdict_complete">완료</string>
+    <string name="verdict_innocent">무죄</string>
+    <string name="verdict_guilty">유죄</string>
+
+    <!-- JudgementDialog -->
+    <string name="verdict_dialog_title">소비의 판결을 내려주세요</string>
+    <string name="verdict_dialog_subtitle">친구에게 판결을 전달하세요</string>
+
+    <!-- VerdictPendingBottomSheet -->
+    <string name="verdict_pending_title">소비 심판 내용</string>
+
+    <!-- InviteIntroduction -->
+    <string name="invite_introduction_title">함께 소비를 개선할\n친구를 초대할까요?</string>
+    <string name="invite_introduction_action">초대하기</string>
+    <string name="invite_introduction_ghost">괜찮아요</string>
+    <string name="invite_introduction_already">이미 초대코드를 받았어요</string>
 
     <!-- Global -->
     <string name="global_session_expired">세션이 만료되었습니다. 다시 로그인해주세요.</string>

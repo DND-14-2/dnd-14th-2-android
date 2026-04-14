@@ -28,7 +28,7 @@ fun SettingRow(item: SettingItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Dimensions.buttonHeightSmall)
+            .height(Dimensions.buttonHeightLarge)
             .clickable(onClick = item.onClick)
             .padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,

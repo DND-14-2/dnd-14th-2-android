@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smtm.pickle.presentation.R
+import com.smtm.pickle.presentation.designsystem.components.button.PickleButton
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.login.LoginUiState
 
@@ -28,6 +29,7 @@ fun ButtonSection(
     uiState: LoginUiState,
     onKakaoLogin: () -> Unit,
     onGoogleLogin: () -> Unit,
+    onDemoLogin: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
         Button(
@@ -82,6 +84,15 @@ fun ButtonSection(
                 color = PickleTheme.colors.gray700
             )
         }
+
+        Spacer(modifier = Modifier.height(11.dp))
+
+        PickleButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.login_demo_start),
+            onClick = onDemoLogin,
+            enabled = uiState !is LoginUiState.Loading,
+        )
     }
 }
 

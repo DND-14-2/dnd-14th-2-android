@@ -3,6 +3,7 @@ package com.smtm.pickle.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smtm.pickle.domain.model.auth.AuthToken
+import com.smtm.pickle.domain.usecase.auth.DemoLoginUseCase
 import com.smtm.pickle.domain.usecase.auth.GoogleLoginUseCase
 import com.smtm.pickle.domain.usecase.auth.KakaoLoginUseCase
 import com.smtm.pickle.domain.usecase.user.GetFirstLoginUseCase
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val kakaoLoginUseCase: KakaoLoginUseCase,
     private val googleLoginUseCase: GoogleLoginUseCase,
+    private val demoLoginUseCase: DemoLoginUseCase,
     private val getFirstLoginUseCase: GetFirstLoginUseCase,
     private val setFirstLoginUseCase: SetFirstLoginUseCase,
 ) : ViewModel() {
@@ -43,6 +45,10 @@ class LoginViewModel @Inject constructor(
         handleLogin {
             kakaoLoginUseCase(token = token)
         }
+    }
+
+    fun loginWithDemo() {
+        handleLogin { demoLoginUseCase() }
     }
 
     fun handleLoginError(message: String) {

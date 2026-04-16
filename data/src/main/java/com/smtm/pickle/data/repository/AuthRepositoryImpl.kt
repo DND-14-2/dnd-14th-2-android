@@ -4,6 +4,7 @@ import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.source.remote.api.AuthService
 import com.smtm.pickle.data.source.remote.api.UserApi
 import com.smtm.pickle.data.source.remote.datasource.GoogleAuthDataSource
+import com.smtm.pickle.data.source.remote.model.auth.DemoLoginRequest
 import com.smtm.pickle.data.source.remote.model.auth.LoginRequest
 import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.model.auth.SocialLoginType
@@ -46,6 +47,16 @@ class AuthRepositoryImpl @Inject constructor(
             token = idToken,
             type = SocialLoginType.GOOGLE
         )
+    }
+
+    /** 그냥 사용해보기 — deviceId로 데모 계정 발급 */
+    override suspend fun demoLogin(deviceId: String): AuthToken {
+        val response = authService.demoLogin(
+            request = DemoLoginRequest(deviceId = deviceId)
+        )
+        val authToken = response.toDomain()
+        tokenProvider.saveToken(authToken)
+        return authToken
     }
 
     override suspend fun logout() {

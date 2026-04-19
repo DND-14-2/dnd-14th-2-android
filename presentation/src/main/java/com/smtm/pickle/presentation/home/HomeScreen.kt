@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -19,14 +20,16 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.domain.model.ledger.LedgerId
+import com.smtm.pickle.presentation.R
 import com.smtm.pickle.presentation.common.utils.BackPressFinishHandler
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleLogoAppBar
+import com.smtm.pickle.presentation.designsystem.components.appbar.model.PickleAppBarAction
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarPosition
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
 import com.smtm.pickle.presentation.home.component.HomeProfile
-import com.smtm.pickle.presentation.home.component.HomeTopBar
 import com.smtm.pickle.presentation.home.component.LedgerCalendar
 import com.smtm.pickle.presentation.home.component.dailyLedgerInfoSection
 import java.time.LocalDate
@@ -100,7 +103,15 @@ private fun HomeContent(
 ) {
     Scaffold(
         topBar = {
-            HomeTopBar(onStatisticsClick = onNavigateToMyPage)
+            PickleLogoAppBar(
+                actions = listOf(
+                    PickleAppBarAction.Icon(
+                        icon = R.drawable.ic_app_bar_statistics,
+                        contentDescription = stringResource(R.string.home_action_statistics),
+                        onClick = onNavigateToMyPage
+                    )
+                )
+            )
         }
     ) { innerPadding ->
         LazyColumn(

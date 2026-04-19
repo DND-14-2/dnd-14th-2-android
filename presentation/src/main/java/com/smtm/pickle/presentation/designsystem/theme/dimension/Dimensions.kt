@@ -33,6 +33,11 @@ object Dimensions {
 
     // 앱바
     val appbarHeight = 56.dp
+    val appBarHorizontalSpacing = 12.dp
+    val appBarActionsSpacing = 4.dp
+    val appBarSearchSpacing = 6.dp
+    val appBarLogoWidth = 84.dp
+    val appBarLogoHeight = 32.dp
 
     // 칩
     /** 바텀시트, 다이얼로그 등 내부 칩 */
@@ -44,6 +49,10 @@ object Dimensions {
     // 심판 물건 아이콘
     val judgementIcon = 40.dp
     val judgementIconSmall = 32.dp
+
+    // PullToRefresh
+    val pullToRefreshIndicatorSize = 48.dp
+    val pullToRefreshDistance = 50.dp
 
     // 프로필 이미지
     val profileSizeSmall = 40.dp

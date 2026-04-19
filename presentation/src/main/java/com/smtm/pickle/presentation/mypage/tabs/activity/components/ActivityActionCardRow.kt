@@ -48,7 +48,7 @@ fun ActivityActionCardRow(
         ActivityActionCard(
             title = "배심 활동",
             subTitle = "내가 판결한 소비",
-            iconRes = R.drawable.illust_mypage_gavel,
+            iconRes = R.drawable.illust_common_gavel,
             onClick = onJuryClick
         )
     }

@@ -28,8 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.smtm.pickle.domain.model.ledger.LedgerId
 import com.smtm.pickle.presentation.R
-import com.smtm.pickle.presentation.designsystem.components.appbar.PickleAppBar
-import com.smtm.pickle.presentation.designsystem.components.appbar.model.NavigationItem
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
@@ -117,9 +116,9 @@ private fun MyLedgerContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     stickyHeader("top_bar") {
-                        PickleAppBar(
+                        PickleTitleAppBar(
                             title = stringResource(R.string.my_ledger_title),
-                            navigationItem = NavigationItem.Back(onNavigateBack),
+                            onBack = onNavigateBack,
                         )
                     }
 

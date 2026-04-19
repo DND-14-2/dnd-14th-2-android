@@ -12,8 +12,9 @@ data class SemanticColors(
 
     // 소비 심판
     val guilty: Color,
-    val innocent: Color,
     val guiltyBackground: Color,
+    val innocent: Color,
+    val innocentVariant: Color,
     val innocentBackground: Color,
 
     // 지출 카테고리
@@ -44,8 +45,9 @@ val LightSemanticColors = SemanticColors(
     google = ColorPalette.base0,
 
     guilty = ColorPalette.error50,
-    guiltyBackground = Color(0xFFFFEAEA),
-    innocent = Color(0xFF5C95FF),
+    guiltyBackground = Color(0xFFFFECEC),
+    innocent = Color(0xFF2D5DEA),
+    innocentVariant = Color(0xFF5C95FF),
     innocentBackground = Color(0xFFEAF1FF),
 
     ledgerCategoryFood = Color(0xFF2BC4C1),

@@ -2,18 +2,19 @@ package com.smtm.pickle.data.repository
 
 import com.smtm.pickle.data.mapper.toDomain
 import com.smtm.pickle.data.source.remote.api.AuthService
+import com.smtm.pickle.data.source.remote.api.UserApi
 import com.smtm.pickle.data.source.remote.datasource.GoogleAuthDataSource
+import com.smtm.pickle.data.source.remote.model.auth.DemoLoginRequest
 import com.smtm.pickle.data.source.remote.model.auth.LoginRequest
 import com.smtm.pickle.domain.model.auth.AuthToken
 import com.smtm.pickle.domain.model.auth.SocialLoginType
 import com.smtm.pickle.domain.provider.TokenProvider
 import com.smtm.pickle.domain.repository.AuthRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
+    private val userApi: UserApi,
     private val tokenProvider: TokenProvider,
     private val googleAuthDataSource: GoogleAuthDataSource,
 ) : AuthRepository {
@@ -48,8 +49,26 @@ class AuthRepositoryImpl @Inject constructor(
         )
     }
 
+    /** 그냥 사용해보기 — deviceId로 데모 계정 발급 */
+    override suspend fun demoLogin(deviceId: String): AuthToken {
+        val response = authService.demoLogin(
+            request = DemoLoginRequest(deviceId = deviceId)
+        )
+        val authToken = response.toDomain()
+        tokenProvider.saveToken(authToken)
+        return authToken
+    }
+
+    override suspend fun logout() {
+        try {
+            authService.logout()
+        } finally {
+            tokenProvider.clearToken()
+        }
+    }
+
     override suspend fun withdrawAccount() {
-        authService.withdrawAccount()
+        userApi.withdrawAccount()
         tokenProvider.clearToken()
     }
 }

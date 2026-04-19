@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -26,11 +25,11 @@ import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateAppBar
 import com.smtm.pickle.presentation.ledger.create.component.firststep.LedgerCreateFirstStepContent
 import com.smtm.pickle.presentation.ledger.create.component.secondstep.LedgerCreateSecondContent
 
@@ -104,7 +103,6 @@ private fun LedgerEditContent(
     updateLedger: (String?) -> Unit,
     onNavigationClick: () -> Unit,
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val date = uiState.date
 
@@ -123,10 +121,9 @@ private fun LedgerEditContent(
                 CircularProgressIndicator()
             }
         } else {
-            LedgerCreateAppBar(
-                modifier = Modifier,
+            PickleTitleAppBar(
                 title = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
-                onNavigationClick = onNavigationClick,
+                onBack = onNavigationClick,
             )
 
             when (uiState.step) {
@@ -146,6 +143,9 @@ private fun LedgerEditContent(
                 }
 
                 LedgerEditStep.Second -> {
+                    val defaultLedgerDescription = uiState.firstStepState.selectedCategory?.let {
+                        stringResource(it.stringResId)
+                    }
                     LedgerCreateSecondContent(
                         selectedPaymentMethod = uiState.secondStepState.selectedPaymentMethod,
                         memo = uiState.secondStepState.memo,
@@ -154,10 +154,7 @@ private fun LedgerEditContent(
                         onMemoChange = setMemo,
                         onPreviousClick = { setStep(LedgerEditStep.First) },
                         onSuccessClick = {
-                            val defaultDescription = uiState.firstStepState.selectedCategory?.let {
-                                context.getString(it.stringResId)
-                            }
-                            updateLedger(defaultDescription)
+                            updateLedger(defaultLedgerDescription)
                         },
                     )
                 }

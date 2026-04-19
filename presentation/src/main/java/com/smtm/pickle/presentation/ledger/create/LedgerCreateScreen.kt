@@ -4,13 +4,12 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -23,11 +22,11 @@ import com.smtm.pickle.presentation.common.extension.clearFocusOnBackgroundTab
 import com.smtm.pickle.presentation.common.model.ledger.CategoryUiModel
 import com.smtm.pickle.presentation.common.model.ledger.LedgerTypeUiModel
 import com.smtm.pickle.presentation.common.model.ledger.PaymentMethodUiModel
+import com.smtm.pickle.presentation.designsystem.components.appbar.PickleTitleAppBar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.PickleSnackbar
 import com.smtm.pickle.presentation.designsystem.components.snackbar.SnackbarHost
 import com.smtm.pickle.presentation.designsystem.components.snackbar.model.SnackbarState
 import com.smtm.pickle.presentation.designsystem.theme.PickleTheme
-import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateAppBar
 import com.smtm.pickle.presentation.ledger.create.component.LedgerCreateExitDialog
 import com.smtm.pickle.presentation.ledger.create.component.firststep.LedgerCreateFirstStepContent
 import com.smtm.pickle.presentation.ledger.create.component.secondstep.LedgerCreateSecondContent
@@ -106,20 +105,18 @@ private fun LedgerCreateContent(
     createLedger: (LocalDate, String?) -> Unit,
     onNavigationClick: () -> Unit,
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(PickleTheme.colors.base0)
-            .systemBarsPadding()
+            .navigationBarsPadding()
             .clearFocusOnBackgroundTab(focusManager),
     ) {
-        LedgerCreateAppBar(
-            modifier = Modifier,
+        PickleTitleAppBar(
             title = stringResource(R.string.common_yyyy_mm_dd, date.year, date.monthValue, date.dayOfMonth),
-            onNavigationClick = onNavigationClick,
+            onBack = onNavigationClick,
         )
 
         when (uiState.step) {
@@ -139,6 +136,9 @@ private fun LedgerCreateContent(
             }
 
             LedgerCreateStep.Second -> {
+                val defaultLedgerDescription = uiState.firstStepState.selectedCategory?.let {
+                    stringResource(it.stringResId)
+                }
                 LedgerCreateSecondContent(
                     selectedPaymentMethod = uiState.secondStepState.selectedPaymentMethod,
                     memo = uiState.secondStepState.memo,
@@ -147,10 +147,7 @@ private fun LedgerCreateContent(
                     onMemoChange = setMemo,
                     onPreviousClick = { setStep(LedgerCreateStep.First) },
                     onSuccessClick = {
-                        val defaultDescription = uiState.firstStepState.selectedCategory?.let {
-                            context.getString(it.stringResId)
-                        }
-                        createLedger(date, defaultDescription)
+                        createLedger(date, defaultLedgerDescription)
                     },
                 )
             }

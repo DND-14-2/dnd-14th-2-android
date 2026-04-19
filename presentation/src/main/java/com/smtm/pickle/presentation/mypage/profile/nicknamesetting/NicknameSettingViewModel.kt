@@ -2,10 +2,10 @@ package com.smtm.pickle.presentation.mypage.profile.nicknamesetting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smtm.pickle.domain.usecase.nickname.GetNicknameUseCase
-import com.smtm.pickle.domain.usecase.nickname.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SaveNicknameUseCase
+import com.smtm.pickle.domain.usecase.user.SyncUserUseCase
 import com.smtm.pickle.presentation.common.constant.NicknameValidation
-import com.smtm.pickle.presentation.common.utils.NicknameUtils
+import com.smtm.pickle.presentation.common.utils.InputStateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NicknameSettingViewModel @Inject constructor(
     private val saveNicknameUseCase: SaveNicknameUseCase,
-    private val getNicknameUseCase: GetNicknameUseCase
+    private val syncUserUseCase: SyncUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NicknameSettingUiState())
@@ -38,12 +38,12 @@ class NicknameSettingViewModel @Inject constructor(
 
     private fun initializeNickname() {
         viewModelScope.launch {
-            getNicknameUseCase()
+            syncUserUseCase()
                 .onSuccess { nickname ->
                     savedNickname = nickname
 
                     _uiState.update {
-                        it.copy(editingNickname = nickname)
+                        it.copy(editingNickname = nickname ?: "유저 닉네임")
                     }
                 }.onFailure { e ->
                     Timber.e(e, "닉네임 초기화 실패")
@@ -57,7 +57,7 @@ class NicknameSettingViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 editingNickname = correctNickname,
-                inputState = NicknameUtils.validateNicknameFormat(correctNickname, savedNickname),
+                inputState = InputStateUtils.validateNicknameFormat(correctNickname, savedNickname),
                 isNicknameModified = true
             )
         }

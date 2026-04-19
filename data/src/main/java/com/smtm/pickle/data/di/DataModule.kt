@@ -1,6 +1,8 @@
 package com.smtm.pickle.data.di
 
+import com.smtm.pickle.data.source.local.provider.DeviceIdProviderImpl
 import com.smtm.pickle.data.source.local.provider.TokenProviderImpl
+import com.smtm.pickle.domain.provider.DeviceIdProvider
 import com.smtm.pickle.domain.provider.TokenProvider
 import dagger.Binds
 import dagger.Module
@@ -16,4 +18,8 @@ abstract class DataModule {
         tokenProviderImpl: TokenProviderImpl
     ): TokenProvider
 
+    @Binds
+    abstract fun bindDeviceIdProvider(
+        deviceIdProviderImpl: DeviceIdProviderImpl
+    ): DeviceIdProvider
 }

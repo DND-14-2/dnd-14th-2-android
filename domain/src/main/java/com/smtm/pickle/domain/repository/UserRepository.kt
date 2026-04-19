@@ -1,5 +1,6 @@
 package com.smtm.pickle.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
@@ -11,4 +12,11 @@ interface UserRepository {
 
     suspend fun getFirstLogin(): Boolean
 
+    suspend fun getInvitationCode(): String
+
+    suspend fun saveNickname(nickname: String)
+
+    suspend fun getNickname(): String?
+
+    fun observeNickname(): Flow<String?>
 }

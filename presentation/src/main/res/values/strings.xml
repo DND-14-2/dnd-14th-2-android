@@ -204,4 +204,7 @@
     <string name="invite_introduction_ghost">괜찮아요</string>
     <string name="invite_introduction_already">이미 초대코드를 받았어요</string>
 
+    <!-- Global -->
+    <string name="global_session_expired">세션이 만료되었습니다. 다시 로그인해주세요.</string>
+
 </resources>

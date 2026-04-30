@@ -16,7 +16,6 @@ import com.smtm.pickle.presentation.verdict.navigation.verdictDestinations
 @Composable
 fun PickleNavHost(
     navController: NavHostController = rememberNavController(),
-    onGlobalNavEvent: (GlobalNavEvent) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +35,6 @@ fun PickleNavHost(
             composable<MainRoute> {
                 MainScreen(
                     rootNavController = navController,
-                    onGlobalNavEvent = onGlobalNavEvent
                 )
             }
 

@@ -1,5 +1,6 @@
 package com.smtm.pickle.domain.provider
 
+import com.smtm.pickle.domain.model.auth.AuthState
 import com.smtm.pickle.domain.model.auth.AuthToken
 import kotlinx.coroutines.flow.Flow
 
@@ -19,9 +20,13 @@ interface TokenProvider {
 
     suspend fun clearToken()
 
+    suspend fun expireSession()
+
     fun getCachedToken(): AuthToken?
 
     fun getTokenFlow(): Flow<AuthToken?>
 
     fun getAccessTokenFlow(): Flow<String?>
+
+    fun getAuthStateFlow(): Flow<AuthState>
 }

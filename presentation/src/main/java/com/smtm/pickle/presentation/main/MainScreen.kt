@@ -29,7 +29,6 @@ import com.smtm.pickle.presentation.home.HomeScreen
 import com.smtm.pickle.presentation.main.component.DimOverlay
 import com.smtm.pickle.presentation.main.component.HomeExpandableFab
 import com.smtm.pickle.presentation.mypage.MyPageScreen
-import com.smtm.pickle.presentation.navigation.GlobalNavEvent
 import com.smtm.pickle.presentation.navigation.PickleBottomNavigationBar
 import com.smtm.pickle.presentation.navigation.route.AlarmSettingRoute
 import com.smtm.pickle.presentation.navigation.route.HomeTabRoute
@@ -51,7 +50,6 @@ import java.time.LocalDate
 @Composable
 fun MainScreen(
     rootNavController: NavHostController,
-    onGlobalNavEvent: (GlobalNavEvent) -> Unit,
 ) {
     val tabNavController = rememberNavController()
     val navBackStackEntry by tabNavController.currentBackStackEntryAsState()
